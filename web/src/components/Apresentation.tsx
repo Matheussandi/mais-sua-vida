@@ -6,7 +6,7 @@ import HomeFooter from "../assets/home.svg";
 export function Apresentation() {
   return (
     <>
-      <div className="grid grid-cols-1 mt-16 mx-4 md:grid-cols-2 gap-4 lg:mx-40 relative z-10">
+      <div className="grid grid-cols-1 mt-16 md:grid-cols-2 gap-4 relative z-10">
         {/* Conteúdo da primeira coluna */}
         <div>
           <h1 className="text-2xl md:text-5xl font-bold">
@@ -85,23 +85,22 @@ export function Apresentation() {
             className="h-full w-auto hidden md:block"
           />
         </div>
-      </div>
-
-      {/* SVG está atrapalhando a exibir o próximo conteúdo */}
-      <div className="absolute bottom-0 left-0 w-full">
-        <div className="relative">
-          <Image
-            src={HomeFooter}
-            className="object-cover w-full h-full"
-            alt="footer home"
-          />
-          {/* Botão dentro da imagem (aparece somente em dispositivos pequenos) */}
-          <button
-            id="botao-ir-para-baixo"
-            className="bg-primary absolute bottom-0 left-0 w-full py-4 px-9 rounded-xl text-white block md:hidden"
-          >
-            Ir para baixo
-          </button>
+        {/* SVG está atrapalhando a exibir o próximo conteúdo */}
+        <div className="absolute bottom-0 left-0 w-full">
+          <div className="relative">
+            <Image
+              src={HomeFooter}
+              className="object-cover w-full h-full"
+              alt="footer home"
+            />
+            {/* Botão dentro da imagem (aparece somente em dispositivos pequenos) */}
+            <button
+              id="botao-ir-para-baixo"
+              className="bg-primary absolute bottom-0 left-0 w-full py-4 px-9 rounded-xl text-white block md:hidden"
+            >
+              Ir para baixo
+            </button>
+          </div>
         </div>
       </div>
     </>
