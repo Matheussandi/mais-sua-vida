@@ -1,5 +1,6 @@
 import { About } from "@/components/About";
 import { Apresentation } from "@/components/Apresentation";
+import { Clinics } from "@/components/Clinics";
 import { NavBar } from "@/components/NavBar";
 
 export default function Home() {
@@ -8,6 +9,7 @@ export default function Home() {
       <NavBar />
       <Apresentation />
       <About />
+      <Clinics />
     </div>
   );
 }
