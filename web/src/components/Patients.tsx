@@ -2,7 +2,7 @@ import Image from "next/image";
 
 import { BsCheckCircleFill } from "react-icons/bs";
 
-import Search from "../assets/Search.png";
+import Search from "../assets/search.png";
 import Phone from "../assets/phone.png";
 import Profile from "../assets/profile.png";
 import Calender from "../assets/calendar.png";
