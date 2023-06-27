@@ -1,6 +1,7 @@
 import { About } from "@/components/About";
 import { Apresentation } from "@/components/Apresentation";
 import { Clinics } from "@/components/Clinics";
+import { Footer } from "@/components/Footer";
 import { NavBar } from "@/components/NavBar";
 import { Newsletter } from "@/components/Newsletter";
 import { Patients } from "@/components/Patients";
@@ -14,6 +15,7 @@ export default function Home() {
       <Clinics />
       <Patients />
       <Newsletter />
+      <Footer />
     </div>
   );
 }
