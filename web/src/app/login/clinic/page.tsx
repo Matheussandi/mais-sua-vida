@@ -1,35 +1,38 @@
-"use client"
+"use client";
 
 import { useState } from "react";
-import axios from "axios";
+import { api } from "@/lib/api";
+import { useRouter } from "next/navigation";
 
 interface IClinic {
-  email: string;
-  // Adicione outros campos necessários do objeto médico
+  id: string;
+  // Adicione outros campos necessários do objeto clínica
 }
 
 export default function LoginClinic() {
-  const [email, setEmail] = useState("");
+  const [id, setId] = useState("");
   const [error, setError] = useState("");
+
+  const router = useRouter();
 
   const handleLogin = async () => {
     try {
-      const response = await axios.get<IClinic[]>(
-        "http://localhost:3333/clinica"
-      );
+      const response = await api.get<IClinic[]>("/clinica");
 
-      const clinics = response.data; // Array de médicos retornados pela API
+      const clinics = response.data; // Array de clínicas retornados pela API
 
-      const clinicFound = clinics.find((clinic) => clinic.email === email);
+      const clinicFound = clinics.find((clinic) => clinic.id === id);
 
       if (clinicFound) {
         // Autenticação bem-sucedida, redirecione para a página desejada
         console.log("Autenticação bem-sucedida");
         // Redirecione para a página desejada usando o router do Next.js
+
         // Exemplo: router.push("/dashboard");
+        router.push("/clinic");
       } else {
         // Autenticação falhou, exiba uma mensagem de erro
-        setError("Credenciais inválidas. Por favor, verifique seu email.");
+        setError("Credenciais inválidas. Por favor, verifique seu ID.");
       }
     } catch (error) {
       // Lidar com erros de chamada à API
@@ -49,11 +52,11 @@ export default function LoginClinic() {
             className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
               error ? "border-red-500" : ""
             }`}
-            id="email"
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            id="id"
+            type="text"
+            placeholder="ID"
+            value={id}
+            onChange={(e) => setId(e.target.value)}
           />
           {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
         </div>

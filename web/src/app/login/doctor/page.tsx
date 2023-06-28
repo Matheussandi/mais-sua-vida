@@ -1,7 +1,8 @@
-"use client"
+"use client";
 
 import { useState } from "react";
 import axios from "axios";
+import { api } from "@/lib/api";
 
 interface IDoctor {
   email: string;
@@ -14,9 +15,7 @@ export default function LoginDoctor() {
 
   const handleLogin = async () => {
     try {
-      const response = await axios.get<IDoctor[]>(
-        "http://localhost:3333/medico"
-      );
+      const response = await api.get<IDoctor[]>("/medico");
 
       const doctors = response.data; // Array de médicos retornados pela API
 
