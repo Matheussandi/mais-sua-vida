@@ -85,21 +85,15 @@ export function Apresentation() {
             className="h-full w-auto hidden md:block"
           />
         </div>
-        {/* SVG está atrapalhando a exibir o próximo conteúdo */}
+        {/* Exibição condicional do SVG em telas maiores */}
         <div className="absolute bottom-0 left-0 w-full">
           <div className="relative">
+            {/* O SVG está oculto em telas de celular e tablet */}
             <Image
               src={HomeFooter}
-              className="object-cover w-full h-full"
+              className="object-cover w-full h-full hidden lg:block"
               alt="footer home"
             />
-            {/* Botão dentro da imagem (aparece somente em dispositivos pequenos) */}
-            <button
-              id="botao-ir-para-baixo"
-              className="bg-primary absolute bottom-0 left-0 w-full py-4 px-9 rounded-xl text-white block md:hidden"
-            >
-              Ir para baixo
-            </button>
           </div>
         </div>
       </div>
