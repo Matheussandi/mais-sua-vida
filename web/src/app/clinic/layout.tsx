@@ -14,21 +14,21 @@ interface AuthLayoutProps {
 
 export default function AuthLayout({ children }: AuthLayoutProps) {
   return (
-    <div className="bg-gray-50 h-screen flex">
-      <div className="w-72 bg-gray-50 flex flex-col rounded-lg shadow-md">
+    <div className="flex h-screen bg-gray-50">
+      <div className="flex w-72 flex-col rounded-lg bg-gray-50 shadow-md">
         <div className="p-4">
           <Image
             src={DoisMedicos}
             width={130}
             height={130}
             alt="Clinic"
-            className="w-130 h-130 rounded-full mx-auto mb-4"
+            className="w-130 h-130 mx-auto mb-4 rounded-full"
           />
-          <h1 className="text-xl font-bold mb-8 text-center">
+          <h1 className="mb-8 text-center text-xl font-bold">
             Nome da Clínica
           </h1>
           <nav className="border-t border-gray-300">
-            <ul className="list-none mt-5">
+            <ul className="mt-5 list-none">
               <Link
                 href="/clinic"
                 className="flex items-center py-2 hover:text-blue-500"
@@ -69,7 +69,7 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
         </div>
         <div className="mt-auto p-4">
           <Link href="/login/clinic">
-            <button className="bg-red-500 text-white py-2 px-4 rounded w-full">
+            <button className="w-full rounded bg-red-500 px-4 py-2 text-white">
               Sair
             </button>
           </Link>

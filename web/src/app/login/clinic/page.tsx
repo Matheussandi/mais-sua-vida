@@ -41,7 +41,7 @@ export default function LoginClinic() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen">
+    <div className="flex min-h-screen flex-col items-center justify-center">
       <h1 className="text-3xl font-bold">Clínica</h1>
       <p className="my-10 text-sm text-gray-600">
         Acesse a plataforma inserindo suas credenciais
@@ -49,7 +49,7 @@ export default function LoginClinic() {
       <form className="w-full max-w-sm">
         <div className={`mb-4 ${error ? "border-red-500" : ""}`}>
           <input
-            className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
+            className={`focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none ${
               error ? "border-red-500" : ""
             }`}
             id="id"
@@ -58,18 +58,18 @@ export default function LoginClinic() {
             value={id}
             onChange={(e) => setId(e.target.value)}
           />
-          {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
+          {error && <p className="mt-1 text-xs text-red-500">{error}</p>}
         </div>
         <div className="flex flex-col items-center">
           <button
-            className="bg-primary hover:bg-blue-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full mb-4"
+            className="focus:shadow-outline mb-4 w-full rounded bg-primary px-4 py-2 font-bold text-white hover:bg-blue-500 focus:outline-none"
             type="button"
             onClick={handleLogin}
           >
             Entrar
           </button>
           <a
-            className="inline-block align-baseline font-bold text-sm text-primary hover:text-blue-500"
+            className="inline-block align-baseline text-sm font-bold text-primary hover:text-blue-500"
             href="#"
           >
             Esqueceu sua senha?

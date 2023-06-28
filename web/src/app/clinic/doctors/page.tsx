@@ -66,14 +66,14 @@ export default function Doctors() {
   return (
     <div className="flex-grow p-10">
       <div className="bg-gray-50 p-7">
-        <div className="flex items-center justify-between mb-4">
+        <div className="mb-4 flex items-center justify-between">
           <div className="relative w-1/2">
             <input
               type="text"
               placeholder="Buscar médico"
-              className="border border-gray-300 rounded-lg p-2 pr-8 w-full"
+              className="w-full rounded-lg border border-gray-300 p-2 pr-8"
             />
-            <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
               <FiSearch color="#0079FF" size={20} />
             </div>
           </div>
@@ -84,26 +84,26 @@ export default function Doctors() {
         </div>
 
         {/* Listagem de médicos */}
-        <div className="border-t border-gray-300 mt-7">
-          <div className="flex flex-wrap -mx-2 mt-7">
+        <div className="mt-7 border-t border-gray-300">
+          <div className="-mx-2 mt-7 flex flex-wrap">
             {doctors.map((doctor) => (
               <div
                 key={doctor.id}
-                className="w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/6 px-2 mb-4"
+                className="mb-4 w-1/2 px-2 md:w-1/3 lg:w-1/4 xl:w-1/6"
               >
-                <div className="border border-gray-300 rounded-lg h-150 w-200 flex flex-col items-center">
-                  <div className="w-full h-32 rounded-lg bg-blue-300 flex items-center justify-center">
+                <div className="h-150 w-200 flex flex-col items-center rounded-lg border border-gray-300">
+                  <div className="flex h-32 w-full items-center justify-center rounded-lg bg-blue-300">
                     <Image
                       src={doctor.image}
                       alt={doctor.name}
-                      className="w-10 h-10 rounded-full"
+                      className="h-10 w-10 rounded-full"
                     />
                   </div>
                   <div className="p-4">
-                    <h3 className="text-base font-bold mb-2 text-center">
+                    <h3 className="mb-2 text-center text-base font-bold">
                       {doctor.name}
                     </h3>
-                    <p className="text-sm text-gray-500 text-center">
+                    <p className="text-center text-sm text-gray-500">
                       {doctor.specialization}
                     </p>
                   </div>
