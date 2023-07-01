@@ -44,25 +44,18 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
                 <span>Médicos</span>
               </Link>
               <Link
-                href="/clinic/annotation"
-                className="flex items-center py-2 hover:text-blue-500"
-              >
-                <IoIosJournal className="mr-2" size={20} />
-                <span>Anotação</span>
-              </Link>
-              <Link
                 href="/clinic/settings"
                 className="flex items-center py-2 hover:text-blue-500"
               >
                 <AiFillTool className="mr-2" size={20} />
-                <span>Configuração</span>
+                <span>Configurações</span>
               </Link>
               <Link
-                href="/clinic/plan"
+                href="/clinic/plans"
                 className="flex items-center py-2 hover:text-blue-500"
               >
                 <BsShieldFillCheck className="mr-2" size={20} />
-                <span>Plano</span>
+                <span>Planos</span>
               </Link>
             </ul>
           </nav>
