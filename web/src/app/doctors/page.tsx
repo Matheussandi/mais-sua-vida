@@ -1,9 +1,9 @@
-"use client"
+"use client";
 
 import Image from "next/image";
 import { FiSearch, FiFilter, FiPlus } from "react-icons/fi";
 
-import { getDoctors } from "../services/get-doctors";
+import { getDoctors } from "../clinic/services/get-doctors";
 import Link from "next/link";
 
 interface Doctor {
@@ -33,7 +33,7 @@ export default async function Doctors() {
           </div>
           <div className="flex items-center">
             <FiFilter className="mr-2" color="#0079FF" size={20} />
-            <Link href="./doctors/new">
+            <Link href="/doctors/new">
               <FiPlus className="mr-2" color="#0079FF" size={20} />
             </Link>
           </div>
