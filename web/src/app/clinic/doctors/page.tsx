@@ -47,7 +47,7 @@ export default async function Doctors() {
                 className="mb-4 w-1/2 px-2 md:w-1/3 lg:w-1/4 xl:w-1/6"
               >
                 <Link
-                  href={`/medico/${doctor.id}`}
+                  href={`./doctors/${doctor.id}`}
                   className="h-150 w-200 flex flex-col items-center rounded-lg border border-gray-300"
                 >
                   <div className="flex h-32 w-full items-center justify-center rounded-lg bg-blue-300">
