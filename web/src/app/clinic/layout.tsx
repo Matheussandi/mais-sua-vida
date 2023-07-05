@@ -1,9 +1,8 @@
 import Image from "next/image";
 import { ReactNode } from "react";
 
-import DoisMedicos from "../../assets/twodoctors.png";
+import PhotoClinic from "../../assets/photoClinic.png";
 
-import { IoIosJournal } from "react-icons/io";
 import { AiFillHome, AiFillTool } from "react-icons/ai";
 import { BsFillFilePersonFill, BsShieldFillCheck } from "react-icons/bs";
 import Link from "next/link";
@@ -18,7 +17,7 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
       <div className="flex w-72 flex-col rounded-lg bg-gray-50 shadow-md">
         <div className="p-4">
           <Image
-            src={DoisMedicos}
+            src={PhotoClinic}
             width={130}
             height={130}
             alt="Clinic"

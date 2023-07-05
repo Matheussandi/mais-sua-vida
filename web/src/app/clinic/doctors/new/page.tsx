@@ -1,4 +1,4 @@
-import { NewDoctorForm } from "../components/NewDoctorForm";
+import { NewDoctorForm } from "@/components/NewDoctorForm";
 
 export default function NewDoctor() {
   return (

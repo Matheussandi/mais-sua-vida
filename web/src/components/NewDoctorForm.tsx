@@ -8,7 +8,7 @@ import Image from "next/image";
 import { MdModeEdit } from "react-icons/md";
 import { api } from "@/lib/api";
 
-import ImageMedico from "../../../../assets/doctor1.png";
+import ImageMedico from "../assets/doctor1.png";
 import { MediaPicker } from "@/components/MediaPicker";
 
 import { useForm } from "react-hook-form";

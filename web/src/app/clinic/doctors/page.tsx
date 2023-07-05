@@ -1,7 +1,5 @@
-"use client"
-
 import Image from "next/image";
-import { FiSearch, FiFilter, FiPlus } from "react-icons/fi";
+import { FiSearch, FiPlus } from "react-icons/fi";
 
 import { getDoctors } from "../services/get-doctors";
 import Link from "next/link";
@@ -10,7 +8,9 @@ interface Doctor {
   id: number;
   nome: string;
   sobrenome: string;
-  specialization: string;
+  especializacao: {
+    nome: string;
+  };
   image: string;
 }
 
@@ -19,7 +19,7 @@ export default async function Doctors() {
 
   return (
     <div className="flex-grow p-10">
-      <div className="bg-gray-50 p-7">
+      <div className="rounded bg-gray-50 p-7">
         <div className="mb-4 flex items-center justify-between">
           <div className="relative w-1/2">
             <input
@@ -32,7 +32,6 @@ export default async function Doctors() {
             </div>
           </div>
           <div className="flex items-center">
-            <FiFilter className="mr-2" color="#0079FF" size={20} />
             <Link href="./doctors/new">
               <FiPlus className="mr-2" color="#0079FF" size={20} />
             </Link>
@@ -66,7 +65,7 @@ export default async function Doctors() {
                       {doctor.nome + " " + doctor.sobrenome}
                     </h3>
                     <p className="text-center text-sm text-gray-500">
-                      {doctor.specialization}
+                      {doctor.especializacao.nome}
                     </p>
                   </div>
                 </Link>
