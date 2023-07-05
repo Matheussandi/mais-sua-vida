@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { FiSearch, FiPlus } from "react-icons/fi";
 
-import { getDoctors } from "../services/get-doctors";
+import { getDoctors } from "../../../services/get-doctors";
 import Link from "next/link";
 
 interface Doctor {
