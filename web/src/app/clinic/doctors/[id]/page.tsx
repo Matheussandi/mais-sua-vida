@@ -33,7 +33,12 @@ export default async function DoctorDetails({ params }: DoctorId) {
                 {doctor.especializacao.nome}
               </p>
             </div>
-            <Link href="./edit">
+            <Link
+              href={{
+                pathname: "./edit",
+                query: { doctor: `${doctor.id}` },
+              }}
+            >
               <div className="rounded-full bg-primary p-2">
                 <MdModeEdit color="#ffffff" />
               </div>
