@@ -80,6 +80,12 @@ export default async function DoctorDetails({ params }: DoctorId) {
               </h2>
               <p>{doctor.CRM}</p>
             </div>
+            <Link
+              className="rounded bg-primary p-2 text-center text-white"
+              href={`./${doctor.id}/patients`}
+            >
+              Pacientes
+            </Link>
           </div>
         </div>
       </div>
