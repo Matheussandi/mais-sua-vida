@@ -1,15 +1,13 @@
-import Link from "next/link";
-import { getPatientById } from "../../../../../../services/get-patient-by-id";
-import { MdModeEdit } from "react-icons/md";
+import { getPatientById } from "../../../../services/get-patient-by-id";
 
 import Image from "next/image";
 
-import Retangle from "../../../../../../assets/Rectangle.svg";
-import Patient from "../../../../../../assets/doctor1.png";
+import Retangle from "../../../../assets/Rectangle.svg";
+import Patient from "../../../../assets/doctor1.png";
 
 interface PatientId {
   params: {
-    patient: string;
+    patientId: string;
   };
 }
 
@@ -20,7 +18,7 @@ interface PatientProps {
 }
 
 export default async function PatientDetails({ params }: PatientId) {
-  const patient: PatientProps = await getPatientById(params.patient);
+  const patient: PatientProps = await getPatientById(params.patientId);
 
   return (
     <div className="flex-grow p-10">
@@ -48,7 +46,7 @@ export default async function PatientDetails({ params }: PatientId) {
 
         <div className="p-7">
           <div className="mt-12 flex flex-col">
-            <div className="flex gap-10 border-t-2 border-gray-200 p-10 justify-around">
+            <div className="flex justify-around gap-10 border-t-2 border-gray-200 p-10">
               <div>
                 <h2 className="font-bold uppercase">Sobre</h2>
                 <p>Gênero:</p>

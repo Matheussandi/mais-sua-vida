@@ -291,12 +291,12 @@ export function NewDoctorForm() {
         </label>
 
         <div className="flex justify-end gap-4">
-          <button
+{/*           <button
             onClick={() => router.push("/clinic")}
             className="rounded-lg bg-gray-500 px-10 py-2 font-bold uppercase text-white hover:bg-gray-600"
           >
             Cancelar
-          </button>
+          </button> */}
           <button className="rounded-lg bg-primary px-10 py-2 font-bold uppercase text-white hover:bg-blue-600">
             Salvar
           </button>

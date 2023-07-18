@@ -1,5 +1,4 @@
 import Image from "next/image";
-import { FiSearch, FiPlus } from "react-icons/fi";
 
 import { getPatients } from "../../../../../services/get-patients";
 import Link from "next/link";
@@ -33,10 +32,7 @@ export default async function Patients() {
         <div className="mt-7">
           {patients.map((patient) => (
             <div key={patient.id} className="mb-4">
-              <Link
-                href={`./patients/${patient.id}`}
-                className="h-150 w-200 flex items-center  border-t-2 border-gray-300 py-2"
-              >
+              <div className="h-150 w-200 flex items-center  border-t-2 border-gray-300 py-2">
                 <div className="h-20 w-20 overflow-hidden rounded-full">
                   {/* Sem imagem por enquanto */}
                   <Image
@@ -60,7 +56,7 @@ export default async function Patients() {
                     </div>
                   </div>
                 </div>
-              </Link>
+              </div>
             </div>
           ))}
         </div>

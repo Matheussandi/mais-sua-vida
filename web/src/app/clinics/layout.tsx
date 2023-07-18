@@ -29,28 +29,28 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
           <nav className="border-t border-gray-300">
             <ul className="mt-5 list-none">
               <Link
-                href="/clinic"
+                href="/clinics"
                 className="flex items-center py-2 hover:text-blue-500"
               >
                 <AiFillHome className="mr-2" size={20} />
                 <span>Início</span>
               </Link>
               <Link
-                href="/clinic/doctors"
+                href="/clinics/doctors"
                 className="flex items-center py-2 hover:text-blue-500"
               >
                 <BsFillFilePersonFill className="mr-2" size={20} />
                 <span>Médicos</span>
               </Link>
               <Link
-                href="/clinic/settings"
+                href="/clinics/settings"
                 className="flex items-center py-2 hover:text-blue-500"
               >
                 <AiFillTool className="mr-2" size={20} />
                 <span>Configurações</span>
               </Link>
               <Link
-                href="/clinic/plans"
+                href="/clinics/plans"
                 className="flex items-center py-2 hover:text-blue-500"
               >
                 <BsShieldFillCheck className="mr-2" size={20} />
