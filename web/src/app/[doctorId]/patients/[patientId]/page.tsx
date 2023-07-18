@@ -4,6 +4,9 @@ import Image from "next/image";
 
 import Retangle from "../../../../assets/Rectangle.svg";
 import Patient from "../../../../assets/doctor1.png";
+import Link from "next/link";
+import { HeightConverter } from "@/utils/HeightConverter";
+import { WeightConverter } from "@/utils/WeightConverter";
 
 interface PatientId {
   params: {
@@ -15,7 +18,14 @@ interface PatientProps {
   id: string;
   nome: string;
   sobrenome: string;
+  email: string;
+  telefone: string;
+  dataNascimento: string;
+  altura: string;
+  peso: string;
 }
+
+
 
 export default async function PatientDetails({ params }: PatientId) {
   const patient: PatientProps = await getPatientById(params.patientId);
@@ -51,8 +61,9 @@ export default async function PatientDetails({ params }: PatientId) {
                 <h2 className="font-bold uppercase">Sobre</h2>
                 <p>Gênero:</p>
                 <p>Idade:</p>
-                <p>Data de Nascimento:</p>
-                <p>Ocupação:</p>
+                <p>Data de Nascimento: {patient.dataNascimento}</p>
+                <p>Altura: {HeightConverter(patient.altura)}</p>
+                <p>Peso: {WeightConverter(patient.peso)}</p>
               </div>
               <div>
                 <h2 className="font-bold uppercase">Endereço</h2>
@@ -63,15 +74,15 @@ export default async function PatientDetails({ params }: PatientId) {
               </div>
               <div>
                 <h2 className="font-bold uppercase">Contato</h2>
-                <p>E-mail:</p>
-                <p>Celular:</p>
+                <p>E-mail: {patient.email}</p>
+                <p>Celular: {patient.telefone}</p>
               </div>
             </div>
 
             <div className="flex items-center justify-center">
-              <button className="rounded-lg bg-primary px-16 py-5 font-bold text-white ">
+              <Link href={`./${params.patientId}/historic`} className="rounded-lg bg-primary px-16 py-5 font-bold text-white ">
                 Histórico
-              </button>
+              </Link>
             </div>
           </div>
         </div>

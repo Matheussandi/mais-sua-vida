@@ -22,7 +22,7 @@ export default function DoctorLayout({ children, params }: DoctorLayoutProps) {
           <nav className="border-t border-gray-300">
             <ul className="mt-5 list-none">
               <Link
-                href={`.././${params.doctorId}`}
+                href={`/${params.doctorId}`}
                 className="flex items-center py-2 hover:text-blue-500"
               >
                 <FaUser className="mr-2" size={20} />
