@@ -6,13 +6,42 @@ import PhotoClinic from "../../../assets/photoClinic.png";
 import { AiFillHome, AiFillTool } from "react-icons/ai";
 import { BsFillFilePersonFill, BsShieldFillCheck } from "react-icons/bs";
 import Link from "next/link";
-import { ClinicDetails } from "@/components/ClinicDetails";
+import { getClinicById } from "@/services/get-clinic-by-id";
 
 interface ClinicLayoutProps {
   children: ReactNode;
   params: {
     clinicId: string;
   };
+}
+
+interface ClinicIdProps {
+  id: string;
+}
+
+interface ClinicProps {
+  nome: string;
+  sobrenome: string;
+  image: string;
+}
+
+async function ClinicDetails({ id }: ClinicIdProps) {
+  const doctor: ClinicProps = await getClinicById(id);
+
+  return (
+    <>
+      <Image
+        src={PhotoClinic}
+        width={130}
+        height={130}
+        alt="Clinic"
+        className="w-130 h-130 mx-auto mb-4 rounded-full"
+      />
+      <h1 className="mb-8 text-center text-xl font-bold uppercase">
+        {doctor.nome}
+      </h1>
+    </>
+  );
 }
 
 export default function ClinicLayout({ children, params }: ClinicLayoutProps) {

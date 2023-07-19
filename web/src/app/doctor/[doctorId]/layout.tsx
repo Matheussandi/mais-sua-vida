@@ -1,16 +1,46 @@
-import Image from "next/image";
 import { ReactNode } from "react";
-
-import { AiFillTool } from "react-icons/ai";
-import { FaUser, FaUsers } from "react-icons/fa";
+import Image from "next/image";
 import Link from "next/link";
-import { DoctorDetails } from "@/components/DoctorDetails";
+
+import { FaUser, FaUsers } from "react-icons/fa";
+import { AiFillTool } from "react-icons/ai";
+
+import { getDoctorById } from "@/services/get-doctor-by-id";
+
+import PhotoDoctor from "../../../assets/doctor1.png";
 
 interface DoctorLayoutProps {
   children: ReactNode;
   params: {
     doctorId: string;
   };
+}
+
+interface DoctorIdProps {
+  id: string;
+}
+
+interface DoctorProps {
+  nome: string;
+  sobrenome: string;
+  image: string;
+}
+
+async function DoctorDetails({ id }: DoctorIdProps) {
+  const doctor: DoctorProps = await getDoctorById(id);
+
+  return (
+    <>
+      <Image
+        src={PhotoDoctor}
+        width={130}
+        height={130}
+        alt="Clinic"
+        className="w-130 h-130 mx-auto mb-4 rounded-full"
+      />
+      <h1 className="mb-8 text-center text-xl font-bold uppercase">{`${doctor.nome} ${doctor.sobrenome}`}</h1>
+    </>
+  );
 }
 
 export default function DoctorLayout({ children, params }: DoctorLayoutProps) {

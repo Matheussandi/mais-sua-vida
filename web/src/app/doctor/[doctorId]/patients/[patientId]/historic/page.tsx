@@ -1,9 +1,9 @@
-import { getPatientById } from "../../../../../services/get-patient-by-id";
+import { getPatientById } from "../../../../../../services/get-patient-by-id";
 
 import Image from "next/image";
 
-import Retangle from "../../../../../assets/Rectangle.svg";
-import Patient from "../../../../../assets/doctor1.png";
+import Retangle from "../../../../../../assets/Rectangle.svg";
+import Patient from "../../../../../../assets/doctor1.png";
 
 interface PatientId {
   params: {
