@@ -2,16 +2,20 @@
 
 import { FormEvent, useEffect } from "react";
 
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 
 import { MdModeEdit } from "react-icons/md";
 import { api } from "@/lib/api";
 
-import PhotoClinic from "../../../assets/photoClinic.png";
+import PhotoClinic from "../../../../assets/photoClinic.png";
 import { MediaPicker } from "@/components/MediaPicker";
 
 export default function Settings() {
+  const searchParams = useSearchParams();
+
+  const search = searchParams.get("clinicId");
+
   const router = useRouter();
 
   async function handleCreateDoctor(event: FormEvent<HTMLFormElement>) {
@@ -21,7 +25,7 @@ export default function Settings() {
 
     // Falta adicionar a imagem.
 
-    await api.post("/medico", {
+    await api.put(`/clinica/${search}`, {
       nome: formData.get("nome"),
       telefone: formData.get("telefone"),
       email: formData.get("email"),
@@ -32,7 +36,7 @@ export default function Settings() {
       cidade: formData.get("cidade"),
     });
 
-    router.push("/clinics");
+    router.push("/");
   }
 
   // Está sendo pré-renderizado apenas o primeiro médico
@@ -165,7 +169,7 @@ export default function Settings() {
             </div>
 
             <div className="flex justify-end gap-4">
-{/*               <button className="rounded-lg bg-gray-500 px-10 py-2 font-bold uppercase text-white hover:bg-gray-600">
+              {/*               <button className="rounded-lg bg-gray-500 px-10 py-2 font-bold uppercase text-white hover:bg-gray-600">
                 Cancelar
               </button> */}
               <button className="rounded-lg bg-primary px-10 py-2 font-bold uppercase text-white hover:bg-blue-600">

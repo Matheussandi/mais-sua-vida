@@ -1,10 +1,9 @@
 import Image from "next/image";
-import { FiSearch, FiPlus } from "react-icons/fi";
 
-import { getPatients } from "../../../services/get-patients";
+import { getPatients } from "../../../../services/get-patients";
 import Link from "next/link";
 
-import Pacientes from "../../../assets/doctor1.png";
+import Pacientes from "../../../../assets/doctor1.png";
 import { MdDateRange } from "react-icons/md";
 import { FiClock } from "react-icons/fi";
 

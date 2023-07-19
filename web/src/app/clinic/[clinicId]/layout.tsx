@@ -1,56 +1,56 @@
 import Image from "next/image";
 import { ReactNode } from "react";
 
-import PhotoClinic from "../../assets/photoClinic.png";
+import PhotoClinic from "../../../assets/photoClinic.png";
 
 import { AiFillHome, AiFillTool } from "react-icons/ai";
 import { BsFillFilePersonFill, BsShieldFillCheck } from "react-icons/bs";
 import Link from "next/link";
+import { ClinicDetails } from "@/components/ClinicDetails";
 
-interface AuthLayoutProps {
+interface ClinicLayoutProps {
   children: ReactNode;
+  params: {
+    clinicId: string;
+  };
 }
 
-export default function AuthLayout({ children }: AuthLayoutProps) {
+export default function ClinicLayout({ children, params }: ClinicLayoutProps) {
   return (
     <div className="flex h-screen bg-gray-50">
       <div className="flex w-72 flex-col rounded-lg bg-gray-50 shadow-md">
         <div className="p-4">
-          <Image
-            src={PhotoClinic}
-            width={130}
-            height={130}
-            alt="Clinic"
-            className="w-130 h-130 mx-auto mb-4 rounded-full"
-          />
-          <h1 className="mb-8 text-center text-xl font-bold">
-            Nome da Clínica
-          </h1>
+          <ClinicDetails id={params.clinicId} />
           <nav className="border-t border-gray-300">
             <ul className="mt-5 list-none">
-              <Link
-                href="/clinics"
+              {/*               <Link
+                href={`/clinic/${params.clinicId}`}
                 className="flex items-center py-2 hover:text-blue-500"
               >
                 <AiFillHome className="mr-2" size={20} />
                 <span>Início</span>
-              </Link>
+              </Link> */}
               <Link
-                href="/clinics/doctors"
+                href={`/clinic/${params.clinicId}`}
                 className="flex items-center py-2 hover:text-blue-500"
               >
                 <BsFillFilePersonFill className="mr-2" size={20} />
                 <span>Médicos</span>
               </Link>
               <Link
-                href="/clinics/settings"
+                href={{
+                  pathname: `/clinic/${params.clinicId}/settings`,
+                  query: {
+                    clinicId: params.clinicId,
+                  },
+                }}
                 className="flex items-center py-2 hover:text-blue-500"
               >
                 <AiFillTool className="mr-2" size={20} />
                 <span>Configurações</span>
               </Link>
               <Link
-                href="/clinics/plans"
+                href={`/clinic/${params.clinicId}/plans`}
                 className="flex items-center py-2 hover:text-blue-500"
               >
                 <BsShieldFillCheck className="mr-2" size={20} />

@@ -1,10 +1,14 @@
+'use client'
+ 
+import { useSearchParams } from 'next/navigation'
+
+import { getDoctorById } from "@/services/get-doctor-by-id";
 import Link from "next/link";
-import { getDoctorById } from "../../services/get-doctor-by-id";
 import { MdModeEdit } from "react-icons/md";
 
 interface DoctorId {
   params: {
-    doctorId: string;
+    id: string;
   };
 }
 
@@ -19,8 +23,12 @@ interface DoctorProps {
   image: string;
 }
 
-export default async function DoctorId({ params }: DoctorId) {
-  const doctor: DoctorProps = await getDoctorById(params.doctorId);
+export default async function DoctorSelected() {
+  const searchParams = useSearchParams()
+ 
+  const search = searchParams.get('doctor')
+
+  const doctor: DoctorProps = await getDoctorById(search);
 
   return (
     <div className="flex-grow p-10">
@@ -33,16 +41,6 @@ export default async function DoctorId({ params }: DoctorId) {
                 {doctor.especializacao.nome}
               </p>
             </div>
-            <Link
-              href={{
-                pathname: `/${params.doctorId}/edit`,
-                query: params.doctorId,
-              }}
-            >
-              <div className="rounded-full bg-primary p-2">
-                <MdModeEdit color="#ffffff" />
-              </div>
-            </Link>
           </div>
 
           <div className="mt-4 flex flex-col gap-10">
@@ -69,10 +67,23 @@ export default async function DoctorId({ params }: DoctorId) {
 
             <div>
               <h2 className="border-b-2 border-gray-200 font-bold uppercase">
+                Idiomas
+              </h2>
+              <p>Conteúdo da seção Idiomas</p>
+            </div>
+
+            <div>
+              <h2 className="border-b-2 border-gray-200 font-bold uppercase">
                 CRM
               </h2>
               <p>{doctor.CRM}</p>
             </div>
+            <Link
+              className="rounded bg-primary p-2 text-center text-white"
+              href={`./doctorSelected/patients`}
+            >
+              Pacientes
+            </Link>
           </div>
         </div>
       </div>

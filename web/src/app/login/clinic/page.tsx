@@ -29,7 +29,7 @@ export default function LoginClinic() {
         // Redirecione para a página desejada usando o router do Next.js
 
         // Exemplo: router.push("/dashboard");
-        router.push("/clinics");
+        router.push(`/clinic/${clinicFound.id}`);
       } else {
         // Autenticação falhou, exiba uma mensagem de erro
         setError("Credenciais inválidas. Por favor, verifique seu ID.");

@@ -1,9 +1,9 @@
-import { getPatientById } from "../../../../services/get-patient-by-id";
+import { getPatientById } from "../../../../../services/get-patient-by-id";
 
 import Image from "next/image";
 
-import Retangle from "../../../../assets/Rectangle.svg";
-import Patient from "../../../../assets/doctor1.png";
+import Retangle from "../../../../../assets/Rectangle.svg";
+import Patient from "../../../../../assets/doctor1.png";
 import Link from "next/link";
 import { HeightConverter } from "@/utils/HeightConverter";
 import { WeightConverter } from "@/utils/WeightConverter";
@@ -24,8 +24,6 @@ interface PatientProps {
   altura: string;
   peso: string;
 }
-
-
 
 export default async function PatientDetails({ params }: PatientId) {
   const patient: PatientProps = await getPatientById(params.patientId);
@@ -80,7 +78,10 @@ export default async function PatientDetails({ params }: PatientId) {
             </div>
 
             <div className="flex items-center justify-center">
-              <Link href={`./${params.patientId}/historic`} className="rounded-lg bg-primary px-16 py-5 font-bold text-white ">
+              <Link
+                href={`./${params.patientId}/historic`}
+                className="rounded-lg bg-primary px-16 py-5 font-bold text-white "
+              >
                 Histórico
               </Link>
             </div>

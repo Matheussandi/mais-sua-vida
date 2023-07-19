@@ -22,14 +22,14 @@ export default function DoctorLayout({ children, params }: DoctorLayoutProps) {
           <nav className="border-t border-gray-300">
             <ul className="mt-5 list-none">
               <Link
-                href={`/${params.doctorId}`}
+                href={`/doctor/${params.doctorId}`}
                 className="flex items-center py-2 hover:text-blue-500"
               >
                 <FaUser className="mr-2" size={20} />
                 <span>Sobre</span>
               </Link>
               <Link
-                href={`/${params.doctorId}/patients`}
+                href={`/doctor/${params.doctorId}/patients`}
                 className="flex items-center py-2 hover:text-blue-500"
               >
                 <FaUsers className="mr-2" size={20} />
@@ -37,7 +37,7 @@ export default function DoctorLayout({ children, params }: DoctorLayoutProps) {
               </Link>
               <Link
                 href={{
-                  pathname: `/${params.doctorId}/edit`,
+                  pathname: `/doctor/${params.doctorId}/edit`,
                   query: params.doctorId,
                 }}
                 className="flex items-center py-2 hover:text-blue-500"

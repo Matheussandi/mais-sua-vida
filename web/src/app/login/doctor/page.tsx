@@ -29,8 +29,8 @@ export default function LoginDoctor() {
         console.log("Autenticação bem-sucedida");
         // Redirecione para a página desejada usando o router do Next.js
         // Exemplo: router.push("/dashboard");
-        
-        router.push(`/${doctorFound.id}`);
+
+        router.push(`/doctor/${doctorFound.id}`);
       } else {
         // Autenticação falhou, exiba uma mensagem de erro
         setError("Credenciais inválidas. Por favor, verifique seu email.");
