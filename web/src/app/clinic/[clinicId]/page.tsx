@@ -74,7 +74,7 @@ export default async function DoctorSelected({ params }: ClinicId) {
                   </div>
                   <div className="p-4">
                     <h3 className="mb-2 text-center text-base font-bold">
-                      {doctor.nome + " " + doctor.sobrenome}
+                      {doctor.nome}
                     </h3>
                     {/*                     <p className="text-center text-sm text-gray-500">
                       {doctor.idEspecializacao}

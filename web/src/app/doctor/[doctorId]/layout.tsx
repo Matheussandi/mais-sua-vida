@@ -68,7 +68,7 @@ export default function DoctorLayout({ children, params }: DoctorLayoutProps) {
               <Link
                 href={{
                   pathname: `/doctor/${params.doctorId}/edit`,
-                  query: params.doctorId,
+                  query: { doctor: params.doctorId},
                 }}
                 className="flex items-center py-2 hover:text-blue-500"
               >

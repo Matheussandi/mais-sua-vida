@@ -52,8 +52,8 @@ const createDoctorFormSchema = z.object({
     .string()
     .nonempty({ message: "Senha é obrigatória" })
     .min(6, "Senha precisa de no mínimo 6 caracteres"),
-  about: z.string(),
-  experience: z.string(),
+  sobre: z.string(),
+  experiencia: z.string(),
   idEspecializacao: z.string(),
   idClinica: z.string(),
   CRM: z
@@ -85,8 +85,8 @@ export function NewDoctorForm() {
         CRM: data.CRM,
         email: data.email,
         senha: data.senha,
-        about: data.about,
-        experience: data.experience,
+        sobre: data.sobre,
+        experiencia: data.experiencia,
         idEspecializacao: data.idEspecializacao,
         idClinica: data.idClinica,
       };
@@ -189,19 +189,19 @@ export function NewDoctorForm() {
 
           <div className="flex flex-col">
             <Form.Label>Sobre</Form.Label>
-            <Form.TextArea id="about" name="about" rows={4} cols={4} />
-            <Form.ErrorMessage field="about" />
+            <Form.TextArea id="sobre" name="sobre" rows={4} cols={4} />
+            <Form.ErrorMessage field="sobre" />
           </div>
 
           <div className="flex flex-col">
             <Form.Label>Experiência</Form.Label>
             <Form.TextArea
-              id="experience"
-              name="experience"
+              id="experiencia"
+              name="experiencia"
               rows={4}
               cols={4}
             />
-            <Form.ErrorMessage field="experience" />
+            <Form.ErrorMessage field="experiencia" />
           </div>
 
           <Form.Field>

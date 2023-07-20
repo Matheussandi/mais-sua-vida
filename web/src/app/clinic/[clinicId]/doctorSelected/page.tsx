@@ -1,6 +1,6 @@
-'use client'
- 
-import { useSearchParams } from 'next/navigation'
+"use client";
+
+import { useSearchParams } from "next/navigation";
 
 import { getDoctorById } from "@/services/get-doctor-by-id";
 import Link from "next/link";
@@ -17,6 +17,9 @@ interface DoctorProps {
   nome: string;
   sobrenome: string;
   CRM: string;
+  email: string;
+  sobre: string;
+  experiencia: string;
   especializacao: {
     nome: string;
   };
@@ -24,9 +27,9 @@ interface DoctorProps {
 }
 
 export default async function DoctorSelected() {
-  const searchParams = useSearchParams()
- 
-  const search = searchParams.get('doctor')
+  const searchParams = useSearchParams();
+
+  const search = searchParams.get("doctor");
 
   const doctor: DoctorProps = await getDoctorById(search);
 
@@ -48,28 +51,14 @@ export default async function DoctorSelected() {
               <h2 className="border-b-2 border-gray-200 font-bold uppercase">
                 Sobre
               </h2>
-              <p>Conteúdo da seção Sobre</p>
+              <p>{doctor.sobre}</p>
             </div>
 
             <div>
               <h2 className="border-b-2 border-gray-200 font-bold uppercase">
                 Experiência
               </h2>
-              <p>Conteúdo da seção Experiência</p>
-            </div>
-
-            <div>
-              <h2 className="border-b-2 border-gray-200 font-bold uppercase">
-                Formação
-              </h2>
-              <p>Conteúdo da seção Formação</p>
-            </div>
-
-            <div>
-              <h2 className="border-b-2 border-gray-200 font-bold uppercase">
-                Idiomas
-              </h2>
-              <p>Conteúdo da seção Idiomas</p>
+              <p>{doctor.experiencia}</p>
             </div>
 
             <div>

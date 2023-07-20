@@ -12,6 +12,8 @@ interface DoctorProps {
   id: string;
   nome: string;
   sobrenome: string;
+  sobre: string;
+  experiencia: string;
   CRM: string;
   especializacao: {
     nome: string;
@@ -50,21 +52,14 @@ export default async function DoctorId({ params }: DoctorId) {
               <h2 className="border-b-2 border-gray-200 font-bold uppercase">
                 Sobre
               </h2>
-              <p>Conteúdo da seção Sobre</p>
+              <p>{doctor.sobre}</p>
             </div>
 
             <div>
               <h2 className="border-b-2 border-gray-200 font-bold uppercase">
                 Experiência
               </h2>
-              <p>Conteúdo da seção Experiência</p>
-            </div>
-
-            <div>
-              <h2 className="border-b-2 border-gray-200 font-bold uppercase">
-                Formação
-              </h2>
-              <p>Conteúdo da seção Formação</p>
+              <p>{doctor.experiencia}</p>
             </div>
 
             <div>

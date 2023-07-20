@@ -1,16 +1,18 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { useSearchParams } from "next/navigation";
 
-import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import axios from "axios";
+import { z } from "zod";
+
+import { Form } from "./Form";
+import { api } from "@/lib/api";
 
 const editDoctorFormSchema = z.object({
-  // lógica para converter a primeira letra para maísculo
+  // Lógica para converter a primeira letra para maísculo
   nome: z
     .string()
     .nonempty("Nome é obrigatório")
@@ -44,11 +46,10 @@ const editDoctorFormSchema = z.object({
     .string()
     .nonempty("Senha é obrigatória")
     .min(6, "Senha precisa de no mínimo 6 caracteres"),
-  cidade: z.string(),
-  estado: z.string(),
-  CEP: z.string(),
-  telefone: z.string().length(13, "Telefone de ter 13 caracteres"),
+  sobre: z.string(),
+  experiencia: z.string(),
   idEspecializacao: z.string(),
+  idClinica: z.string(),
   CRM: z
     .string()
     .nonempty("CRM é obrigatório")
@@ -58,198 +59,167 @@ const editDoctorFormSchema = z.object({
 type EditDoctorFormData = z.infer<typeof editDoctorFormSchema>;
 
 export function EditDoctorForm() {
+  const [isModificationSuccessful, setIsModificationSuccessful] =
+    useState(false);
+
+  const [formData, setFormData] = useState<EditDoctorFormData>({
+    nome: "",
+    sobrenome: "",
+    email: "",
+    senha: "",
+    sobre: "",
+    experiencia: "",
+    idEspecializacao: "",
+    idClinica: "",
+    CRM: "",
+  });
+
   const searchParams = useSearchParams();
-
   const search = searchParams.get("doctor");
-
   const [output, setOutput] = useState("");
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<EditDoctorFormData>({
+  const editDoctorForm = useForm<EditDoctorFormData>({
     resolver: zodResolver(editDoctorFormSchema),
+    defaultValues: formData,
   });
+
+  const {
+    handleSubmit,
+    formState: { isSubmitting },
+    watch,
+  } = editDoctorForm;
 
   async function editDoctor(data: EditDoctorFormData) {
     try {
-      // Cria um objeto com os dados do formulário
-      const requestData = {
-        nome: data.nome,
-        sobrenome: data.sobrenome,
-        email: data.email,
-        senha: data.senha,
-        cidade: data.cidade,
-        estado: data.estado,
-        CEP: data.CEP,
-        telefone: data.telefone,
-        idEspecializacao: data.idEspecializacao,
-        CRM: data.CRM,
-      };
-
       // Modifica os dados do médico
-      await axios.put(`http://localhost:3333/medico/${search}`, requestData, {
+      await api.put(`/medico/${search}`, data, {
         headers: {
           "Content-Type": "application/json",
         },
       });
 
       console.log("Dados enviados com sucesso");
+      setOutput(JSON.stringify(data, null, 2));
+
+      // Define o estado como verdadeiro para mostrar a mensagem de sucesso
+      setIsModificationSuccessful(true);
     } catch (error) {
       console.error("Erro ao enviar os dados", error);
     }
-
-    setOutput(JSON.stringify(data, null, 2));
   }
+
+  // Utilizei useCallback para garantir que useEffect tenha acesso atualizado ao editDoctorForm
+  // useCallback é usado para memorizar a função handleGetRegisteredData,
+  // garantindo que ela tenha acesso à instância mais recente de editDoctorForm e evitando recriações desnecessárias.
+  const handleGetRegisteredData = useCallback(async () => {
+    try {
+      const response = await api.get(`/medico/${search}`);
+      const doctor = await response.data;
+
+      const { senha, ...restDoctorData } = doctor;
+      setFormData(restDoctorData);
+
+      editDoctorForm.reset(restDoctorData);
+    } catch (error) {
+      console.error("Erro ao buscar dados da API:", error);
+    }
+  }, [search, editDoctorForm]);
+
+  useEffect(() => {
+    handleGetRegisteredData();
+  }, [handleGetRegisteredData]);
 
   return (
     <div className="flex-grow p-10">
       <div className="rounded bg-gray-50 p-7">
-        <form
-          onSubmit={handleSubmit(editDoctor)}
-          className="flex flex-1 flex-col gap-4"
-        >
-          <div className="flex flex-row gap-4">
-            <div className="flex-1">
-              <label className="flex flex-col">
-                <span className="text-lg font-medium">Nome:</span>
-                <input
-                  type="text"
-                  className="rounded-lg border border-gray-300 px-4 py-2"
-                  {...register("nome")}
-                />
-                {errors.nome && (
-                  <span className="text-red-500">{errors.nome.message}</span>
-                )}
-              </label>
-            </div>
-            <div className="flex-1">
-              <label className="flex flex-col">
-                <span className="text-lg font-medium">Sobrenome:</span>
-                <input
-                  type="text"
-                  className="rounded-lg border border-gray-300 px-4 py-2"
-                  {...register("sobrenome")}
-                />
-                {errors.sobrenome && (
-                  <span className="text-red-500">
-                    {errors.sobrenome.message}
-                  </span>
-                )}
-              </label>
-            </div>
-          </div>
+        <FormProvider {...editDoctorForm}>
+          <form
+            onSubmit={handleSubmit(editDoctor)}
+            className="flex flex-1 flex-col gap-4"
+          >
+            <Form.Field>
+              <div className="flex flex-1 flex-col">
+                <Form.Label>Nome</Form.Label>
+                <Form.Input type="text" name="nome" value={formData.nome} />
+                <Form.ErrorMessage field="nome" />
+              </div>
 
-          <div className="flex flex-row gap-4">
-            <div className="flex-1">
-              <label className="flex flex-col">
-                <span className="text-lg font-medium">E-mail:</span>
-                <input
-                  type="email"
-                  className="rounded-lg border border-gray-300 px-4 py-2"
-                  {...register("email")}
-                />
-                {errors.email && (
-                  <span className="text-red-500">{errors.email.message}</span>
-                )}
-              </label>
+              <div className="flex flex-1 flex-col">
+                <Form.Label>Sobrenome</Form.Label>
+                <Form.Input type="text" name="sobrenome" />
+                <Form.ErrorMessage field="sobrenome" />
+              </div>
+            </Form.Field>
+
+            <Form.Field>
+              <div className="flex flex-1 flex-col">
+                <Form.Label>CRM</Form.Label>
+                <Form.Input type="text" name="CRM" maxLength={12} />
+                <Form.ErrorMessage field="CRM" />
+              </div>
+            </Form.Field>
+
+            <Form.Field>
+              <div className="flex flex-1 flex-col">
+                <Form.Label>E-mail</Form.Label>
+                <Form.Input type="email" name="email" />
+                <Form.ErrorMessage field="email" />
+              </div>
+
+              {/* A senha está com hash */}
+              <div className="flex flex-1 flex-col">
+                <Form.Label>Senha</Form.Label>
+                <Form.Input type="password" name="senha" />
+                <Form.ErrorMessage field="senha" />
+              </div>
+            </Form.Field>
+
+            <div className="flex flex-col">
+              <Form.Label>Sobre</Form.Label>
+              <Form.TextArea id="sobre" name="sobre" rows={4} cols={4} />
+              <Form.ErrorMessage field="sobre" />
             </div>
-            <div className="flex-1">
-              <label className="flex flex-col">
-                <span className="text-lg font-medium">Telefone:</span>
-                <input
-                  type="tel"
-                  minLength={13}
-                  maxLength={13}
-                  className="rounded-lg border border-gray-300 px-4 py-2"
-                  {...register("telefone")}
-                />
-                {errors.telefone && (
-                  <span className="text-red-500">
-                    {errors.telefone.message}
-                  </span>
-                )}
-              </label>
+
+            <div className="flex flex-col">
+              <Form.Label>Experiência</Form.Label>
+              <Form.TextArea
+                id="experiencia"
+                name="experiencia"
+                rows={4}
+                cols={4}
+              />
+              <Form.ErrorMessage field="experiencia" />
             </div>
-          </div>
 
-          <label className="flex flex-col">
-            <span className="text-lg font-medium">Senha:</span>
-            <input
-              type="password"
-              className="rounded-lg border border-gray-300 px-4 py-2"
-              {...register("senha")}
-            />
-            {errors.senha && (
-              <span className="text-red-500">{errors.senha.message}</span>
-            )}
-          </label>
+            <Form.Field>
+              <div className="flex flex-1 flex-col">
+                <Form.Label>ID Especialização</Form.Label>
+                <Form.Input type="text" name="idEspecializacao" />
+                <Form.ErrorMessage field="idEspecializacao" />
+              </div>
 
-          <label className="flex flex-col">
-            <span className="text-lg font-medium">CEP:</span>
-            <input
-              type="text"
-              className="rounded-lg border border-gray-300 px-4 py-2"
-              {...register("CEP")}
-            />
-          </label>
+              <div className="flex flex-1 flex-col">
+                <Form.Label>ID Clínica</Form.Label>
+                <Form.Input type="text" name="idClinica" />
+                <Form.ErrorMessage field="idClinica" />
+              </div>
+            </Form.Field>
 
-          <div className="flex flex-row gap-4">
-            <div className="flex-1">
-              <label className="flex flex-col">
-                <span className="text-lg font-medium">Estado:</span>
-                <input
-                  type="text"
-                  className="rounded-lg border border-gray-300 px-4 py-2"
-                  {...register("estado")}
-                />
-              </label>
+            <div className="flex items-center justify-end gap-4">
+              {isModificationSuccessful && (
+                <span className="font-bold text-green-600">
+                  Modificação realizada com sucesso!
+                </span>
+              )}
+              <button
+                disabled={isSubmitting}
+                className="rounded-lg bg-primary px-10 py-2 font-bold uppercase text-white hover:bg-blue-600"
+              >
+                Salvar
+              </button>
             </div>
-            <div className="flex-1">
-              <label className="flex flex-col">
-                <span className="text-lg font-medium">Cidade:</span>
-                <input
-                  type="text"
-                  className="rounded-lg border border-gray-300 px-4 py-2"
-                  {...register("cidade")}
-                />
-              </label>
-            </div>
-          </div>
-
-          <div className="flex flex-row gap-4">
-            <div className="flex-1">
-              <label className="flex flex-col">
-                <span className="text-lg font-medium">ID Especialização:</span>
-                <input
-                  type="text"
-                  className="rounded-lg border border-gray-300 px-4 py-2"
-                  {...register("idEspecializacao")}
-                />
-              </label>
-            </div>
-          </div>
-
-          <label className="flex flex-col">
-            <span className="text-lg font-medium">CRM:</span>
-            <input
-              type="text"
-              maxLength={12}
-              className="rounded-lg border border-gray-300 px-4 py-2"
-              {...register("CRM")}
-            />
-            {errors.CRM && (
-              <span className="text-red-500">{errors.CRM.message}</span>
-            )}
-          </label>
-
-          <div className="flex justify-end gap-4">
-            <button className="rounded-lg bg-primary px-10 py-2 font-bold uppercase text-white hover:bg-blue-600">
-              Salvar
-            </button>
-          </div>
-        </form>
+          </form>
+        </FormProvider>
 
         <pre>{output}</pre>
       </div>
