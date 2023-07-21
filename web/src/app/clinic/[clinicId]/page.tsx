@@ -1,4 +1,4 @@
-import DoctorList from "@/components/DoctorsList";
+import DoctorList from "../components/DoctorsList";
 
 interface ClinicId {
   params: {

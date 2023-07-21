@@ -9,11 +9,11 @@ import Image from "next/image";
 import { MdModeEdit } from "react-icons/md";
 
 import { MediaPicker } from "@/components/MediaPicker";
-import ImageMedico from "../assets/doctor1.png";
+import ImageMedico from "../../../assets/doctor1.png";
 import { api } from "@/lib/api";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Form } from "./Form";
+import { Form } from "../../../components/Form";
 import { z } from "zod";
 
 const createDoctorFormSchema = z.object({
@@ -115,15 +115,14 @@ export function NewDoctorForm() {
   } = createDoctorForm;
 
   return (
-    <main className="h-screen">
+    <main className="h-screen p-16">
       <FormProvider {...createDoctorForm}>
         <form
           onSubmit={handleSubmit(createDoctor)}
           className="flex flex-1 flex-col gap-4"
         >
           <div className="flex items-center">
-            <MediaPicker />
-            <Form.Input type="file" name="avatar" accept="image/*" />
+
             <Form.Label
               htmlFor="media"
               className="h-100 w-100 relative cursor-pointer overflow-hidden"
@@ -148,8 +147,12 @@ export function NewDoctorForm() {
                   Isso será exibido em seu perfil.
                 </span>
               </div>
+              
+              <MediaPicker />
+            <Form.Input type="file" name="avatar" accept="image/*" />
             </div>
           </div>
+          
 
           <Form.Field>
             <div className="flex flex-1 flex-col">
@@ -229,7 +232,7 @@ export function NewDoctorForm() {
         </form>
       </FormProvider>
 
-      <pre>{output}</pre>
+      <pre className="w-11">{output}</pre>
     </main>
   );
 }

@@ -8,7 +8,7 @@ import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 
-import { Form } from "./Form";
+import { Form } from "../../../components/Form";
 import { api } from "@/lib/api";
 
 const editDoctorFormSchema = z.object({
