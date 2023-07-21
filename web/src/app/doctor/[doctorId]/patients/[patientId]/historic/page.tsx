@@ -37,14 +37,14 @@ export default async function Historic({ params }: PatientId) {
               alt=""
               width={120}
               height={120}
-              className="rounded-full"
-              style={{ border: "6px solid white" }}
+              className="rounded-full border-[6px] border-solid border-white"
             />
             <h1 className="my-2 text-2xl font-extrabold">{`${patient.nome} ${patient.sobrenome}`}</h1>
           </div>
         </div>
 
-        <div className="p-7">
+        {/* Listagem do histórico do paciente */}
+        <div className="">
           <div className="mt-12 flex flex-col">
             <div className="relative max-h-80 max-w-screen-xl overflow-y-scroll">
               <ul className="divide-y divide-gray-300">

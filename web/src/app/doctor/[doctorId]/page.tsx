@@ -1,6 +1,4 @@
-import Link from "next/link";
 import { getDoctorById } from "../../../services/get-doctor-by-id";
-import { MdModeEdit } from "react-icons/md";
 
 interface DoctorId {
   params: {
@@ -35,16 +33,6 @@ export default async function DoctorId({ params }: DoctorId) {
                 {doctor.especializacao.nome}
               </p>
             </div>
-            <Link
-              href={{
-                pathname: `/${params.doctorId}/edit`,
-                query: params.doctorId,
-              }}
-            >
-              <div className="rounded-full bg-primary p-2">
-                <MdModeEdit color="#ffffff" />
-              </div>
-            </Link>
           </div>
 
           <div className="mt-4 flex flex-col gap-10">
