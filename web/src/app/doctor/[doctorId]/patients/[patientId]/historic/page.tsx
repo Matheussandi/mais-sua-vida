@@ -4,6 +4,12 @@ import Image from "next/image";
 
 import Retangle from "../../../../../../assets/Rectangle.svg";
 import Patient from "../../../../../../assets/doctor1.png";
+import { getHistoryByPatientId } from "@/services/get-history-by-patient-id";
+
+import ptBr from "dayjs/locale/pt-br";
+import dayjs from "dayjs";
+
+dayjs.locale(ptBr);
 
 interface PatientId {
   params: {
@@ -17,8 +23,15 @@ interface PatientProps {
   sobrenome: string;
 }
 
+interface HistoryProps {
+  id: string;
+  data: string;
+  descricao: string;
+}
+
 export default async function Historic({ params }: PatientId) {
   const patient: PatientProps = await getPatientById(params.patientId);
+  const history: HistoryProps[] = await getHistoryByPatientId(params.patientId);
 
   return (
     <div className="flex-grow p-10">
@@ -46,68 +59,23 @@ export default async function Historic({ params }: PatientId) {
         {/* Listagem do histórico do paciente */}
         <div className="">
           <div className="mt-12 flex flex-col">
-            <div className="relative max-h-80 max-w-screen-xl overflow-y-scroll">
+            <div className="relative mt-10 max-h-80 max-w-screen-xl overflow-y-scroll p-5">
               <ul className="divide-y divide-gray-300">
-                <li className="py-2">
-                  <div className="flex items-center">
-                    <div className="h-4 w-4 rounded-full bg-blue-500"></div>
-                    <p className="ml-3 font-medium text-gray-500">
-                      10 de Julho de 2023
-                    </p>
-                  </div>
-                  <p className="ml-7 text-gray-800">
-                    Lorem ipsum dolor sit amet. Et omnis dolorem 33 expedita
-                    sequi hic minus tenetur vel perferendis perferendis? Qui
-                    dolor error et autem architecto aut nulla doloremque cum
-                    voluptate deserunt quo rerum culpa sit totam reprehenderit
-                    qui eveniet excepturi. Et omnis velit qui officiis quaerat
-                    qui possimus alias qui cumque ullam aut labore impedit.
-                  </p>
-                </li>
-                <li className="py-2">
-                  <div className="flex items-center">
-                    <div className="h-4 w-4 rounded-full bg-blue-500"></div>
-                    <p className="ml-3 font-medium text-gray-500">
-                      15 de Julho de 2023
-                    </p>
-                  </div>
-                  <p className="ml-7 text-gray-800">
-                    Lorem ipsum dolor sit amet. Et omnis dolorem 33 expedita
-                    sequi hic minus tenetur vel perferendis perferendis? Qui
-                    dolor error et autem architecto aut nulla doloremque cum
-                    voluptate deserunt quo rerum culpa sit totam reprehenderit
-                    qui eveniet excepturi. Et omnis velit qui officiis quaerat
-                    qui possimus alias qui cumque ullam aut labore impedit.
-                  </p>
-                </li>
-                <li className="py-2">
-                  <div className="flex items-center">
-                    <div className="h-4 w-4 rounded-full bg-blue-500"></div>
-                    <p className="ml-3 font-medium text-gray-500">
-                      15 de Julho de 2023
-                    </p>
-                  </div>
-                  <p className="ml-7 text-gray-800">
-                    Lorem ipsum dolor sit amet. Et omnis dolorem 33 expedita
-                    sequi hic minus tenetur vel perferendis perferendis? Qui
-                    dolor error et autem architecto aut nulla doloremque cum
-                    voluptate deserunt quo rerum culpa sit totam reprehenderit
-                    qui eveniet excepturi. Et omnis velit qui officiis quaerat
-                    qui possimus alias qui cumque ullam aut labore impedit.
-                  </p>
-                </li>
-                <li className="py-2">
-                  <div className="flex items-center">
-                    <div className="h-4 w-4 rounded-full bg-blue-500"></div>
-                    <p className="ml-3 font-medium text-gray-500">
-                      15 de Julho de 2023
-                    </p>
-                  </div>
-                  <p className="ml-7 text-gray-800">
-                    Realizada a análise de sangue. Resultados dentro dos
-                    parâmetros normais.
-                  </p>
-                </li>
+                {/* Renderiza os itens do histórico dinamicamente */}
+                {history.map((item) => (
+                  <li key={item.id} className="py-2">
+                    <div className="flex items-center">
+                      <div className="h-4 w-4 rounded-full bg-blue-500"></div>
+                      <p className="ml-3 font-medium text-gray-500">
+                        {dayjs(item.data).format("D[ de ]MMMM[ de ]YYYY")}
+                      </p>
+                    </div>
+                    <p className="ml-7 text-gray-800">{item.descricao}</p>
+                    {/*                     {item.medicos.length > 0 && (
+                      <p className="ml-7 text-gray-800">Médico: {item.medicos[0].nome}</p>
+                    )} */}
+                  </li>
+                ))}
               </ul>
             </div>
 
