@@ -8,6 +8,8 @@ import { getHistoryByPatientId } from "@/services/get-history-by-patient-id";
 
 import ptBr from "dayjs/locale/pt-br";
 import dayjs from "dayjs";
+import Link from "next/link";
+import { BasicModal } from "@/app/doctor/components/BasicModal";
 
 dayjs.locale(ptBr);
 
@@ -15,6 +17,11 @@ interface PatientId {
   params: {
     patientId: string;
   };
+  searchParams: Record<string, string> | null | undefined;
+}
+
+type Props = {
+  searchParams: Record<string, string> | null | undefined;
 }
 
 interface PatientProps {
@@ -29,9 +36,11 @@ interface HistoryProps {
   descricao: string;
 }
 
-export default async function Historic({ params }: PatientId) {
+export default async function Historic({ params, searchParams }: PatientId) {
   const patient: PatientProps = await getPatientById(params.patientId);
   const history: HistoryProps[] = await getHistoryByPatientId(params.patientId);
+
+  const showModal = searchParams?.modal;
 
   return (
     <div className="flex-grow p-10">
@@ -80,10 +89,12 @@ export default async function Historic({ params }: PatientId) {
             </div>
 
             <div className="mt-6 flex items-center justify-center">
-              <button className="rounded-lg bg-primary px-16 py-5 font-bold text-white ">
+              <Link href="?modal=true" className="rounded-lg bg-primary px-16 py-5 font-bold text-white ">
                 Adicionar
-              </button>
+              </Link>
             </div>
+
+            {showModal && <BasicModal />}
           </div>
         </div>
       </div>
