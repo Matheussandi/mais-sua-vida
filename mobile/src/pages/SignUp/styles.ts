@@ -28,7 +28,7 @@ export const Title = styled.Text`
 export const CenteredView = styled.View`
     justify-content: center;
     align-items: center;
-    padding: 20px;
+    width: 100%;
 `;
 
 export const InputWrapper = styled.View`
@@ -49,7 +49,7 @@ export const Input = styled.TextInput`
 `;
 
 export const LoginButton = styled.TouchableOpacity`
-    width: 100%;
+    width: 80%;
     height: 50px;
     margin-top: 20px;
     background-color: #0079ff;

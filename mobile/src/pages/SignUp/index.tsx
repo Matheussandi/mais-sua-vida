@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
 	KeyboardAvoidingView,
 	TouchableWithoutFeedback,
@@ -7,17 +7,18 @@ import {
 	Alert,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { AxiosError } from 'axios';
 import { Feather } from '@expo/vector-icons';
+
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
 
 import { api } from '../../api';
 import {
 	Container,
-	Input,
 	Title,
 	TopContent,
 	CenteredView,
-	InputWrapper,
 	LoginButton,
 	LoginButtonText,
 	SignUpText,
@@ -25,34 +26,56 @@ import {
 	BackButton,
 } from './styles';
 import { useUserContext } from '../../context/UserContext';
+import { ControlledInput } from '../../components/ControlledInput';
+
+interface FormData {
+    nome: string;
+    sobrenome: string;
+    CPF: string;
+    telefone: string;
+    email: string;
+    senha: string;
+}
+
+const schema = yup
+	.object({
+		nome: yup
+			.string()
+			.required('Nome é obrigatório.')
+			.matches(/^[A-Za-zÀ-ÖØ-öø-ÿ']+$/, 'Nome inválido'),
+		sobrenome: yup
+			.string()
+			.required('Sobrenome é obrigatório.')
+			.matches(/^[A-Za-zÀ-ÖØ-öø-ÿ']+$/, 'Sobrenome inválido'),
+		CPF: yup
+			.string()
+			.required('CPF é obrigatório.')
+			.matches(/^\d{11}$/, 'CPF inválido.'),
+		telefone: yup
+			.string()
+			.required('Número de telefone é obrigatório.')
+			.matches(/^\d{13}$/, 'Telefone inválido.'),
+		email: yup.string().email('Email inválido').required('Email inválido'),
+		senha: yup.string().required('Senha inválida'),
+	})
+	.required();
 
 export default function SignUp() {
-	const [nome, setNome] = useState('');
-	const [sobrenome, setSobrenome] = useState('');
-	const [email, setEmail] = useState('');
-	const [CPF, setCPF] = useState('');
-	const [telefone, setTelefone] = useState('');
-	const [senha, setSenha] = useState('');
-	const [showPassword, setShowPassword] = useState(false);
-
 	const { setUserData } = useUserContext();
+
+	const {
+		control,
+		handleSubmit,
+		formState: { errors },
+	} = useForm<FormData>({
+		resolver: yupResolver(schema),
+	});
+
 	const navigation = useNavigation();
 
-	async function handleSignIn() {
-		navigation.navigate('SignIn');
-	}
-
-	async function handleSignUp() {
+	async function handleSignUp(data: FormData) {
 		try {
-			const data = {
-				nome,
-				sobrenome,
-				CPF,
-				email,
-				senha,
-				telefone,
-			};
-
+			
 			const paciente = await api
 				.post('paciente', data)
 				.then((response) => {
@@ -77,6 +100,10 @@ export default function SignUp() {
 			}
 		}
 	}
+
+	async function handleSignIn() {
+		navigation.navigate('SignIn');
+	}
 	return (
 		<KeyboardAvoidingView behavior={'padding'}>
 			<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -89,80 +116,66 @@ export default function SignUp() {
 					</TopContent>
 					<ScrollView>
 						<CenteredView>
-							<InputWrapper>
-								<Feather name="user" size={24} color="#777" />
-								<Input
-									placeholder="Nome"
-									value={nome}
-									onChangeText={(value: string) =>
-										setNome(value)
-									}
-								/>
-							</InputWrapper>
-							<InputWrapper>
-								<Feather name="user" size={24} color="#777" />
-								<Input
-									placeholder="Sobrenome"
-									value={sobrenome}
-									onChangeText={(value: string) =>
-										setSobrenome(value)
-									}
-								/>
-							</InputWrapper>
-							<InputWrapper>
-								<Feather name="mail" size={24} color="#777" />
-								<Input
-									placeholder="E-mail"
-									value={email}
-									onChangeText={(value: string) =>
-										setEmail(value)
-									}
-								/>
-							</InputWrapper>
-							<InputWrapper>
-								<Feather name="lock" size={24} color="#777" />
-								<Input
-									placeholder="Senha"
-									secureTextEntry={!showPassword}
-									value={senha}
-									onChangeText={(value: string) =>
-										setSenha(value)
-									}
-									maxLength={16}
-								/>
-								{/* Ícone de olho para alternar a visualização da senha */}
-								<Feather
-									name={showPassword ? 'eye-off' : 'eye'}
-									size={20}
-									color="#777"
-									onPress={() =>
-										setShowPassword(!showPassword)
-									}
-								/>
-							</InputWrapper>
-							<InputWrapper>
-								<Feather name="user" size={24} color="#777" />
-								<Input
-									placeholder="CPF"
-									value={CPF}
-									maxLength={11}
-									onChangeText={(value: string) =>
-										setCPF(value)
-									}
-								/>
-							</InputWrapper>
-							<InputWrapper>
-								<Feather name="phone" size={24} color="#777" />
-								<Input
-									placeholder="Telefone"
-									value={telefone}
-									maxLength={13}
-									onChangeText={(value: string) =>
-										setTelefone(value)
-									}
-								/>
-							</InputWrapper>
-							<LoginButton onPress={handleSignUp}>
+							<ControlledInput
+								name="nome"
+								maxLength={25}
+								control={control}
+								icon="user"
+								placeholder="Nome"
+								error={errors.nome}
+								autoCapitalize="none"
+							/>
+
+							<ControlledInput
+								name="sobrenome"
+								maxLength={25}
+								control={control}
+								icon="user"
+								placeholder="Sobrenome"
+								error={errors.sobrenome}
+								autoCapitalize="none"
+							/>
+
+							<ControlledInput
+								name="CPF"
+								maxLength={11}
+								control={control}
+								icon="user"
+								placeholder="CPF"
+								error={errors.CPF}
+								autoCapitalize="none"
+							/>
+
+							<ControlledInput
+								name="telefone"
+								maxLength={13}
+								control={control}
+								icon="phone"
+								placeholder="Telefone"
+								error={errors.telefone}
+								autoCapitalize="none"
+							/>
+							<ControlledInput
+								name="email"
+								maxLength={25}
+								control={control}
+								icon="mail"
+								placeholder="E-mail"
+								error={errors.email}
+								autoCapitalize="none"
+							/>
+
+							<ControlledInput
+								name="senha"
+								secureTextEntry={true}
+								maxLength={16}
+								control={control}
+								icon="lock"
+								placeholder="Senha"
+								error={errors.senha}
+							/>
+
+							<LoginButton onPress={handleSubmit(handleSignUp)}>
 								<LoginButtonText>Cadastrar</LoginButtonText>
 							</LoginButton>
 							<SignUpText>

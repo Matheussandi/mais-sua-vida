@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { useUserContext } from '../../context/UserContext';
-import { Feather } from '@expo/vector-icons';
+
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
 
 import {
 	KeyboardAvoidingView,
@@ -17,33 +20,44 @@ const imagePath = require("../../assets/LogoPng.png");
 import {
 	Container,
 	Title,
-	Input,
 	ForgotPasswordLink,
 	LoginButton,
 	LoginButtonText,
 	Logo,
-	InputWrapper,
 	TopContent,
 	ForgotPasswordContainer,
 	CenteredView,
 	SignUpText,
 	SignUpLink,
 } from './styles';
+import { ControlledInput } from '../../components/ControlledInput';
+
+interface FormData {
+    email: string;
+    senha: string;
+}
+
+const schema = yup
+	.object({
+		email: yup.string().email('Email inválido').required('Email inválido'),
+		senha: yup.string().required('Senha inválida'),
+	})
+	.required();
 
 export default function SignIn() {
-	const [email, setEmail] = useState('');
-	const [senha, setSenha] = useState('');
-	const [showPassword, setShowPassword] = useState(false);
 	const { setUserData } = useUserContext();
+
+	const {
+		control,
+		handleSubmit,
+		formState: { errors },
+	} = useForm<FormData>({
+		resolver: yupResolver(schema),
+	});
 
 	const navigation = useNavigation();
 
-	async function handleSignIn() {
-		const data = {
-			email,
-			senha,
-		};
-
+	async function handleSignIn(data: FormData) {
 		await api
 			.post('paciente/login', data)
 			.then((response) => {
@@ -56,6 +70,7 @@ export default function SignIn() {
 				}); //This works!
 			})
 			.catch((error) => {
+				Alert.alert('Usuário inválido');
 				console.log(data);
 				console.log(error);
 			});
@@ -73,43 +88,32 @@ export default function SignIn() {
 					</TopContent>
 					<CenteredView>
 						<Logo source={imagePath} />
-						<InputWrapper>
-							{/* Ícone de e-mail */}
-							<Feather name="mail" size={24} color="#777" />
-							<Input
-								placeholder="E-mail"
-								value={email}
-								onChangeText={(value: string) =>
-									setEmail(value)
-								}
-							/>
-						</InputWrapper>
-						<InputWrapper>
-							{/* Ícone de senha */}
-							<Feather name="lock" size={24} color="#777" />
-							<Input
-								placeholder="Senha"
-								secureTextEntry={!showPassword} // A propriedade secureTextEntry será true quando o showPassword for false, e vice-versa
-								value={senha}
-								onChangeText={(value: string) =>
-									setSenha(value)
-								}
-								maxLength={16}
-							/>
-							{/* Ícone de olho para alternar a visualização da senha */}
-							<Feather
-								name={showPassword ? 'eye-off' : 'eye'}
-								size={24}
-								color="#777"
-								onPress={() => setShowPassword(!showPassword)}
-							/>
-						</InputWrapper>
+						<ControlledInput
+							name="email"
+							maxLength={25}
+							control={control}
+							icon="mail"
+							placeholder="E-mail"
+							error={errors.email}
+							autoCapitalize="none"
+						/>
+
+						<ControlledInput
+							name="senha"
+							secureTextEntry={true}
+							maxLength={16}
+							control={control}
+							icon="lock"
+							placeholder="Senha"
+							error={errors.senha}
+						/>
+
 						<ForgotPasswordContainer>
 							<ForgotPasswordLink onPress={handleSignUp}>
                                 Esqueceu a senha?
 							</ForgotPasswordLink>
 						</ForgotPasswordContainer>
-						<LoginButton onPress={handleSignIn}>
+						<LoginButton onPress={handleSubmit(handleSignIn)}>
 							<LoginButtonText>Acessar</LoginButtonText>
 						</LoginButton>
 						<SignUpText>

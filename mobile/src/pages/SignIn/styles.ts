@@ -42,6 +42,12 @@ export const Input = styled.TextInput`
     margin-left: 10px;
 `;
 
+export const TextError = styled.Text`
+    color: red;
+    width: 80%;
+    margin-top: 2px;
+`;
+
 export const ForgotPasswordContainer = styled.View`
     width: 80%;
     justify-content: flex-end;
