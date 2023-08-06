@@ -17,7 +17,7 @@ export default function SplashScreen() {
 			<Logo 
 				source={imagePath}
 			/>
-			<ActivityIndicator size={60} color="blue"/>
+			<ActivityIndicator size={60} color="#0079ff"/>
 		</Container>
 	);
 }

@@ -3,22 +3,25 @@ import {
 	BottomTabNavigationProp,
 } from '@react-navigation/bottom-tabs';
 
-import  Home  from '../Home';
-import  { Config }  from '../Config';
+import Home from '../Home';
+import { Config } from '../Config';
 
-import Icon from 'react-native-vector-icons/FontAwesome';
+import { Feather } from '@expo/vector-icons';
 
 type AppRoutes = {
-    home: undefined,
-    config: undefined,
-}
+    home: undefined;
+    config: undefined;
+    calendar: undefined;
+    file: undefined;
+    heart: undefined;
+};
 
-export type AppNavigatorRoutesProps = BottomTabNavigationProp<AppRoutes>
+export type AppNavigatorRoutesProps = BottomTabNavigationProp<AppRoutes>;
 
 const { Navigator, Screen } = createBottomTabNavigator<AppRoutes>();
 
-export function Main(){
-	return(
+export function Main() {
+	return (
 		<Navigator
 			screenOptions={{
 				headerShown: false,
@@ -37,20 +40,42 @@ export function Main(){
 				options={{
 					tabBarLabel: 'Home',
 					tabBarIcon: () => (
-						<Icon name="home" size={30} color="#0079FF"/>
-					)
+						<Feather name="home" size={24} color="#0079FF" />
+					),
 				}}
 			/>
+
 			<Screen
-				name="config"
+				name="calendar"
 				component={Config}
 				options={{
 					tabBarLabel: 'Home',
 					tabBarIcon: () => (
-						<Icon name="cog" size={30} color="#0079FF"/>
-					)
+						<Feather name="calendar" size={24} color="#0079FF" />
+					),
+				}}
+			/>
+			<Screen
+				name="file"
+				component={Config}
+				options={{
+					tabBarLabel: 'Home',
+					tabBarIcon: () => (
+						<Feather name="file" size={24} color="#0079FF" />
+					),
+				}}
+			/>
+			<Screen
+				name="heart"
+				component={Config}
+				options={{
+					tabBarLabel: 'Home',
+					tabBarIcon: () => (
+						<Feather name="heart" size={24} color="#0079FF" />
+					),
 				}}
 			/>
 		</Navigator>
 	);
 }
+

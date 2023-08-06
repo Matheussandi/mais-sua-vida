@@ -1,10 +1,12 @@
-import { FlatList } from 'react-native';
-import {  useState } from 'react';
+import { FlatList, Image } from 'react-native';
+import { useState } from 'react';
 
 import { Text } from '../../../Text';
 import { Doctor } from '../../../../types/Doctors';
 
-interface DoctorProps{
+import docImage from '../../../../assets/doctor.png';
+
+interface DoctorProps {
     doctors: Doctor[];
 }
 
@@ -14,22 +16,25 @@ import {
 	DoctorContainer,
 	DoctorImage,
 	DoctorDetails,
-	Separator
+	Separator,
+	DoctorCardItemSeparator,
+	DoctorCard,
+	DoctorName,
+	DoctorSpecialization,
+	Title,
 } from './styles';
 import { DoctorModal } from '../DoctorModal';
 
-
-export function Doctors({ doctors} : DoctorProps){
+export function Doctors({ doctors }: DoctorProps) {
 	const [isModalVisible, setIsModalVisible] = useState(false);
 	const [selectedDoctor, setSelectedDoctor] = useState<null | Doctor>(null);
-    
-    
-	function handleOpenModal(doctor: Doctor){
+
+	function handleOpenModal(doctor: Doctor) {
 		setIsModalVisible(true);
 		setSelectedDoctor(doctor);
 	}
 
-	return(
+	return (
 		<>
 			<DoctorModal
 				visible={isModalVisible}
@@ -37,27 +42,28 @@ export function Doctors({ doctors} : DoctorProps){
 				doctor={selectedDoctor}
 			/>
 
+			<Title>Médicos Recomendados</Title>
+
 			<FlatList
 				data={doctors}
-				style={{ marginTop: 32}}
-				contentContainerStyle={{ paddingHorizontal: 24}}
-				keyExtractor={doctor => doctor.id}
-				ItemSeparatorComponent={Separator}
-				renderItem={({ item: doctor}) => (
-                
-					<DoctorContainer onPress={() => handleOpenModal(doctor)}>
-						<DoctorImage
-							source={{
-								uri: `${serverUrl}/uploads/${doctor.doctorImage}`,
-							}}
-						/>
+				showsVerticalScrollIndicator={false}
+				keyExtractor={(doctor) => doctor.id}
+				ItemSeparatorComponent={() => <DoctorCardItemSeparator />}
+				renderItem={({ item: doctor }) => (
+					<DoctorCard onPress={() => handleOpenModal(doctor)}>
+						<DoctorImage source={docImage} />
 						<DoctorDetails>
-							<Text weight="700">Dr. {doctor.nome} {doctor.sobrenome}</Text>
-							<Text>{doctor.especializacao?.nome}</Text>
+							<DoctorName>
+                                Dr. {doctor.nome} {doctor.sobrenome}
+							</DoctorName>
+							<DoctorSpecialization>
+								{doctor.especializacao?.nome}
+							</DoctorSpecialization>
 						</DoctorDetails>
-					</DoctorContainer>
+					</DoctorCard>
 				)}
 			/>
 		</>
 	);
 }
+

@@ -9,6 +9,7 @@ type RootStackParamList = {
     SignIn: undefined,
     SignUp: undefined,
     Main: undefined,
+	Config: undefined,
 }
 
 
@@ -16,6 +17,7 @@ import SplashScreen from './src/pages/SplashScreen';
 import SignIn from './src/pages/SignIn';
 import SignUp from './src/pages/SignUp';
 import { Main } from './src/pages/Main';
+import { Config } from './src/pages/Config';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -57,6 +59,11 @@ export default function App() {
 					<Stack.Screen
 						name="Main"
 						component={Main}
+						options={{ headerShown: false}}
+					/>
+					<Stack.Screen
+						name="Config"
+						component={Config}
 						options={{ headerShown: false}}
 					/>
 				</Stack.Navigator>

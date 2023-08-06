@@ -2,27 +2,34 @@ import React, { useState, useEffect } from 'react';
 
 import { useUserContext } from '../../context/UserContext';
 
-import { ActivityIndicator} from 'react-native';
-import { Text } from '../Text';
+import { ActivityIndicator, Image } from 'react-native';
 
 import { api } from '../../api';
 
+import DoctorImage from '../../assets/persona.jpg';
+
 import { Doctor } from '../../types/Doctors';
 import { Especialization } from '../../types/Especialization';
-import { useRoute } from '@react-navigation/native';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import { useRoute, useNavigation } from '@react-navigation/native';
 
 const serverUrl = process.env.SERVER;
 
 import {
 	Container,
 	CenteredContainer,
+	ContentContainer,
 	Header,
 	Greetings,
-	UserImage,
 	EspecializationsContainer,
 	DoctorsContainer,
-
+	GreetingsText,
+	UserName,
+	UserImageContainer,
+	UserIcon,
+	EspecializationsTitle,
+	EspecializationsList,
+	EmptyDoctorsText,
+	EmptyDoctorsContainer,
 } from './styles';
 
 import { TouchableOpacity } from 'react-native-gesture-handler';
@@ -31,87 +38,106 @@ import { Especializations } from './components/Especializations';
 import { Doctors } from './components/Doctors';
 
 export default function Home() {
-	const [ doctors, setDoctors] = useState<Doctor[]>([]);
-	const [ especialization, setEspecialization] = useState<Especialization[]>([]);
-	const [ isLoadingDoctors, setIsLoadingDoctors] = useState(false);
+	const [doctors, setDoctors] = useState<Doctor[]>([]);
+	const [especialization, setEspecialization] = useState<Especialization[]>(
+		[]
+	);
+	const [isLoadingDoctors, setIsLoadingDoctors] = useState(false);
+
 	const { userData } = useUserContext();
 
 	const route = useRoute();
+	const navigation = useNavigation();
 
 	useEffect(() => {
-		Promise.all([
-			api.get('/medico'),
-			api.get('especializacao')
-		]).then(([doctorResponse, especializationResponse]) => {
-			setDoctors(doctorResponse.data);   
-			setEspecialization(especializationResponse.data);
-		});
+		Promise.all([api.get('/medico'), api.get('especializacao')]).then(
+			([doctorResponse, especializationResponse]) => {
+				setDoctors(doctorResponse.data);
+				setEspecialization(especializationResponse.data);
+			}
+		);
 	}, []);
 
-	async function handleSelectEspecialization(especializationId: string){
+	async function handleSelectEspecialization(especializationId: string) {
 		const route = !especializationId
 			? '/medico'
 			: `/especializacao/${especializationId}/medico/`;
 
 		setIsLoadingDoctors(true);
-		
-		await new Promise(resolve => setTimeout(resolve, 500));
+
+		await new Promise((resolve) => setTimeout(resolve, 500));
 		const { data } = await api.get(route);
-        
+
 		setDoctors(data);
 		setIsLoadingDoctors(false);
 	}
 
-	const userImage = userData?.patientImage;
+	/* const userImage = userData?.patientImage; */
+	const userImage = 'abc';
 
 	return (
-		<>
-			<Container>
-				<Header>
-					<Greetings>
-						<Text color="#FFF">Olá, Bem-vindo(a)</Text>
-						<Text weight="700" color="#FFF">{userData?.nome}</Text>
-					</Greetings>
+		<Container>
+			<Header>
+				<Greetings>
+					<GreetingsText>Olá, Bem-vindo(a)</GreetingsText>
+					<UserName>{userData?.nome} {userData?.sobrenome}</UserName>
+				</Greetings>
 
-					{userImage ? (
-						<UserImage source={{uri:`${serverUrl}/uploads/${userData?.patientImage}`}}/>
-					): (
-						<TouchableOpacity>
-							<Icon name="user" size={40} color="lightgrey"/>
-						</TouchableOpacity>
-					)} 
-				</Header>
+				{userImage ? (
+					<TouchableOpacity onPress={() => navigation.navigate('Config')}>
+						<UserImageContainer>
+							{/* <Image
+							source={{
+								uri: `${serverUrl}/uploads/${userData?.patientImage}`,
+							}}
+						/> */}
+							<Image
+								source={DoctorImage}
+								style={{ width: 60, height: 60, borderRadius: 30 }}
+							/>
+						</UserImageContainer>
+					</TouchableOpacity>
+				) : (
+					<UserImageContainer>
+						<UserIcon name="user" size={40} />
+					</UserImageContainer>
+				)}
+			</Header>
+
+			<ContentContainer>
 				<EspecializationsContainer>
-					<Text color="#000" weight="700" opacity={0.5}>Especialistas</Text>
-					<Especializations
-						especializations={especialization}
-						onSelectEspecialization={handleSelectEspecialization}
-					/>
+					<EspecializationsTitle>Especialistas</EspecializationsTitle>
+					<EspecializationsList>
+						{/* Render your list of specializations here */}
+						<Especializations
+							especializations={especialization}
+							onSelectEspecialization={
+								handleSelectEspecialization
+							}
+						/>
+					</EspecializationsList>
 				</EspecializationsContainer>
-                
+
 				{isLoadingDoctors ? (
 					<CenteredContainer>
-						<ActivityIndicator color="#0079FF" size={60}/>
+						<ActivityIndicator color="#0079FF" size={60} />
 					</CenteredContainer>
-				): (
-					<>
+				) : (
+					<DoctorsContainer>
 						{doctors.length > 0 ? (
-							<DoctorsContainer>
-								<Doctors 
-									doctors={doctors}
-								/>
-							</DoctorsContainer>
-						): (
-							<CenteredContainer>
-								<Icon name="exclamation-circle" size={60} color="#0079FF"/>
-								<Text color="#666" style={{marginTop: 24}}>Ainda não temos nenhum(a) Dr(a) com essa especialidade</Text>
-							</CenteredContainer>
+							<Doctors doctors={doctors} />
+						) : (
+							<EmptyDoctorsContainer>
+								{/* <EmptyDoctorsIcon name="exclamation-circle" size={60} /> */}
+								<EmptyDoctorsText>
+                                    Ainda não temos nenhum(a) Dr(a) com essa
+                                    especialidade
+								</EmptyDoctorsText>
+							</EmptyDoctorsContainer>
 						)}
-                
-					</>
+					</DoctorsContainer>
 				)}
-
-			</Container>
-		</>	
+			</ContentContainer>
+		</Container>
 	);
 }
