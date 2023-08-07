@@ -10,6 +10,7 @@ type RootStackParamList = {
     SignUp: undefined,
     Main: undefined,
 	Config: undefined,
+	DoctorDetails: undefined,
 }
 
 
@@ -18,6 +19,7 @@ import SignIn from './src/pages/SignIn';
 import SignUp from './src/pages/SignUp';
 import { Main } from './src/pages/Main';
 import { Config } from './src/pages/Config';
+import { DoctorDetails } from './src/pages/DoctorsDetails';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -66,6 +68,13 @@ export default function App() {
 						component={Config}
 						options={{ headerShown: false}}
 					/>
+					<Stack.Screen
+						name="DoctorDetails"
+						component={DoctorDetails}
+						options={{ headerShown: false}}
+					/>
+
+
 				</Stack.Navigator>
 			</NavigationContainer>
 		</UserProvider>

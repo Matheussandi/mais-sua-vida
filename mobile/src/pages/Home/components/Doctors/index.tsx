@@ -24,6 +24,7 @@ import {
 	Title,
 } from './styles';
 import { DoctorModal } from '../DoctorModal';
+import { useNavigation } from '@react-navigation/native';
 
 export function Doctors({ doctors }: DoctorProps) {
 	const [isModalVisible, setIsModalVisible] = useState(false);
@@ -32,6 +33,12 @@ export function Doctors({ doctors }: DoctorProps) {
 	function handleOpenModal(doctor: Doctor) {
 		setIsModalVisible(true);
 		setSelectedDoctor(doctor);
+	}
+
+	const navigation = useNavigation(); // Obtém o objeto de navegação
+
+	function handleOpenDoctorDetails(doctor: Doctor) {
+		navigation.navigate('DoctorDetails', { doctor }); // Navega para a tela "DoctorDetails" com os dados do médico selecionado
 	}
 
 	return (
@@ -50,7 +57,7 @@ export function Doctors({ doctors }: DoctorProps) {
 				keyExtractor={(doctor) => doctor.id}
 				ItemSeparatorComponent={() => <DoctorCardItemSeparator />}
 				renderItem={({ item: doctor }) => (
-					<DoctorCard onPress={() => handleOpenModal(doctor)}>
+					<DoctorCard onPress={() => handleOpenDoctorDetails(doctor)}>
 						<DoctorImage source={docImage} />
 						<DoctorDetails>
 							<DoctorName>
