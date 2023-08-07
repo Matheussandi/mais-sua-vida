@@ -62,12 +62,15 @@ export default function SignIn() {
 			.post('paciente/login', data)
 			.then((response) => {
 				const userData = response.data;
+				const userId = userData.id;
+
+				console.log(userData);
 
 				setUserData(userData);
 				navigation.reset({
 					index: 0,
-					routes: [{ name: 'Main' }],
-				}); //This works!
+					routes: [{ name: 'Main', params: { userId } }],
+				});
 			})
 			.catch((error) => {
 				Alert.alert('Usuário inválido');

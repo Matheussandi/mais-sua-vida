@@ -6,13 +6,17 @@ import {
 import Home from '../Home';
 import { Config } from '../Config';
 
+import { useRoute } from '@react-navigation/native';
+
 import { Feather } from '@expo/vector-icons';
+import { Appointments } from '../Appointments';
+import { useUserContext } from '../../context/UserContext';
 
 type AppRoutes = {
     home: undefined;
     config: undefined;
     calendar: undefined;
-    file: undefined;
+    settings: undefined;
     heart: undefined;
 };
 
@@ -21,6 +25,13 @@ export type AppNavigatorRoutesProps = BottomTabNavigationProp<AppRoutes>;
 const { Navigator, Screen } = createBottomTabNavigator<AppRoutes>();
 
 export function Main() {
+	const route = useRoute();
+	const { userData } = useUserContext();
+	const userId = route.params?.userId;
+
+	// console.log('ID do usuário logado:', userId);
+  
+
 	return (
 		<Navigator
 			screenOptions={{
@@ -47,21 +58,11 @@ export function Main() {
 
 			<Screen
 				name="calendar"
-				component={Config}
+				component={Appointments}
 				options={{
-					tabBarLabel: 'Home',
+					tabBarLabel: 'Appointments',
 					tabBarIcon: () => (
 						<Feather name="calendar" size={24} color="#0079FF" />
-					),
-				}}
-			/>
-			<Screen
-				name="file"
-				component={Config}
-				options={{
-					tabBarLabel: 'Home',
-					tabBarIcon: () => (
-						<Feather name="file" size={24} color="#0079FF" />
 					),
 				}}
 			/>
@@ -72,6 +73,16 @@ export function Main() {
 					tabBarLabel: 'Home',
 					tabBarIcon: () => (
 						<Feather name="heart" size={24} color="#0079FF" />
+					),
+				}}
+			/>
+			<Screen
+				name="settings"
+				component={Config}
+				options={{
+					tabBarLabel: 'Settings',
+					tabBarIcon: () => (
+						<Feather name="settings" size={24} color="#0079FF" />
 					),
 				}}
 			/>
