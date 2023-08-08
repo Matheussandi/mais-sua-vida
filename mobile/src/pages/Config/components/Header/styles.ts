@@ -4,29 +4,35 @@ import { Platform, StatusBar } from 'react-native';
 const isAndroid = Platform.OS === 'android';
 
 export const Container = styled.SafeAreaView`
-    flex: 1;
-    background-color: #fafafa;
+    flex: 0.5;
 `;
 
-export const PageHeader = styled.View`
+export const UserContent = styled.View`
     flex: 1;
     justify-content: center;
     align-items: center;
-    background-color: #0079FF;
 `;
 
+export const UserName = styled.Text`
+    color: #FFF;
+    margin: 20px 0;
+    font-size: 20px;
+    font-weight: 600;
+`;
+
+
 export const Photo = styled.Image`
-    width: 60px;
-    height: 60px;
-    border-radius: 30px;
+    width: 100px;
+    height: 100px;
+    border-radius: 50px;
     background-color: #FFF;
 `;
 
-export const DetailsContainer = styled.View`
+export const UserDetails = styled.View`
     flex-direction: row;
 `;
 
-export const DetailItem = styled.View`
+export const UserItem = styled.View`
     align-items: center;
     margin: 10px;
 `;

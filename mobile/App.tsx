@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { useFonts } from 'expo-font';
@@ -6,13 +6,13 @@ import { useFonts } from 'expo-font';
 import { UserProvider } from './src/context/UserContext';
 
 type RootStackParamList = {
-    SignIn: undefined,
-    SignUp: undefined,
-    Main: undefined,
-	Config: undefined,
-	DoctorDetails: undefined,
-}
-
+    SignIn: undefined;
+    SignUp: undefined;
+    Main: undefined;
+    Config: undefined;
+    DoctorDetails: undefined;
+    Faq: undefined;
+};
 
 import SplashScreen from './src/pages/SplashScreen';
 import SignIn from './src/pages/SignIn';
@@ -20,11 +20,12 @@ import SignUp from './src/pages/SignUp';
 import { Main } from './src/pages/Main';
 import { Config } from './src/pages/Config';
 import { DoctorDetails } from './src/pages/DoctorsDetails';
+import { Faq } from './src/pages/Faq';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
 export default function App() {
-	const [ appLoaded, setAppLoaded] = useState(false);
+	const [appLoaded, setAppLoaded] = useState(false);
 	const [fontsLoaded] = useFonts({
 		Inter_400: require('./src/assets/fonts/Inter-Regular.otf'),
 		Inter_500: require('./src/assets/fonts/Inter-SemiBold.otf'),
@@ -39,11 +40,10 @@ export default function App() {
 		return () => clearTimeout(timer);
 	}, []);
 
-
-	if(!appLoaded || !fontsLoaded){
-		return <SplashScreen/>;
+	if (!appLoaded || !fontsLoaded) {
+		return <SplashScreen />;
 	}
-	
+
 	return (
 		<UserProvider>
 			<NavigationContainer>
@@ -51,33 +51,36 @@ export default function App() {
 					<Stack.Screen
 						name="SignIn"
 						component={SignIn}
-						options={{ headerShown: false}}
+						options={{ headerShown: false }}
 					/>
 					<Stack.Screen
 						name="SignUp"
 						component={SignUp}
-						options={{ headerShown: false}}
+						options={{ headerShown: false }}
 					/>
 					<Stack.Screen
 						name="Main"
 						component={Main}
-						options={{ headerShown: false}}
+						options={{ headerShown: false }}
 					/>
 					<Stack.Screen
 						name="Config"
 						component={Config}
-						options={{ headerShown: false}}
+						options={{ headerShown: false }}
 					/>
 					<Stack.Screen
 						name="DoctorDetails"
 						component={DoctorDetails}
-						options={{ headerShown: false}}
+						options={{ headerShown: false }}
 					/>
-
-
+					<Stack.Screen
+						name="Faq"
+						component={Faq}
+						options={{ headerShown: false }}
+					/>
 				</Stack.Navigator>
 			</NavigationContainer>
 		</UserProvider>
 	);
-	
 }
+
