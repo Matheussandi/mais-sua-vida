@@ -24,6 +24,7 @@ export const CardDate = styled.Text`
 export const DoctorCard = styled.TouchableOpacity`
   background-color: #fff;
   border-radius: 8px;
+  margin-bottom: 16px;
 `;
 
 export const DoctorImage = styled.Image`

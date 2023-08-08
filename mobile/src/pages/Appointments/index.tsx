@@ -1,4 +1,4 @@
-import { Text, FlatList, Modal } from 'react-native';
+import { Text, Modal, ScrollView } from 'react-native';
 import { useState } from 'react';
 import {
 	BackButton,
@@ -9,7 +9,8 @@ import {
 	ModalBackground,
 	ModalContent,
 	ModalCloseButton,
-	DoctorCardItemSeparator,
+	Title,
+	TextModal,
 } from './styles';
 import { Feather } from '@expo/vector-icons';
 
@@ -63,10 +64,22 @@ export function Appointments() {
 		setModalVisible(false);
 	};
 
+	const today = dayjs(); // Obter a data de hoje
+
+	// Filtrar consultas passadas e futuras
+	const consultasPassadas = consultasAgendadas.filter(
+		(consulta) => dayjs(consulta.data).isBefore(today)
+	);
+
+	const consultasFuturas = consultasAgendadas.filter(
+		(consulta) => dayjs(consulta.data).isAfter(today) || dayjs(consulta.data).isSame(today, 'day')
+	);
+
+
 	async function fetchAppointment(patientId: string) {
 		try {
 			const response = await api.get('/consultas');
-			console.log(response.data);
+			// console.log(response.data);
 			const filteredConsultas = response.data.filter(
 				(consulta: Consulta) => consulta.idPaciente === patientId
 			);
@@ -94,21 +107,37 @@ export function Appointments() {
 			</HeaderContainer>
 
 			<CardContainer>
-				{consultasAgendadas.length > 0 ? (
-					<FlatList
-						data={consultasAgendadas}
-						keyExtractor={(item) => item.id}
-						ItemSeparatorComponent={() => <DoctorCardItemSeparator />}
-						renderItem={({ item }) => (
-							<CardDoctor
-								doctor={item.medico}
-								onPress={() => handleCardPress(item)}
-							/>
-						)}
-					/>
-				) : (
-					<Text>Não há consultas agendadas.</Text>
-				)}
+				<ScrollView showsVerticalScrollIndicator={false}>
+					{consultasFuturas.length > 0 && (
+						<>
+							<Title>Agendadas</Title>
+							{consultasFuturas.map((consulta) => (
+								<CardDoctor
+									key={consulta.id}
+									doctor={consulta.medico}
+									onPress={() => handleCardPress(consulta)}
+								/>
+							))}
+						</>
+					)}
+
+					{consultasPassadas.length > 0 && (
+						<>
+							<Title>Histórico</Title>
+							{consultasPassadas.map((consulta) => (
+								<CardDoctor
+									key={consulta.id}
+									doctor={consulta.medico}
+									onPress={() => handleCardPress(consulta)}
+								/>
+							))}
+						</>
+					)}
+
+					{consultasFuturas.length === 0 && consultasPassadas.length === 0 && (
+						<Text>Não há consultas agendadas.</Text>
+					)}
+				</ScrollView>
 			</CardContainer>
 
 			{/* Modal para exibir os detalhes da consulta */}
@@ -123,9 +152,9 @@ export function Appointments() {
 						<ModalCloseButton onPress={closeModal}>
 							<Feather name="x" size={24} color="#000" />
 						</ModalCloseButton>
-						<Text>Data: {dayjs(selectedConsulta?.data).format('D/MM/YYYY')}</Text>
-						<Text>Horário: {selectedConsulta?.hora}</Text>
-						<Text>Local: {selectedConsulta?.local}</Text>
+						<TextModal>Data: {dayjs(selectedConsulta?.data).format('D/MM/YYYY')}</TextModal>
+						<TextModal>Horário: {selectedConsulta?.hora}</TextModal>
+						<TextModal>Local: {selectedConsulta?.local}</TextModal>
 					</ModalContent>
 				</ModalBackground>
 			</Modal>

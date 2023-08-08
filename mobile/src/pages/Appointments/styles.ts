@@ -27,7 +27,7 @@ export const HeaderTitle = styled.Text`
 
 export const CardContainer = styled.View`
     padding: 16px;
-    margin-bottom: 150px;
+    margin-bottom: 130px;
 `;
 
 export const Card = styled.View`
@@ -48,11 +48,13 @@ export const CardDate = styled.Text`
 `;
 
 export const Title = styled.Text`
-  color: #000;
-  font-size: 16px;
+  font-size: 24px;
   font-weight: 700;
-  opacity: 0.5;
-  margin-bottom: 16px;
+  margin: 0 0 16px 0;
+`;
+
+export const TextModal = styled.Text`
+  font-size: 20px;
 `;
 
 export const DoctorCard = styled.TouchableOpacity`
