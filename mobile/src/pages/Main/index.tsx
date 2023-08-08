@@ -1,16 +1,11 @@
-import {
-	createBottomTabNavigator,
-	BottomTabNavigationProp,
-} from '@react-navigation/bottom-tabs';
+import React from 'react';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { Feather } from '@expo/vector-icons';
+import { Appointments } from '../Appointments';
+import { TabIcon } from './styles'; // Import the TabIcon styled component
 
 import Home from '../Home';
 import { Config } from '../Config';
-
-import { useRoute } from '@react-navigation/native';
-
-import { Feather } from '@expo/vector-icons';
-import { Appointments } from '../Appointments';
-import { useUserContext } from '../../context/UserContext';
 
 type AppRoutes = {
     home: undefined;
@@ -20,71 +15,64 @@ type AppRoutes = {
     heart: undefined;
 };
 
-export type AppNavigatorRoutesProps = BottomTabNavigationProp<AppRoutes>;
+type IconName = 'home' | 'calendar' | 'heart' | 'settings';
 
 const { Navigator, Screen } = createBottomTabNavigator<AppRoutes>();
 
 export function Main() {
-	const route = useRoute();
-	const { userData } = useUserContext();
-	const userId = route.params?.userId;
-
-	// console.log('ID do usuário logado:', userId);
-  
-
 	return (
 		<Navigator
-			screenOptions={{
-				headerShown: false,
-				tabBarShowLabel: false,
-				tabBarLabelPosition: 'below-icon',
-				tabBarActiveTintColor: '#0079FF',
-				tabBarInactiveTintColor: '#969CB2',
+			screenOptions={({ route }) => ({
+				tabBarIcon: ({ focused, color }) => {
+					let iconName: IconName = 'home'; // Default to 'home'
+
+					if (route.name === 'home') {
+						iconName = 'home';
+					} else if (route.name === 'calendar') {
+						iconName = 'calendar';
+					} else if (route.name === 'heart') {
+						iconName = 'heart';
+					} else if (route.name === 'settings') {
+						iconName = 'settings';
+					}
+
+					return (
+						<TabIcon focused={focused}>
+							<Feather
+								name={iconName}
+								size={24}
+								color={focused ? '#FFFFFF' : color}
+							/>
+						</TabIcon>
+					);
+				},
+				tabBarLabelStyle: { display: 'none' },
 				tabBarStyle: {
 					height: 60,
 				},
-			}}
+				tabBarActiveTintColor: '#0079FF',
+				tabBarInactiveTintColor: '#969CB2',
+			})}
 		>
 			<Screen
 				name="home"
 				component={Home}
-				options={{
-					tabBarLabel: 'Home',
-					tabBarIcon: () => (
-						<Feather name="home" size={24} color="#0079FF" />
-					),
-				}}
+				options={{ headerShown: false }}
 			/>
-
 			<Screen
 				name="calendar"
 				component={Appointments}
-				options={{
-					tabBarLabel: 'Appointments',
-					tabBarIcon: () => (
-						<Feather name="calendar" size={24} color="#0079FF" />
-					),
-				}}
+				options={{ headerShown: false }}
 			/>
 			<Screen
 				name="heart"
 				component={Config}
-				options={{
-					tabBarLabel: 'Home',
-					tabBarIcon: () => (
-						<Feather name="heart" size={24} color="#0079FF" />
-					),
-				}}
+				options={{ headerShown: false }}
 			/>
 			<Screen
 				name="settings"
 				component={Config}
-				options={{
-					tabBarLabel: 'Settings',
-					tabBarIcon: () => (
-						<Feather name="settings" size={24} color="#0079FF" />
-					),
-				}}
+				options={{ headerShown: false }}
 			/>
 		</Navigator>
 	);
