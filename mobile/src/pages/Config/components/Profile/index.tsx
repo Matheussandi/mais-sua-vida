@@ -14,8 +14,11 @@ import {
 	UserName,
 	UserDetails,
 	UserItem,
+	BackButton,
 } from './styles';
-import { FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
+
+import { Feather, FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 
 interface UserData {
 	nome: string;
@@ -27,6 +30,8 @@ interface UserData {
 
 export function Profile() {
 	const { userData } = useUserContext();
+
+	const navigation = useNavigation();
 
 	function ageCalculation(dataNascimento: string) {
 		const today = new Date();
@@ -44,68 +49,74 @@ export function Profile() {
 	}
 
 	return (
-		<Container>
-			<UserContent>
-				{/* 				<Photo
+		<>
+			<Container>
+				<BackButton onPress={() => navigation.goBack()}>
+					<Feather name="arrow-left" size={24} color="#333" />
+				</BackButton>
+
+				<UserContent>
+					{/* 				<Photo
 					source={{
 						uri: `${serverURL}/uploads/${userData?.patientImage}`
 					}}
 				/> */}
-				<Photo source={DocImage} />
-				<UserName>
-					{userData?.nome} {userData?.sobrenome}
-				</UserName>
+					<Photo source={DocImage} />
+					<UserName>
+						{userData?.nome} {userData?.sobrenome}
+					</UserName>
 
-				<UserDetails>
-					<UserItem>
-						<MaterialCommunityIcons
-							name="heart-pulse"
-							size={32}
-							color="white"
-						/>
-						<Text color="#fff">Idade</Text>
+					<UserDetails>
+						<UserItem>
+							<MaterialCommunityIcons
+								name="heart-pulse"
+								size={32}
+								color="white"
+							/>
+							<Text color="#fff">Idade</Text>
 
-						{userData?.dataNascimento ? (
-							<Text color="#fff" weight="500" size={18}>
-								{ageCalculation(userData?.dataNascimento)} anos
-							</Text>
-						) : (
-							<Text color="white">--</Text>
-						)}
-					</UserItem>
+							{userData?.dataNascimento ? (
+								<Text color="#fff" weight="500" size={18}>
+									{ageCalculation(userData?.dataNascimento)} anos
+								</Text>
+							) : (
+								<Text color="white">--</Text>
+							)}
+						</UserItem>
 
-					<UserItem>
-						<MaterialCommunityIcons
-							name="human-male-height"
-							size={32}
-							color="white"
-						/>
-						<Text color="#fff">Altura</Text>
+						<UserItem>
+							<MaterialCommunityIcons
+								name="human-male-height"
+								size={32}
+								color="white"
+							/>
+							<Text color="#fff">Altura</Text>
 
-						{userData?.altura ? (
-							<Text color="#fff" weight="500" size={18}>
-								{heightConversion(userData?.altura)}m
-							</Text>
-						) : (
-							<Text color="white">--</Text>
-						)}
-					</UserItem>
+							{userData?.altura ? (
+								<Text color="#fff" weight="500" size={18}>
+									{heightConversion(userData?.altura)}m
+								</Text>
+							) : (
+								<Text color="white">--</Text>
+							)}
+						</UserItem>
 
-					<UserItem>
-						<FontAwesome5 name="weight" size={32} color="white" />
-						<Text color="#fff">Peso</Text>
+						<UserItem>
+							<FontAwesome5 name="weight" size={32} color="white" />
+							<Text color="#fff">Peso</Text>
 
-						{userData?.peso ? (
-							<Text color="#fff" weight="500" size={18}>
-								{userData?.peso}kg
-							</Text>
-						) : (
-							<Text color="white">--</Text>
-						)}
-					</UserItem>
-				</UserDetails>
-			</UserContent>
-		</Container>
+							{userData?.peso ? (
+								<Text color="#fff" weight="500" size={18}>
+									{userData?.peso}kg
+								</Text>
+							) : (
+								<Text color="white">--</Text>
+							)}
+						</UserItem>
+					</UserDetails>
+				</UserContent>
+			</Container>
+		</>
 	);
 }
 

@@ -7,6 +7,12 @@ export const Container = styled.SafeAreaView`
     flex: 0.5;
 `;
 
+export const BackButton = styled.TouchableOpacity`
+    margin-top: ${isAndroid ? `${StatusBar.currentHeight}px` : '0'};
+    padding: 20px 0;
+    left: 20px;
+`;
+
 export const UserContent = styled.View`
     flex: 1;
     justify-content: center;
@@ -14,18 +20,17 @@ export const UserContent = styled.View`
 `;
 
 export const UserName = styled.Text`
-    color: #FFF;
+    color: #fff;
     margin: 20px 0;
     font-size: 20px;
     font-weight: 600;
 `;
 
-
 export const Photo = styled.Image`
     width: 100px;
     height: 100px;
     border-radius: 50px;
-    background-color: #FFF;
+    background-color: #fff;
 `;
 
 export const UserDetails = styled.View`

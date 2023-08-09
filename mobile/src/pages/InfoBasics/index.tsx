@@ -1,33 +1,30 @@
 import { useNavigation } from '@react-navigation/native';
-import React from 'react';
 
 import {
 	KeyboardAvoidingView,
+	ScrollView,
 	TouchableWithoutFeedback,
 	Keyboard,
-	ScrollView,
-	Alert,
+	View,
 } from 'react-native';
 
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 
-import { api } from '../../api';
-
 import {
-	Container,
 	CenteredView,
+	Container,
 	LoginButton,
 	LoginButtonText,
-	SignUpText,
-	SignUpLink,
 } from './styles';
-
-import { useUserContext } from '../../context/UserContext';
 
 import { ControlledInput } from '../../components/ControlledInput';
 import { Header } from '../../components/Header';
+
+import { useUserContext } from '../../context/UserContext';
+
+import { api } from '../../api';
 
 interface FormData {
     nome: string;
@@ -36,6 +33,9 @@ interface FormData {
     telefone: string;
     email: string;
     senha: string;
+    dataNascimento: string;
+    altura: string;
+    peso: string;
 }
 
 const schema = yup
@@ -58,11 +58,20 @@ const schema = yup
 			.matches(/^\d{13}$/, 'Telefone inválido.'),
 		email: yup.string().email('Email inválido').required('Email inválido'),
 		senha: yup.string().required('Senha inválida'),
+		dataNascimento: yup.string(),
+		altura: yup.string(),
+		peso: yup.string(),
 	})
 	.required();
 
-export default function SignUp() {
-	const { setUserData } = useUserContext();
+export function InfoBasics() {
+	const { setUserData, userData } = useUserContext();
+
+	console.log(userData.id);
+
+	const userId = userData.id;
+
+	const navigation = useNavigation();
 
 	const {
 		control,
@@ -72,24 +81,16 @@ export default function SignUp() {
 		resolver: yupResolver(schema),
 	});
 
-	const navigation = useNavigation();
-
-	async function handleSignUp(data: FormData) {
+	async function handleUpdateUser(data: FormData) {
 		try {
-			
-			const paciente = await api
-				.post('paciente', data)
+			const updatedUser = await api
+				.put(`paciente/${userId}`, data) // Use o ID do usuário na rota
 				.then((response) => {
 					const userData = response.data;
-					setUserData(userData);
-					navigation.reset({
-						index: 0,
-						routes: [{ name: 'Main' }],
-					}); //This works!
+					console.log('Usuário atualizado com sucesso');
+					navigation.navigate('home');
 				})
 				.catch((error) => {
-					Alert.alert('Erro ao cadastrar o usuário');
-					console.log(data);
 					console.log(error);
 				});
 		} catch (erro: any) {
@@ -102,15 +103,11 @@ export default function SignUp() {
 		}
 	}
 
-	async function handleSignIn() {
-		navigation.navigate('SignIn');
-	}
-	
 	return (
 		<KeyboardAvoidingView behavior={'padding'}>
 			<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
 				<Container>
-					<Header title={'Registrar'}/>
+					<Header title={'Informações Básicas'} />
 
 					<ScrollView>
 						<CenteredView>
@@ -173,15 +170,41 @@ export default function SignUp() {
 								error={errors.senha}
 							/>
 
-							<LoginButton onPress={handleSubmit(handleSignUp)}>
-								<LoginButtonText>Cadastrar</LoginButtonText>
+							<ControlledInput
+								name="dataNascimento"
+								maxLength={8}
+								control={control}
+								icon="calendar"
+								placeholder="Data de Nascimento"
+								error={errors.dataNascimento}
+								autoCapitalize="none"
+							/>
+							
+							<ControlledInput
+								name="altura"
+								maxLength={3}
+								control={control}
+								icon="user"
+								placeholder="Altura"
+								error={errors.altura}
+								autoCapitalize="none"
+							/>
+
+							<ControlledInput
+								name="peso"
+								maxLength={3}
+								control={control}
+								icon="user"
+								placeholder="Peso"
+								error={errors.peso}
+								autoCapitalize="none"
+							/>
+
+							<LoginButton
+								onPress={handleSubmit(handleUpdateUser)}
+							>
+								<LoginButtonText>Salvar</LoginButtonText>
 							</LoginButton>
-							<SignUpText>
-                                Já tem uma conta?{' '}
-								<SignUpLink onPress={handleSignIn}>
-                                    Entre
-								</SignUpLink>
-							</SignUpText>
 						</CenteredView>
 					</ScrollView>
 				</Container>

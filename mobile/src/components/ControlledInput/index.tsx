@@ -7,7 +7,7 @@ import { ErrorText, InputWrapper } from './styles';
 import { Feather } from '@expo/vector-icons';
 
 // Define an enum for the allowed icon names
-type IconNames = 'mail' | 'lock' | 'user' | 'phone'
+type IconNames = 'mail' | 'lock' | 'user' | 'phone' | 'calendar'
 
 type Props = InputProps & {
     control: Control<any>;

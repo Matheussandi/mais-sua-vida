@@ -12,6 +12,7 @@ type RootStackParamList = {
     Config: undefined;
     DoctorDetails: undefined;
     Faq: undefined;
+    InfoBasics: undefined;
 };
 
 import SplashScreen from './src/pages/SplashScreen';
@@ -21,6 +22,7 @@ import { Main } from './src/pages/Main';
 import { Config } from './src/pages/Config';
 import { DoctorDetails } from './src/pages/DoctorsDetails';
 import { Faq } from './src/pages/Faq';
+import { InfoBasics } from './src/pages/InfoBasics';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -76,6 +78,11 @@ export default function App() {
 					<Stack.Screen
 						name="Faq"
 						component={Faq}
+						options={{ headerShown: false }}
+					/>
+					<Stack.Screen
+						name="InfoBasics"
+						component={InfoBasics}
 						options={{ headerShown: false }}
 					/>
 				</Stack.Navigator>
