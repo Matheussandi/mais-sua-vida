@@ -8,23 +8,6 @@ export const Container = styled.View`
     background-color: #f0f0f0;
 `;
 
-export const HeaderContainer = styled.View`
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    padding: 20px 0;
-`;
-
-export const BackButton = styled.TouchableOpacity`
-    position: absolute;
-    left: 20px;
-`;
-
-export const HeaderTitle = styled.Text`
-    font-size: 24px;
-    font-weight: bold;
-`;
-
 export const CardContainer = styled.View`
     padding: 16px;
     margin-bottom: 130px;
@@ -48,9 +31,10 @@ export const CardDate = styled.Text`
 `;
 
 export const Title = styled.Text`
-  font-size: 24px;
-  font-weight: 700;
-  margin: 0 0 16px 0;
+    color: #000;
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 16px;
 `;
 
 export const TextModal = styled.Text`

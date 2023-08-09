@@ -1,29 +1,11 @@
-import styled from 'styled-components/native';
 import { Platform, StatusBar } from 'react-native';
+import styled from 'styled-components/native';
 import { Feather } from '@expo/vector-icons';
 
 const isAndroid = Platform.OS === 'android';
 
 export const Container = styled.View`
     margin-top: ${isAndroid ? `${StatusBar.currentHeight}px` : '0'};
-    background-color: #f0f0f0;
-`;
-
-export const TopContent = styled.View`
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    padding: 20px 0;
-`;
-
-export const BackButton = styled.TouchableOpacity`
-    position: absolute;
-    left: 20px;
-`;
-
-export const Title = styled.Text`
-    font-size: 24px;
-    font-weight: bold;
 `;
 
 export const QuestionContainer = styled.View`

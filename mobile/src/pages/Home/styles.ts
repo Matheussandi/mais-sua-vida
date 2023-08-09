@@ -66,10 +66,8 @@ export const EspecializationsContainer = styled.View`
 `;
 
 export const EspecializationsTitle = styled.Text`
-    color: #000;
     font-size: 16px;
     font-weight: 700;
-    opacity: 0.5;
     margin-bottom: 8px;
 `;
 

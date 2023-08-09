@@ -4,15 +4,12 @@ import { useUserContext } from '../../../../context/UserContext';
 import { differenceInYears } from 'date-fns';
 
 import { Text } from '../../../Text';
-import Icon from 'react-native-vector-icons/FontAwesome';
 
 import DocImage from '../../../../assets/doctor.png';
 
 import {
 	Container,
 	Photo,
-	DetailsContainer,
-	DetailItem,
 	UserContent,
 	UserName,
 	UserDetails,
@@ -20,7 +17,15 @@ import {
 } from './styles';
 import { FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
 
-export function Header() {
+interface UserData {
+	nome: string;
+	sobrenome: string;
+	dataNascimento?: string;
+	altura?: string;
+	peso?: string;
+  }
+
+export function Profile() {
 	const { userData } = useUserContext();
 
 	function ageCalculation(dataNascimento: string) {
@@ -55,7 +60,7 @@ export function Header() {
 					<UserItem>
 						<MaterialCommunityIcons
 							name="heart-pulse"
-							size={30}
+							size={32}
 							color="white"
 						/>
 						<Text color="#fff">Idade</Text>
@@ -65,14 +70,14 @@ export function Header() {
 								{ageCalculation(userData?.dataNascimento)} anos
 							</Text>
 						) : (
-							<Icon name="question" size={20} color="#fff" />
+							<Text color="white">--</Text>
 						)}
 					</UserItem>
 
 					<UserItem>
 						<MaterialCommunityIcons
 							name="human-male-height"
-							size={30}
+							size={32}
 							color="white"
 						/>
 						<Text color="#fff">Altura</Text>
@@ -82,12 +87,12 @@ export function Header() {
 								{heightConversion(userData?.altura)}m
 							</Text>
 						) : (
-							<Icon name="question" size={20} color="#fff" />
+							<Text color="white">--</Text>
 						)}
 					</UserItem>
 
 					<UserItem>
-						<FontAwesome5 name="weight" size={30} color="white" />
+						<FontAwesome5 name="weight" size={32} color="white" />
 						<Text color="#fff">Peso</Text>
 
 						{userData?.peso ? (
@@ -95,7 +100,7 @@ export function Header() {
 								{userData?.peso}kg
 							</Text>
 						) : (
-							<Icon name="question" size={20} color="#fff" />
+							<Text color="white">--</Text>
 						)}
 					</UserItem>
 				</UserDetails>
@@ -103,3 +108,4 @@ export function Header() {
 		</Container>
 	);
 }
+

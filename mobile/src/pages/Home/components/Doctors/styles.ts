@@ -2,10 +2,8 @@ import styled from 'styled-components/native';
 
 
 export const Title = styled.Text`
-    color: #000;
     font-size: 16px;
     font-weight: 700;
-    opacity: 0.5;
     margin-bottom: 16px;
 `;
 

@@ -3,11 +3,8 @@ import { Text, Modal, ScrollView } from 'react-native';
 import { useState, useEffect } from 'react';
 
 import {
-	BackButton,
 	CardContainer,
 	Container,
-	HeaderContainer,
-	HeaderTitle,
 	ModalBackground,
 	ModalContent,
 	ModalCloseButton,
@@ -25,6 +22,7 @@ import { CardDoctor } from '../../components/CardDoctor';
 
 import dayjs from 'dayjs';
 import ptBr from 'dayjs/locale/pt-br';
+import { Header } from '../../components/Header';
 
 dayjs.locale(ptBr);
 
@@ -102,13 +100,7 @@ export function Appointments() {
 
 	return (
 		<Container>
-			{/* Cabeçalho */}
-			<HeaderContainer>
-				<BackButton onPress={() => navigation.goBack()}>
-					<Feather name="arrow-left" size={24} color="#333" />
-				</BackButton>
-				<HeaderTitle>Consultas</HeaderTitle>
-			</HeaderContainer>
+			<Header title={'Consultas'} />
 
 			<CardContainer>
 				<ScrollView showsVerticalScrollIndicator={false}>

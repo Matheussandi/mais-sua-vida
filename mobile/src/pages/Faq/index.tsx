@@ -1,18 +1,15 @@
-import React, { useState } from 'react';
-import { Feather } from '@expo/vector-icons';
 import { ScrollView, View } from 'react-native';
+import React, { useState } from 'react';
+
 import {
-	BackButton,
 	Container,
-	Title,
-	TopContent,
 	QuestionContainer,
 	QuestionText,
 	AnswerText,
 	ExpandIcon,
 } from './styles';
 
-import { useNavigation } from '@react-navigation/native';
+import {Header} from '../../components/Header';
 
 const questionsData = [
 	{
@@ -34,7 +31,6 @@ const questionsData = [
 ];
 
 export function Faq() {
-	const navigation = useNavigation();
 	const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
 
 	const toggleExpand = (index: number) => {
@@ -47,12 +43,7 @@ export function Faq() {
 
 	return (
 		<Container>
-			<TopContent>
-				<BackButton onPress={() => navigation.goBack()}>
-					<Feather name="arrow-left" size={24} color="#333" />
-				</BackButton>
-				<Title>Perguntas Frequentes</Title>
-			</TopContent>
+			<Header title={'Perguntas Frequentes'}/>
 
 			<ScrollView>
 				{questionsData.map((item, index) => (
