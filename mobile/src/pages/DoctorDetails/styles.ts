@@ -8,23 +8,6 @@ export const Container = styled.View`
     background-color: #f0f0f0;
 `;
 
-export const HeaderContainer = styled.View`
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    padding: 20px 0;
-`;
-
-export const BackButton = styled.TouchableOpacity`
-    position: absolute;
-    left: 20px;
-`;
-
-export const HeaderTitle = styled.Text`
-    font-size: 24px;
-    font-weight: bold;
-`;
-
 export const CardContainer = styled.View`
     padding: 16px;
     margin-bottom: 150px;
@@ -56,18 +39,17 @@ export const Title = styled.Text`
 `;
 
 export const DoctorCard = styled.View`
-    margin: 0 16px
-    `;
+    margin: 0 16px;
+`;
 
 export const DoctorImage = styled.Image`
     width: 100%;
     height: 200px;
     border-radius: 8px;
-    
 `;
 
 export const DoctorContent = styled.View`
-    margin: 0 16px
+    margin: 0 16px 80px 16px;
 `;
 
 export const DoctorName = styled.Text`
@@ -78,6 +60,7 @@ export const DoctorName = styled.Text`
 
 export const DoctorSpecialization = styled.Text`
     font-size: 16px;
+    color: #666;
 `;
 
 export const DoctorCardItemSeparator = styled.View`
@@ -89,29 +72,20 @@ export const DoctorContainer = styled.TouchableOpacity`
     align-items: center;
 `;
 
-export const Separator = styled.View`
-    width: 100%;
-    height: 1px;
-    background: rgba(204, 204, 204, 0.3);
-    margin: 24px 0;
+export const Section = styled.View`
+    margin: 10px 0;
 `;
 
-export const ModalBackground = styled.View`
-    flex: 1;
-    justify-content: center;
-    align-items: center;
-    background-color: rgba(0, 0, 0, 0.5);
+export const SectionTitle = styled.Text`
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 5px;
 `;
 
-export const ModalContent = styled.View`
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    width: 80%;
-`;
-
-export const ModalCloseButton = styled.TouchableOpacity`
-    align-self: flex-end;
+export const SectionContent = styled.Text`
+    font-size: 16px;
+    text-align: justify;
+    color: #666;
 `;
 
 export const AppointmentButton = styled.TouchableOpacity`
@@ -127,4 +101,6 @@ export const AppointmentButton = styled.TouchableOpacity`
 export const AppointmentButtonText = styled.Text`
     color: white;
     font-weight: bold;
+    font-size: 16px;
 `;
+

@@ -79,7 +79,7 @@ export default function Home() {
 		<Container>
 			<Header>
 				<Greetings>
-					<GreetingsText>Olá, Bem-vindo(a)</GreetingsText>
+					<GreetingsText>Olá, Bem-vindo(a) 🎉</GreetingsText>
 					<UserName>{userData?.nome} {userData?.sobrenome}</UserName>
 				</Greetings>
 

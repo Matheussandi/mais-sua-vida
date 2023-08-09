@@ -20,7 +20,7 @@ import SignIn from './src/pages/SignIn';
 import SignUp from './src/pages/SignUp';
 import { Main } from './src/pages/Main';
 import { Config } from './src/pages/Config';
-import { DoctorDetails } from './src/pages/DoctorsDetails';
+import { DoctorDetails } from './src/pages/DoctorDetails';
 import { Faq } from './src/pages/Faq';
 import { InfoBasics } from './src/pages/InfoBasics';
 

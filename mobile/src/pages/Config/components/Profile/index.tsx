@@ -52,7 +52,7 @@ export function Profile() {
 		<>
 			<Container>
 				<BackButton onPress={() => navigation.goBack()}>
-					<Feather name="arrow-left" size={24} color="#333" />
+					<Feather name="arrow-left" size={24} color="#FFF" />
 				</BackButton>
 
 				<UserContent>
