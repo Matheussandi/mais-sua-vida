@@ -9,7 +9,7 @@ type RootStackParamList = {
     SignIn: undefined;
     SignUp: undefined;
     Main: undefined;
-    Config: undefined;
+    Settings: undefined;
     DoctorDetails: undefined;
     Faq: undefined;
     InfoBasics: undefined;
@@ -19,7 +19,7 @@ import SplashScreen from './src/pages/SplashScreen';
 import SignIn from './src/pages/SignIn';
 import SignUp from './src/pages/SignUp';
 import { Main } from './src/pages/Main';
-import { Config } from './src/pages/Config';
+import { Settings } from './src/pages/Settings';
 import { DoctorDetails } from './src/pages/DoctorDetails';
 import { Faq } from './src/pages/Faq';
 import { InfoBasics } from './src/pages/InfoBasics';
@@ -66,8 +66,8 @@ export default function App() {
 						options={{ headerShown: false }}
 					/>
 					<Stack.Screen
-						name="Config"
-						component={Config}
+						name="Settings"
+						component={Settings}
 						options={{ headerShown: false }}
 					/>
 					<Stack.Screen

@@ -1,21 +1,20 @@
-import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Feather } from '@expo/vector-icons';
-import { Appointments } from '../Appointments';
-import { TabIcon } from './styles'; // Import the TabIcon styled component
+import React from 'react';
 
+import { TabIcon } from './styles';
+
+import { Appointments } from '../Appointments';
+import { Settings } from '../Settings';
 import Home from '../Home';
-import { Config } from '../Config';
 
 type AppRoutes = {
     home: undefined;
-    config: undefined;
     calendar: undefined;
     settings: undefined;
-    heart: undefined;
 };
 
-type IconName = 'home' | 'calendar' | 'heart' | 'settings';
+type IconName = 'home' | 'calendar' | 'settings';
 
 const { Navigator, Screen } = createBottomTabNavigator<AppRoutes>();
 
@@ -30,8 +29,6 @@ export function Main() {
 						iconName = 'home';
 					} else if (route.name === 'calendar') {
 						iconName = 'calendar';
-					} else if (route.name === 'heart') {
-						iconName = 'heart';
 					} else if (route.name === 'settings') {
 						iconName = 'settings';
 					}
@@ -65,13 +62,8 @@ export function Main() {
 				options={{ headerShown: false }}
 			/>
 			<Screen
-				name="heart"
-				component={Config}
-				options={{ headerShown: false }}
-			/>
-			<Screen
 				name="settings"
-				component={Config}
+				component={Settings}
 				options={{ headerShown: false }}
 			/>
 		</Navigator>

@@ -84,7 +84,7 @@ export default function Home() {
 				</Greetings>
 
 				{userImage ? (
-					<TouchableOpacity onPress={() => navigation.navigate('Config')}>
+					<TouchableOpacity onPress={() => navigation.navigate('Settings')}>
 						<UserImageContainer>
 							{/* <Image
 							source={{

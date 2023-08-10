@@ -64,8 +64,6 @@ export default function SignIn() {
 				const userData = response.data;
 				const userId = userData.id;
 
-				console.log(userData);
-
 				setUserData(userData);
 				navigation.reset({
 					index: 0,

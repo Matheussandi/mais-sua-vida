@@ -67,8 +67,6 @@ const schema = yup
 export function InfoBasics() {
 	const { setUserData, userData } = useUserContext();
 
-	console.log(userData.id);
-
 	const userId = userData.id;
 
 	const navigation = useNavigation();

@@ -22,7 +22,7 @@ import { Profile } from './components/Profile';
 
 import DocImage from '../../assets/doctor.png';
 
-export function Config() {
+export function Settings() {
 	const navigation = useNavigation();
 
 	function handleDisconnect() {
@@ -52,48 +52,6 @@ export function Config() {
 										color="#0079ff"
 									/>
 									<OptionText>Informações básicas</OptionText>
-									<MaterialIcons
-										name="keyboard-arrow-right"
-										size={30}
-										color="#0079ff"
-										style={{ marginLeft: 'auto' }}
-									/>
-								</OptionContainer>
-							</TouchableOpacity>
-
-							<Divider />
-
-							<TouchableOpacity
-								onPress={() => navigation.navigate('Documents')}
-							>
-								<OptionContainer>
-									<Octicons
-										name="file"
-										size={24}
-										color="#0079ff"
-									/>
-									<OptionText>Documentos</OptionText>
-									<MaterialIcons
-										name="keyboard-arrow-right"
-										size={30}
-										color="#0079ff"
-										style={{ marginLeft: 'auto' }}
-									/>
-								</OptionContainer>
-							</TouchableOpacity>
-
-							<Divider />
-
-							<TouchableOpacity
-								onPress={() => navigation.navigate('Address')}
-							>
-								<OptionContainer>
-									<Octicons
-										name="location"
-										size={24}
-										color="#0079ff"
-									/>
-									<OptionText>Endereço</OptionText>
 									<MaterialIcons
 										name="keyboard-arrow-right"
 										size={30}
