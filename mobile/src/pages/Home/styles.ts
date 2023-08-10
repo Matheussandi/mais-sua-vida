@@ -17,18 +17,38 @@ export const CenteredContainer = styled.SafeAreaView`
 `;
 
 export const Header = styled.View`
-    flex: 0.2;
-    flex-direction: row;
-    background-color: #0079ff;
-    padding: ${isAndroid ? `${StatusBar.currentHeight}px` : '24px'} 24px;
-    justify-content: space-between;
-    align-items: center;
-    border-radius: 8px;
+  background-color: #0079ff;
+  padding: ${isAndroid ? `${StatusBar.currentHeight}px` : '24px'} 24px;
+  border-radius: 16px;
+`;
+
+export const HeaderContent = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+`;
+
+
+export const SearchInputContainer = styled.View`
+  flex-direction: row;
+  align-items: center;
+  padding: 10px;
+  border-color: white;
+  border-width: 1px;
+  border-radius: 16px;
+  color: #FFF;
+`;
+
+export const SearchInput = styled.TextInput`
+  flex: 1;
+  margin-left: 4px;
+  color: #FFF;
 `;
 
 export const ContentContainer = styled.View`
   flex: 1;
-  padding: 0 16px; /* Adiciona a margem lateral de 16 pixels */
+  padding: 0 16px;
 `;
 
 export const Greetings = styled.View`
@@ -48,9 +68,9 @@ export const UserName = styled.Text`
 `;
 
 export const UserImageContainer = styled.TouchableOpacity`
-    width: 50px;
-    height: 50px;
-    border-radius: 25px;
+    width: 60px;
+    height: 60px;
+    border-radius: 30px;
     background-color: #fafafa;
     margin-top: ${isAndroid ? `${StatusBar.currentHeight}px` : '0'};
     align-items: center;

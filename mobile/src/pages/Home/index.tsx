@@ -30,12 +30,16 @@ import {
 	EspecializationsList,
 	EmptyDoctorsText,
 	EmptyDoctorsContainer,
+	HeaderContent,
+	SearchInput,
+	SearchInputContainer,
 } from './styles';
 
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import { Especializations } from './components/Especializations';
 import { Doctors } from './components/Doctors';
+import { Feather } from '@expo/vector-icons';
 
 export default function Home() {
 	const [doctors, setDoctors] = useState<Doctor[]>([]);
@@ -43,6 +47,7 @@ export default function Home() {
 		[]
 	);
 	const [isLoadingDoctors, setIsLoadingDoctors] = useState(false);
+	const [searchQuery, setSearchQuery] = useState('');
 
 	const { userData } = useUserContext();
 
@@ -72,36 +77,46 @@ export default function Home() {
 		setIsLoadingDoctors(false);
 	}
 
-	/* const userImage = userData?.patientImage; */
+	// const userImage = userData?.patientImage;
 	const userImage = 'abc';
 
 	return (
 		<Container>
 			<Header>
-				<Greetings>
-					<GreetingsText>Olá, Bem-vindo(a) 🎉</GreetingsText>
-					<UserName>{userData?.nome} {userData?.sobrenome}</UserName>
-				</Greetings>
-
-				{userImage ? (
+				<HeaderContent>
+					<Greetings>
+						<GreetingsText>Olá, Bem-vindo(a) 🎉</GreetingsText>
+						<UserName>{userData?.nome} {userData?.sobrenome}</UserName>
+					</Greetings>
 					<TouchableOpacity onPress={() => navigation.navigate('Settings')}>
-						<UserImageContainer>
-							{/* <Image
-							source={{
-								uri: `${serverUrl}/uploads/${userData?.patientImage}`,
-							}}
-						/> */}
-							<Image
-								source={DoctorImage}
-								style={{ width: 60, height: 60, borderRadius: 30 }}
-							/>
-						</UserImageContainer>
+						{userImage ? (
+							<UserImageContainer>
+								{/* <Image
+									source={{
+										uri: `${serverUrl}/uploads/${userData?.patientImage}`,
+									}}
+								/> */}
+								<Image
+									source={DoctorImage}
+									style={{ width: 60, height: 60, borderRadius: 30 }}
+								/>
+							</UserImageContainer>
+						) : (
+							<UserImageContainer>
+								<UserIcon name="user" size={40} />
+							</UserImageContainer>
+						)}
 					</TouchableOpacity>
-				) : (
-					<UserImageContainer>
-						<UserIcon name="user" size={40} />
-					</UserImageContainer>
-				)}
+				</HeaderContent>
+
+				<SearchInputContainer>
+					<SearchInput
+						placeholder="Pesquisar"
+						value={searchQuery}
+						onChangeText={setSearchQuery}
+					/>
+					<Feather name="search" size={24} color="#fff" />
+				</SearchInputContainer>
 			</Header>
 
 			<ContentContainer>
