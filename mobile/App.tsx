@@ -8,11 +8,13 @@ import { UserProvider } from './src/context/UserContext';
 type RootStackParamList = {
     SignIn: undefined;
     SignUp: undefined;
+    ForgotPassword: undefined;
     Main: undefined;
     Settings: undefined;
     DoctorDetails: undefined;
     Faq: undefined;
     InfoBasics: undefined;
+    UpdatePassword: undefined;
 };
 
 import SplashScreen from './src/pages/SplashScreen';
@@ -23,6 +25,8 @@ import { Settings } from './src/pages/Settings';
 import { DoctorDetails } from './src/pages/DoctorDetails';
 import { Faq } from './src/pages/Faq';
 import { InfoBasics } from './src/pages/InfoBasics';
+import { ForgotPassword } from './src/pages/ForgotPassword';
+import { UpdatePassword } from './src/pages/UpdatePassword';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -60,6 +64,7 @@ export default function App() {
 						component={SignUp}
 						options={{ headerShown: false }}
 					/>
+
 					<Stack.Screen
 						name="Main"
 						component={Main}
@@ -83,6 +88,17 @@ export default function App() {
 					<Stack.Screen
 						name="InfoBasics"
 						component={InfoBasics}
+						options={{ headerShown: false }}
+					/>
+					<Stack.Screen
+						name="ForgotPassword"
+						component={ForgotPassword}
+						options={{ headerShown: false }}
+					/>
+
+					<Stack.Screen
+						name="UpdatePassword"
+						component={UpdatePassword}
 						options={{ headerShown: false }}
 					/>
 				</Stack.Navigator>

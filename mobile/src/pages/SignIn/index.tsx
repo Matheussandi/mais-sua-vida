@@ -30,6 +30,7 @@ import {
 	SignUpText,
 	SignUpLink,
 } from './styles';
+
 import { ControlledInput } from '../../components/ControlledInput';
 
 interface FormData {
@@ -80,6 +81,11 @@ export default function SignIn() {
 	async function handleSignUp() {
 		navigation.navigate('SignUp');
 	}
+
+	async function handleForgotPassword() {
+		navigation.navigate('ForgotPassword');
+	}
+
 	return (
 		<KeyboardAvoidingView behavior={'padding'}>
 			<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -110,7 +116,7 @@ export default function SignIn() {
 						/>
 
 						<ForgotPasswordContainer>
-							<ForgotPasswordLink onPress={handleSignUp}>
+							<ForgotPasswordLink onPress={handleForgotPassword}>
                                 Esqueceu a senha?
 							</ForgotPasswordLink>
 						</ForgotPasswordContainer>
