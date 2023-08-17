@@ -6,70 +6,70 @@ import HomeFooter from "../assets/home.svg";
 export function Apresentation() {
   return (
     <>
-      <div className="grid grid-cols-1 mt-16 md:grid-cols-2 gap-4 relative z-10">
+      <div className="relative z-10 mt-16 grid grid-cols-1 gap-4 md:grid-cols-2">
         {/* Conteúdo da primeira coluna */}
         <div>
-          <h1 className="text-2xl md:text-5xl font-bold">
+          <h1 className="text-2xl font-bold md:text-5xl">
             Simplifique, organize e gerencie as{" "}
             <span className="text-primary">consultas</span>
           </h1>
-          <p className="text-sm mt-6 text-justify text-gray-500">
+          <p className="mt-6 text-justify text-sm text-gray-500">
             +SuaVida é uma nova maneira de marcar sua cotações de seguro de
             saúde. Oferecemos ferramentas semelhantes às fornecidos por
             seguradoras gratuitamente e os preços são baseados em doações e não
             redes restritivas de planos de saúde.
           </p>
-          <button className="bg-primary my-7 py-4 px-9 rounded-xl text-white">
+          <button className="my-7 cursor-default rounded-xl bg-primary px-9 py-4 font-bold text-white">
             Contato
           </button>
 
           <div className="flex space-x-4">
-            <div className="w-24 h-48 lg:w-36 shadow-md rounded-lg p-4 flex-col items-center justify-center hover:shadow-lg transition-shadow">
+            <div className="h-48 w-24 flex-col items-center justify-center rounded-lg p-4 shadow-md transition-shadow hover:shadow-lg lg:w-36">
               <Image
                 src={DoisMedicos}
                 width={50}
                 height={50}
                 alt="Dois médicos juntos"
-                className="rounded-full mx-auto"
+                className="mx-auto rounded-full"
               />
               <div className="text-center">
                 <h3 className="font-bold">Dr. Shimanta</h3>
                 <h3 className="mb-2 text-gray-500">Cardiologista</h3>
-                <button className="bg-primary font-semibold p-2 rounded-xl text-white">
+                <button className="cursor-default rounded-xl bg-primary px-4 py-2 text-white">
                   Agendar
                 </button>
               </div>
             </div>
 
-            <div className="w-24 h-48 lg:w-36 shadow-md rounded-lg p-4 flex-col items-center justify-center hover:shadow-lg transition-shadow">
+            <div className="h-48 w-24 flex-col items-center justify-center rounded-lg p-4 shadow-md transition-shadow hover:shadow-lg lg:w-36">
               <Image
                 src={DoisMedicos}
                 width={50}
                 height={50}
                 alt="Dois médicos juntos"
-                className="rounded-full mx-auto"
+                className="mx-auto rounded-full"
               />
               <div className="text-center">
                 <h3 className="font-bold">Dr. Shimanta</h3>
                 <h3 className="mb-2 text-gray-500">Dematologista</h3>
-                <button className="bg-primary font-semibold p-2 rounded-xl text-white">
+                <button className="cursor-default rounded-xl bg-primary px-4 py-2 text-white">
                   Agendar
                 </button>
               </div>
             </div>
 
-            <div className="w-24 h-48 lg:w-36 shadow-md rounded-lg p-4 flex-col items-center justify-center hover:shadow-lg transition-shadow">
+            <div className="h-48 w-24 flex-col items-center justify-center rounded-lg p-4 shadow-md transition-shadow hover:shadow-lg lg:w-36">
               <Image
                 src={DoisMedicos}
                 width={50}
                 height={50}
                 alt="Dois médicos juntos"
-                className="rounded-full mx-auto"
+                className="mx-auto rounded-full"
               />
               <div className="text-center">
                 <h3 className="font-bold">Dr. Shimanta</h3>
                 <h3 className="mb-2 text-gray-500">Ortopedista</h3>
-                <button className="bg-primary font-semibold p-2 rounded-xl text-white">
+                <button className="cursor-default rounded-xl bg-primary px-4 py-2 text-white">
                   Agendar
                 </button>
               </div>
@@ -78,11 +78,11 @@ export function Apresentation() {
         </div>
 
         {/*  Conteúdo da segunda coluna */}
-        <div className="flex-grow relative z-10">
+        <div className="relative z-10 flex-grow">
           <Image
             src={DoisMedicos}
             alt="Dois médicos juntos"
-            className="h-full w-auto hidden md:block"
+            className="hidden h-full w-auto md:block"
           />
         </div>
         {/* Exibição condicional do SVG em telas maiores */}
@@ -91,7 +91,7 @@ export function Apresentation() {
             {/* O SVG está oculto em telas de celular e tablet */}
             <Image
               src={HomeFooter}
-              className="object-cover w-full h-full hidden lg:block"
+              className="hidden h-full w-full object-cover lg:block"
               alt="footer home"
             />
           </div>

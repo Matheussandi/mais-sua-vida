@@ -1,6 +1,6 @@
 export function Footer() {
   return (
-    <footer className="py-8">
+    <footer className="py-8" id="footer">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-wrap lg:flex-nowrap justify-between gap-x-6">
           <div className="w-full lg:w-1/2 mb-4 lg:mb-0">

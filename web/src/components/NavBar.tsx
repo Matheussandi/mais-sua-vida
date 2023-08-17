@@ -23,19 +23,19 @@ export function NavBar() {
 
         <ul className="hidden sm:flex">
           <li className="p-4 hover:text-primary">
-            <Link href="/">Sobre</Link>
+            <Link href="#about">Sobre</Link>
           </li>
           <li className="p-4 hover:text-primary">
-            <Link href="/">Clínicas</Link>
+            <Link href="#clinics">Clínicas</Link>
           </li>
           <li className="p-4 hover:text-primary">
-            <Link href="/">Pacientes</Link>
+            <Link href="#patients">Pacientes</Link>
           </li>
           <li className="p-4 hover:text-primary">
-            <Link href="/">Contato</Link>
+            <Link href="#footer">Contato</Link>
           </li>
           <button className="bg-primary px-4 rounded-xl my-2 hover:bg-[#136edd] transition-colors duration-300">
-            <Link className="text-white" href="/login">
+            <Link className="text-white font-semibold" href="/login">
               Entrar
             </Link>
           </button>
@@ -72,7 +72,7 @@ export function NavBar() {
               <Link href="/">Contato</Link>
             </li>
             <button className="bg-primary p-4 rounded-xl text-xl hover:bg-[#136edd] transition-colors duration-300">
-              <Link className="text-white" href="/login">
+              <Link className="text-white font-semibold" href="/login">
                 Entrar
               </Link>
             </button>

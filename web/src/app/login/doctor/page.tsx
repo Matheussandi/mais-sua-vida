@@ -63,7 +63,7 @@ export default function LoginDoctor() {
         </div>
         <div className="flex flex-col items-center">
           <button
-            className="focus:shadow-outline mb-4 w-full rounded bg-primary px-4 py-2 font-bold text-white hover:bg-blue-500 focus:outline-none"
+            className="focus:shadow-outline mb-4 w-full rounded bg-primary px-4 py-2 text-white hover:bg-blue-500 transition duration-300"
             type="button"
             onClick={handleLogin}
           >
