@@ -140,7 +140,7 @@ export function EditDoctorForm() {
             <Form.Field>
               <div className="flex flex-1 flex-col">
                 <Form.Label>Nome</Form.Label>
-                <Form.Input type="text" name="nome" value={formData.nome} />
+                <Form.Input type="text" name="nome" />
                 <Form.ErrorMessage field="nome" />
               </div>
 
