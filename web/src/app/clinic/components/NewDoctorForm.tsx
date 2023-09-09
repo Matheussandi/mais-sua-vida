@@ -71,6 +71,9 @@ const createDoctorFormSchema = z.object({
 type CreateDoctorFormData = z.infer<typeof createDoctorFormSchema>;
 
 export function NewDoctorForm() {
+  const [isModificationSuccessful, setIsModificationSuccessful] =
+    useState(false);
+
   const [specializations, setSpecializations] = useState<
     { value: string; label: string }[]
   >([]);
@@ -127,6 +130,7 @@ export function NewDoctorForm() {
       });
 
       console.log("Dados enviados com sucesso");
+      setIsModificationSuccessful(true);
     } catch (error) {
       console.error("Erro ao enviar os dados", error);
     }
@@ -264,6 +268,11 @@ export function NewDoctorForm() {
           )} */}
 
           <div className="flex justify-end gap-4">
+          {isModificationSuccessful && (
+                <span className="font-bold text-green-600">
+                  Cadastro realizadao com sucesso!
+                </span>
+              )}
             <button
               disabled={isSubmitting}
               className="rounded-lg bg-primary px-10 py-2 font-bold uppercase text-white hover:bg-blue-600"
@@ -274,7 +283,7 @@ export function NewDoctorForm() {
         </form>
       </FormProvider>
 
-      <pre className="w-11">{output}</pre>
+      {/* <pre className="w-11">{output}</pre> */}
     </main>
   );
 }

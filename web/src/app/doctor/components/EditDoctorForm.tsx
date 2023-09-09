@@ -11,6 +11,11 @@ import { z } from "zod";
 import { Form } from "../../../components/Form";
 import { api } from "@/lib/api";
 
+interface SpecializationProps {
+  id: string;
+  nome: string;
+}
+
 const editDoctorFormSchema = z.object({
   // Lógica para converter a primeira letra para maísculo
   nome: z
@@ -61,6 +66,10 @@ type EditDoctorFormData = z.infer<typeof editDoctorFormSchema>;
 export function EditDoctorForm() {
   const [isModificationSuccessful, setIsModificationSuccessful] =
     useState(false);
+
+  const [specializations, setSpecializations] = useState<
+    { value: string; label: string }[]
+  >([]);
 
   const [formData, setFormData] = useState<EditDoctorFormData>({
     nome: "",
@@ -129,6 +138,25 @@ export function EditDoctorForm() {
     handleGetRegisteredData();
   }, [handleGetRegisteredData]);
 
+  useEffect(() => {
+    async function fetchSpecializations() {
+      try {
+        const response = await api.get<SpecializationProps[]>(
+          "/especializacao"
+        );
+        const specializationOptions = response.data.map((specialization) => ({
+          value: specialization.id,
+          label: specialization.nome,
+        }));
+        setSpecializations(specializationOptions);
+      } catch (error) {
+        console.error("Error fetching specializations", error);
+      }
+    }
+
+    fetchSpecializations();
+  }, []);
+
   return (
     <div className="flex-grow p-10">
       <div className="rounded bg-gray-50 p-7">
@@ -176,7 +204,7 @@ export function EditDoctorForm() {
 
             <div className="flex flex-col">
               <Form.Label>Sobre</Form.Label>
-              <Form.TextArea id="sobre" name="sobre" rows={4} cols={4} />
+              <Form.TextArea id="sobre" name="sobre" rows={3} cols={3} />
               <Form.ErrorMessage field="sobre" />
             </div>
 
@@ -185,24 +213,28 @@ export function EditDoctorForm() {
               <Form.TextArea
                 id="experiencia"
                 name="experiencia"
-                rows={4}
-                cols={4}
+                rows={3}
+                cols={3}
               />
               <Form.ErrorMessage field="experiencia" />
             </div>
 
             <Form.Field>
               <div className="flex flex-1 flex-col">
-                <Form.Label>ID Especialização</Form.Label>
-                <Form.Input type="text" name="idEspecializacao" />
+                <Form.Label>Especialização</Form.Label>
+                <Form.Select
+                  name="idEspecializacao"
+                  options={specializations}
+                  value={watch("idEspecializacao") || ""}
+                />
                 <Form.ErrorMessage field="idEspecializacao" />
               </div>
 
-              <div className="flex flex-1 flex-col">
+              {/*               <div className="flex flex-1 flex-col">
                 <Form.Label>ID Clínica</Form.Label>
                 <Form.Input type="text" name="idClinica" />
                 <Form.ErrorMessage field="idClinica" />
-              </div>
+              </div> */}
             </Form.Field>
 
             <div className="flex items-center justify-end gap-4">
@@ -221,7 +253,7 @@ export function EditDoctorForm() {
           </form>
         </FormProvider>
 
-        <pre>{output}</pre>
+        {/* <pre>{output}</pre> */}
       </div>
     </div>
   );
