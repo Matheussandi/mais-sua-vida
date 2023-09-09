@@ -130,7 +130,7 @@ export function EditClinicForm() {
                     width={130}
                     height={130}
                     alt="Imagem do médico"
-                    className="h-130 w-130 rounded-full object-cover"
+                    className="h-40 w-40 rounded-full object-cover"
                   />
                 ) : (
                   <Image
@@ -138,7 +138,7 @@ export function EditClinicForm() {
                     width={130}
                     height={130}
                     alt="Imagem do médico"
-                    className="h-full w-full rounded-full object-cover"
+                    className="h-40 w-40 rounded-full object-cover"
                   />
                 )}
                 <input

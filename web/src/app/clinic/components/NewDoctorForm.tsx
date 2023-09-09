@@ -1,7 +1,7 @@
 "use client";
 
 import { useForm, FormProvider } from "react-hook-form";
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 
 import { useRouter } from "next/navigation";
 import Image from "next/image";
@@ -74,11 +74,26 @@ export function NewDoctorForm() {
   const [isModificationSuccessful, setIsModificationSuccessful] =
     useState(false);
 
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+
   const [specializations, setSpecializations] = useState<
     { value: string; label: string }[]
   >([]);
 
   const [output, setOutput] = useState("");
+
+  // Função para lidar com alterações de entrada de arquivo
+  const handleFileInput = (event: ChangeEvent<HTMLInputElement>) => {
+    const { files } = event.target;
+
+    if (!files || files.length === 0) {
+      return;
+    }
+
+    const previewURL = URL.createObjectURL(files[0]);
+
+    setSelectedImage(previewURL);
+  };
 
   useEffect(() => {
     async function fetchSpecializations() {
@@ -109,7 +124,6 @@ export function NewDoctorForm() {
     try {
       const formData = new FormData();
       formData.append("doctorImage", data.avatar);
-
 
       const requestData = {
         nome: data.nome,
@@ -154,7 +168,7 @@ export function NewDoctorForm() {
           onSubmit={handleSubmit(createDoctor)}
           className="flex flex-1 flex-col gap-4"
         >
-          <div className="flex items-center">
+          {/*           <div className="flex items-center">
             <Form.Label
               htmlFor="media"
               className="h-100 w-100 relative cursor-pointer overflow-hidden"
@@ -181,6 +195,53 @@ export function NewDoctorForm() {
               </div>
 
               <MediaPicker />
+            </div>
+          </div> */}
+
+          <div className="flex items-center">
+            <label
+              htmlFor="media"
+              className="h-100 w-100 relative cursor-pointer overflow-hidden"
+            >
+              {/* Renderizar a imagem selecionada, imagem fixa ou espaço reservado */}
+              {selectedImage ? (
+                <Image
+                  src={selectedImage}
+                  width={130}
+                  height={130}
+                  alt="Imagem do médico"
+                  className="h-40 w-40 rounded-full object-cover"
+                />
+              ) : (
+                <Image
+                  src={ImageMedico}
+                  width={130}
+                  height={130}
+                  alt="Imagem do médico"
+                  className="h-40 w-40 rounded-full object-cover"
+                />
+              )}
+              <input
+                onChange={handleFileInput}
+                name="doctorImage"
+                type="file"
+                id="media"
+                accept="image/*"
+                className="invisible h-0 w-0"
+              />
+              <div className="absolute bottom-6 right-0 rounded-full bg-primary p-2">
+                <MdModeEdit color="#fff" />
+              </div>
+            </label>
+
+            <MediaPicker />
+            <div className="ml-4">
+              <span className="text-lg font-medium">Foto de perfil</span>
+              <div>
+                <span className="text-base text-gray-600">
+                  Isso será exibido em seu perfil.
+                </span>
+              </div>
             </div>
           </div>
 
@@ -249,7 +310,7 @@ export function NewDoctorForm() {
               <Form.ErrorMessage field="idEspecializacao" />
             </div>
 
-{/*             <div className="flex flex-1 flex-col">
+            {/*             <div className="flex flex-1 flex-col">
               <Form.Label>ID Clínica</Form.Label>
               <Form.Input type="text" name="idClinica" />
               <Form.ErrorMessage field="idClinica" />
@@ -257,7 +318,7 @@ export function NewDoctorForm() {
           </Form.Field>
 
           {/* Exiba os erros de validação na interface do usuário */}
-{/*           {Object.keys(createDoctorForm.formState.errors).length > 0 && (
+          {/*           {Object.keys(createDoctorForm.formState.errors).length > 0 && (
             <div className="text-red-500">
               {Object.values(createDoctorForm.formState.errors).map(
                 (error, index) => (
@@ -268,11 +329,11 @@ export function NewDoctorForm() {
           )} */}
 
           <div className="flex justify-end gap-4">
-          {isModificationSuccessful && (
-                <span className="font-bold text-green-600">
-                  Cadastro realizadao com sucesso!
-                </span>
-              )}
+            {isModificationSuccessful && (
+              <span className="font-bold text-green-600">
+                Cadastro realizadao com sucesso!
+              </span>
+            )}
             <button
               disabled={isSubmitting}
               className="rounded-lg bg-primary px-10 py-2 font-bold uppercase text-white hover:bg-blue-600"

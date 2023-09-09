@@ -6,12 +6,6 @@ import { getDoctorById } from "@/services/get-doctor-by-id";
 import Link from "next/link";
 import { MdModeEdit } from "react-icons/md";
 
-interface DoctorId {
-  params: {
-    id: string;
-  };
-}
-
 interface DoctorProps {
   id: string;
   nome: string;
@@ -69,7 +63,10 @@ export default async function DoctorSelected() {
             </div>
             <Link
               className="rounded bg-primary p-2 text-center text-white"
-              href={`./doctorSelected/patients`}
+              href={{
+                pathname: `./doctorSelected/patients`,
+                query: { doctor: search },
+              }}
             >
               Pacientes
             </Link>

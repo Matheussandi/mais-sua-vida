@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { ChangeEvent, useCallback, useEffect, useState } from "react";
 
 import { useSearchParams } from "next/navigation";
 
@@ -10,6 +10,11 @@ import { z } from "zod";
 
 import { Form } from "../../../components/Form";
 import { api } from "@/lib/api";
+import Image from "next/image";
+import { MdModeEdit } from "react-icons/md";
+import { MediaPicker } from "@/components/MediaPicker";
+
+import doctoUm from "../../../assets/doctor1.png";
 
 interface SpecializationProps {
   id: string;
@@ -67,6 +72,8 @@ export function EditDoctorForm() {
   const [isModificationSuccessful, setIsModificationSuccessful] =
     useState(false);
 
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+
   const [specializations, setSpecializations] = useState<
     { value: string; label: string }[]
   >([]);
@@ -86,6 +93,19 @@ export function EditDoctorForm() {
   const searchParams = useSearchParams();
   const search = searchParams.get("doctor");
   const [output, setOutput] = useState("");
+
+  // Função para lidar com alterações de entrada de arquivo
+  const handleFileInput = (event: ChangeEvent<HTMLInputElement>) => {
+    const { files } = event.target;
+
+    if (!files || files.length === 0) {
+      return;
+    }
+
+    const previewURL = URL.createObjectURL(files[0]);
+
+    setSelectedImage(previewURL);
+  };
 
   const editDoctorForm = useForm<EditDoctorFormData>({
     resolver: zodResolver(editDoctorFormSchema),
@@ -165,6 +185,53 @@ export function EditDoctorForm() {
             onSubmit={handleSubmit(editDoctor)}
             className="flex flex-1 flex-col gap-4"
           >
+            <div className="flex items-center">
+              <label
+                htmlFor="media"
+                className="h-100 w-100 relative cursor-pointer overflow-hidden"
+              >
+                {/* Renderizar a imagem selecionada, imagem fixa ou espaço reservado */}
+                {selectedImage ? (
+                  <Image
+                    src={selectedImage}
+                    width={130}
+                    height={130}
+                    alt="Imagem do médico"
+                    className="h-40 w-40 rounded-full object-cover"
+                  />
+                ) : (
+                  <Image
+                    src={doctoUm}
+                    width={130}
+                    height={130}
+                    alt="Imagem do médico"
+                    className="h-40 w-40 rounded-full object-cover"
+                  />
+                )}
+                <input
+                  onChange={handleFileInput}
+                  name="doctorImage"
+                  type="file"
+                  id="media"
+                  accept="image/*"
+                  className="invisible h-0 w-0"
+                />
+                <div className="absolute bottom-6 right-0 rounded-full bg-primary p-2">
+                  <MdModeEdit color="#fff" />
+                </div>
+              </label>
+
+              <MediaPicker />
+              <div className="ml-4">
+                <span className="text-lg font-medium">Foto de perfil</span>
+                <div>
+                  <span className="text-base text-gray-600">
+                    Isso será exibido em seu perfil.
+                  </span>
+                </div>
+              </div>
+            </div>
+
             <Form.Field>
               <div className="flex flex-1 flex-col">
                 <Form.Label>Nome</Form.Label>

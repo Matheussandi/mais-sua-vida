@@ -54,70 +54,74 @@ export default async function Patients() {
 
   return (
     <div className="flex-grow p-10">
-    <div className="rounded bg-gray-50 p-7">
-      {/* Select para filtrar pacientes */}
-      <div className="mb-4 font-bold">
-        <select className="rounded-lg bg-gray-50 p-2">
-          <option value="">Hoje</option>
-          <option value="1">Consultas Passadas</option>
-        </select>
-      </div>
+      <div className="rounded bg-gray-50 p-7">
+        {/* Select para filtrar pacientes */}
+        <div className="mb-4 font-bold">
+          <select className="rounded-lg bg-gray-50 p-2">
+            <option value="">Hoje</option>
+            <option value="1">Consultas Passadas</option>
+          </select>
+        </div>
 
-      {/* Listagem de pacientes */}
-      <div className="mt-7">
-        {pattientAppointments.map((patient) => (
-          <div key={patient.id} className="mb-4 ">
-            <Link
-              href={`./patients/${patient.id}`}
-              className="h-150 w-200 flex items-center  border-t-2 border-gray-300 py-2"
-            >
-              <div className="h-20 w-20 overflow-hidden rounded-full">
-                {/* Sem imagem por enquanto */}
-                <Image
-                  src={Pacientes}
-                  alt={patient.nome}
-                  width={100}
-                  height={100}
-                  className="h-full w-full object-cover"
-                />
-              </div>
-              <div className="grid grid-cols-3 gap-4 ml-4 w-full">
-                <div className="max-w-48 overflow-hidden">
-                  <span className="block">
-                    {patient.nome} {patient.sobrenome}
-                  </span>
+        {/* Listagem de pacientes */}
+        <div className="mt-7">
+          {pattientAppointments.map((patient) => (
+            <div key={patient.id} className="mb-4 ">
+              <Link
+                href={`./patients/${patient.id}`}
+                className="h-150 w-200 flex items-center  border-t-2 border-gray-300 py-2"
+              >
+                <div className="h-20 w-20 overflow-hidden rounded-full">
+                  {/* Sem imagem por enquanto */}
+                  <Image
+                    src={Pacientes}
+                    alt={patient.nome}
+                    width={100}
+                    height={100}
+                    className="h-full w-full object-cover"
+                  />
                 </div>
+                <div className="ml-4 grid w-full grid-cols-3 gap-4">
+                  <div className="max-w-48 overflow-hidden">
+                    <span className="block">
+                      {patient.nome} {patient.sobrenome}
+                    </span>
+                  </div>
 
-                <div>
-                  {/* Exibir informações das consultas */}
-                  {doctorAppointments.map((appointment, index) => (
-                    index === 0 && (
-                      <div key={appointment.id} className="flex space-x-2">
-                        <MdDateRange size={20} />
-                        <span>
-                          {dayjs(appointment.data).format("D[ ]MMM[  ]YYYY")}
-                        </span>
-                      </div>
-                    )
-                  ))}
+                  <div>
+                    {/* Exibir informações das consultas */}
+                    {doctorAppointments.map(
+                      (appointment, index) =>
+                        index === 0 && (
+                          <div key={appointment.id} className="flex space-x-2">
+                            <MdDateRange size={20} />
+                            <span>
+                              {dayjs(appointment.data).format(
+                                "D[ ]MMM[  ]YYYY"
+                              )}
+                            </span>
+                          </div>
+                        )
+                    )}
+                  </div>
+                  <div>
+                    {/* Exibir informações das consultas */}
+                    {doctorAppointments.map(
+                      (appointment, index) =>
+                        index === 0 && (
+                          <div key={appointment.id} className="flex space-x-2">
+                            <FiClock size={20} />
+                            <span>{appointment.hora}</span>
+                          </div>
+                        )
+                    )}
+                  </div>
                 </div>
-                <div>
-                  {/* Exibir informações das consultas */}
-                  {doctorAppointments.map((appointment, index) => (
-                    index === 0 && (
-                      <div key={appointment.id} className="flex space-x-2">
-                        <FiClock size={20} />
-                        <span>{appointment.hora}</span>
-                      </div>
-                    )
-                  ))}
-                </div>
-              </div>
-            </Link>
-          </div>
-        ))}
+              </Link>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
-  </div>
   );
 }
