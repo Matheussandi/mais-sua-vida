@@ -1,7 +1,7 @@
 "use client";
 
 import { useForm, FormProvider } from "react-hook-form";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { useRouter } from "next/navigation";
 import Image from "next/image";
@@ -16,8 +16,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Form } from "../../../components/Form";
 import { z } from "zod";
 
+interface SpecializationProps {
+  id: string;
+  nome: string;
+}
+
 const createDoctorFormSchema = z.object({
-  // Lógica para converter a primeira letra para maísculo
   nome: z
     .string()
     .nonempty({ message: "Nome é obrigatório" })
@@ -42,7 +46,7 @@ const createDoctorFormSchema = z.object({
         })
         .join(" ");
     }),
-  avatar: z.instanceof(FileList).transform((list) => list.item(0)),
+  // avatar: z.instanceof(FileList).transform((list) => list.item(0)),
   email: z
     .string()
     .nonempty({ message: "E-mail obrigatório" })
@@ -54,8 +58,10 @@ const createDoctorFormSchema = z.object({
     .min(6, "Senha precisa de no mínimo 6 caracteres"),
   sobre: z.string(),
   experiencia: z.string(),
-  idEspecializacao: z.string(),
-  idClinica: z.string(),
+  idEspecializacao: z
+    .string()
+    .nonempty({ message: "Especialização é obrigatória" }),
+  idClinica: z.string().nonempty({ message: "Clínica é obrigatória" }),
   CRM: z
     .string()
     .nonempty({ message: "CRM é obrigatório" })
@@ -65,9 +71,32 @@ const createDoctorFormSchema = z.object({
 type CreateDoctorFormData = z.infer<typeof createDoctorFormSchema>;
 
 export function NewDoctorForm() {
+  const [specializations, setSpecializations] = useState<
+    { value: string; label: string }[]
+  >([]);
+
   const [output, setOutput] = useState("");
 
   const router = useRouter();
+
+  useEffect(() => {
+    async function fetchSpecializations() {
+      try {
+        const response = await api.get<SpecializationProps[]>(
+          "/especializacao"
+        );
+        const specializationOptions = response.data.map((specialization) => ({
+          value: specialization.id,
+          label: specialization.nome,
+        }));
+        setSpecializations(specializationOptions);
+      } catch (error) {
+        console.error("Error fetching specializations", error);
+      }
+    }
+
+    fetchSpecializations();
+  }, []);
 
   const createDoctorForm = useForm<CreateDoctorFormData>({
     resolver: zodResolver(createDoctorFormSchema),
@@ -78,7 +107,6 @@ export function NewDoctorForm() {
       const formData = new FormData();
       formData.append("doctorImage", data.avatar);
 
-      // Cria um objeto com os dados do formulário
       const requestData = {
         nome: data.nome,
         sobrenome: data.sobrenome,
@@ -91,7 +119,6 @@ export function NewDoctorForm() {
         idClinica: data.idClinica,
       };
 
-      // Envia os dados para a API
       await api.post("/medico", requestData, {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -109,6 +136,7 @@ export function NewDoctorForm() {
   }
 
   const {
+    control,
     handleSubmit,
     formState: { isSubmitting },
     watch,
@@ -122,7 +150,6 @@ export function NewDoctorForm() {
           className="flex flex-1 flex-col gap-4"
         >
           <div className="flex items-center">
-
             <Form.Label
               htmlFor="media"
               className="h-100 w-100 relative cursor-pointer overflow-hidden"
@@ -147,12 +174,10 @@ export function NewDoctorForm() {
                   Isso será exibido em seu perfil.
                 </span>
               </div>
-              
+
               <MediaPicker />
-            <Form.Input type="file" name="avatar" accept="image/*" />
             </div>
           </div>
-          
 
           <Form.Field>
             <div className="flex flex-1 flex-col">
@@ -192,7 +217,7 @@ export function NewDoctorForm() {
 
           <div className="flex flex-col">
             <Form.Label>Sobre</Form.Label>
-            <Form.TextArea id="sobre" name="sobre" rows={4} cols={4} />
+            <Form.TextArea id="sobre" name="sobre" rows={3} cols={3} />
             <Form.ErrorMessage field="sobre" />
           </div>
 
@@ -201,16 +226,22 @@ export function NewDoctorForm() {
             <Form.TextArea
               id="experiencia"
               name="experiencia"
-              rows={4}
-              cols={4}
+              rows={3}
+              cols={3}
             />
             <Form.ErrorMessage field="experiencia" />
           </div>
 
           <Form.Field>
             <div className="flex flex-1 flex-col">
-              <Form.Label>ID Especialização</Form.Label>
-              <Form.Input type="text" name="idEspecializacao" />
+              <Form.Label>Especialização</Form.Label>
+              {/* <Form.Input type="text" name="idEspecializacao" /> */}
+              <Form.Select
+                name="idEspecializacao"
+                options={specializations}
+                value={watch("idEspecializacao") || ""}
+              />
+
               <Form.ErrorMessage field="idEspecializacao" />
             </div>
 
@@ -220,6 +251,17 @@ export function NewDoctorForm() {
               <Form.ErrorMessage field="idClinica" />
             </div>
           </Form.Field>
+
+          {/* Exiba os erros de validação na interface do usuário */}
+          {Object.keys(createDoctorForm.formState.errors).length > 0 && (
+            <div className="text-red-500">
+              {Object.values(createDoctorForm.formState.errors).map(
+                (error, index) => (
+                  <p key={index}>{error.message}</p>
+                )
+              )}
+            </div>
+          )}
 
           <div className="flex justify-end gap-4">
             <button
