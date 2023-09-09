@@ -61,7 +61,7 @@ const createDoctorFormSchema = z.object({
   idEspecializacao: z
     .string()
     .nonempty({ message: "Especialização é obrigatória" }),
-  idClinica: z.string().nonempty({ message: "Clínica é obrigatória" }),
+  // idClinica: z.string().nonempty({ message: "Clínica é obrigatória" }),
   CRM: z
     .string()
     .nonempty({ message: "CRM é obrigatório" })
@@ -76,8 +76,6 @@ export function NewDoctorForm() {
   >([]);
 
   const [output, setOutput] = useState("");
-
-  const router = useRouter();
 
   useEffect(() => {
     async function fetchSpecializations() {
@@ -103,9 +101,12 @@ export function NewDoctorForm() {
   });
 
   async function createDoctor(data: CreateDoctorFormData) {
+    const singleClinic = "3804fc00-9286-481c-82b3-6414f80dc755";
+
     try {
       const formData = new FormData();
       formData.append("doctorImage", data.avatar);
+
 
       const requestData = {
         nome: data.nome,
@@ -116,7 +117,7 @@ export function NewDoctorForm() {
         sobre: data.sobre,
         experiencia: data.experiencia,
         idEspecializacao: data.idEspecializacao,
-        idClinica: data.idClinica,
+        idClinica: singleClinic,
       };
 
       await api.post("/medico", requestData, {
@@ -235,7 +236,6 @@ export function NewDoctorForm() {
           <Form.Field>
             <div className="flex flex-1 flex-col">
               <Form.Label>Especialização</Form.Label>
-              {/* <Form.Input type="text" name="idEspecializacao" /> */}
               <Form.Select
                 name="idEspecializacao"
                 options={specializations}
@@ -245,15 +245,15 @@ export function NewDoctorForm() {
               <Form.ErrorMessage field="idEspecializacao" />
             </div>
 
-            <div className="flex flex-1 flex-col">
+{/*             <div className="flex flex-1 flex-col">
               <Form.Label>ID Clínica</Form.Label>
               <Form.Input type="text" name="idClinica" />
               <Form.ErrorMessage field="idClinica" />
-            </div>
+            </div> */}
           </Form.Field>
 
           {/* Exiba os erros de validação na interface do usuário */}
-          {Object.keys(createDoctorForm.formState.errors).length > 0 && (
+{/*           {Object.keys(createDoctorForm.formState.errors).length > 0 && (
             <div className="text-red-500">
               {Object.values(createDoctorForm.formState.errors).map(
                 (error, index) => (
@@ -261,7 +261,7 @@ export function NewDoctorForm() {
                 )
               )}
             </div>
-          )}
+          )} */}
 
           <div className="flex justify-end gap-4">
             <button
