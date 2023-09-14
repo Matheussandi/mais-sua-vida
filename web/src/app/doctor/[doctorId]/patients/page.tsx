@@ -31,7 +31,7 @@ interface AppointmentsProps {
 }
 
 export default function Patients() {
-  const [filter, setFilter] = useState("hoje");
+  const [filter, setFilter] = useState("today");
   const [patients, setPatients] = useState<PatientsProps[]>([]);
   const [appointments, setAppointments] = useState<AppointmentsProps[]>([]);
 
@@ -66,14 +66,19 @@ export default function Patients() {
 
   const filteredAppointments = () => {
     switch (filter) {
-      case "hoje":
+      case "today":
         return doctorAppointments.filter((appointment) =>
           dayjs(appointment.data).isSame(dayjs(), "day")
         );
-      case "passadas":
+      case "past":
         return doctorAppointments.filter((appointment) =>
           dayjs(appointment.data).isBefore(dayjs(), "day")
         );
+      case "future":
+        return doctorAppointments.filter((appointment) =>
+          dayjs(appointment.data).isAfter(dayjs(), "day")
+        );
+
       default:
         return doctorAppointments;
     }
@@ -88,9 +93,9 @@ export default function Patients() {
             value={filter}
             onChange={(e) => setFilter(e.target.value)}
           >
-            <option value="hoje">Hoje</option>
-            <option value="passadas">Consultas Passadas</option>
-            {/* Adicione opções adicionais para futuras consultas, se necessário */}
+            <option value="today">Hoje</option>
+            <option value="past">Passadas</option>
+            <option value="future">Futuras</option>
           </select>
         </div>
 
@@ -108,7 +113,7 @@ export default function Patients() {
                   <div className="h-20 w-20 overflow-hidden rounded-full">
                     <Image
                       src={Patient}
-                      alt={patient.nome}
+                      alt={patient?.nome ?? ""}
                       width={100}
                       height={100}
                       className="h-full w-full object-cover"
