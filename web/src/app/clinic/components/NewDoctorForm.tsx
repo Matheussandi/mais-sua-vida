@@ -3,7 +3,7 @@
 import { useForm, FormProvider } from "react-hook-form";
 import { ChangeEvent, useEffect, useState } from "react";
 
-import { useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import Image from "next/image";
 
 import { MdModeEdit } from "react-icons/md";
@@ -61,7 +61,6 @@ const createDoctorFormSchema = z.object({
   idEspecializacao: z
     .string()
     .nonempty({ message: "Especialização é obrigatória" }),
-  // idClinica: z.string().nonempty({ message: "Clínica é obrigatória" }),
   CRM: z
     .string()
     .nonempty({ message: "CRM é obrigatório" })
@@ -79,6 +78,8 @@ export function NewDoctorForm() {
   const [specializations, setSpecializations] = useState<
     { value: string; label: string }[]
   >([]);
+
+  const pathname = usePathname();
 
   const [output, setOutput] = useState("");
 
@@ -119,7 +120,9 @@ export function NewDoctorForm() {
   });
 
   async function createDoctor(data: CreateDoctorFormData) {
-    const singleClinic = "3804fc00-9286-481c-82b3-6414f80dc755";
+    const pathParts = pathname.split("/");
+
+    const singleClinic = pathParts[2];
 
     try {
       const formData = new FormData();
@@ -309,26 +312,9 @@ export function NewDoctorForm() {
 
               <Form.ErrorMessage field="idEspecializacao" />
             </div>
-
-            {/*             <div className="flex flex-1 flex-col">
-              <Form.Label>ID Clínica</Form.Label>
-              <Form.Input type="text" name="idClinica" />
-              <Form.ErrorMessage field="idClinica" />
-            </div> */}
           </Form.Field>
 
-          {/* Exiba os erros de validação na interface do usuário */}
-          {/*           {Object.keys(createDoctorForm.formState.errors).length > 0 && (
-            <div className="text-red-500">
-              {Object.values(createDoctorForm.formState.errors).map(
-                (error, index) => (
-                  <p key={index}>{error.message}</p>
-                )
-              )}
-            </div>
-          )} */}
-
-          <div className="flex justify-end gap-4">
+          <div className="mb-4 flex justify-end gap-4">
             {isModificationSuccessful && (
               <span className="font-bold text-green-600">
                 Cadastro realizadao com sucesso!
@@ -343,8 +329,6 @@ export function NewDoctorForm() {
           </div>
         </form>
       </FormProvider>
-
-      {/* <pre className="w-11">{output}</pre> */}
     </main>
   );
 }
