@@ -6,26 +6,25 @@ import { Clinic } from '../../models/ClinicModel';
 
 const comparePasswords = promisify(bcrypt.compare);
 
-export async function clinicLoginValidator(request: Request, response: Response){
-	try{
+export async function clinicLoginValidator(request: Request, response: Response) {
+  try {
+    const { CNPJ, senha } = request.body;
 
-		const { CNPJ, senha} = request.body;
-		const validClinic = await Clinic.findOne({ where: { CNPJ: CNPJ}});
+    const validClinic = await Clinic.findOne({ where: { CNPJ: CNPJ } });
 
-		if(!validClinic){
-			response.status(404).json({Erro: 'Invalid CNPJ'});
-		}
+    if (!validClinic) {
+      return response.status(404).json({ Erro: 'Invalid CNPJ' });
+    }
 
-		const validPassword = await comparePasswords(senha, validClinic.senha);
+    const validPassword = await comparePasswords(senha, validClinic.senha);
 
-		if(!validPassword){
-			response.status(500).json({Error: 'Invalid Password'});
-		}else {
-			response.status(200).json({Clinic: validClinic});
-		}
+    if (!validPassword) {
+      return response.status(401).json({ Error: 'Invalid Password' });
+    }
 
-	}catch(error){
-		response.status(500).json({Error: 'Something went wrong'});
-	}
-
+    return response.status(200).json({ Clinic: validClinic });
+  } catch (error) {
+    console.error('Error during authentication:', error);
+    return response.status(500).json({ Error: 'Something went wrong' });
+  }
 }
