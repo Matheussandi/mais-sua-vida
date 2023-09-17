@@ -5,39 +5,29 @@ import { api } from "@/lib/api";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
-interface IDoctor {
-  id: string;
-  email: string;
-}
-
 export default function LoginDoctor() {
-  const [email, setEmail] = useState("");
+  const [CRM, setCRM] = useState("");
+  const [senha, setSenha] = useState("");
   const [error, setError] = useState("");
 
   const router = useRouter();
 
   const handleLogin = async () => {
     try {
-      const response = await api.get<IDoctor[]>("/medico");
+      const response = await api.post("/medico/login", { CRM, senha });
 
-      const doctors = response.data; // Array de médicos retornados pela API
-
-      const doctorFound = doctors.find((doctor) => doctor.email === email);
-
-      if (doctorFound) {
-        // Autenticação bem-sucedida, redirecione para a página desejada
+      if (response.status === 200) {
+        const doctor = response.data.Doctor;
         console.log("Autenticação bem-sucedida");
-        // Redirecione para a página desejada usando o router do Next.js
-        // Exemplo: router.push("/dashboard");
-
-        router.push(`/doctor/${doctorFound.id}`);
+        router.push(`/doctor/${doctor.id}`);
       } else {
-        // Autenticação falhou, exiba uma mensagem de erro
-        setError("Credenciais inválidas. Por favor, verifique seu email.");
+        throw new Error("Erro durante a autenticação");
       }
     } catch (error) {
-      // Lidar com erros de chamada à API
       console.error("Erro durante a autenticação:", error);
+      setError(
+        "CRM ou senha incorretos. Por favor, verifique suas credenciais."
+      );
     }
   };
 
@@ -53,17 +43,27 @@ export default function LoginDoctor() {
             className={`focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none ${
               error ? "border-red-500" : ""
             }`}
-            id="email"
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            id="CRM"
+            type="text"
+            placeholder="CRM"
+            value={CRM}
+            onChange={(e) => setCRM(e.target.value)}
+          />
+          <input
+            className={`focus:shadow-outline mt-2 w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none ${
+              error ? "border-red-500" : ""
+            }`}
+            id="senha"
+            type="password"
+            placeholder="Senha"
+            value={senha}
+            onChange={(e) => setSenha(e.target.value)}
           />
           {error && <p className="mt-1 text-xs text-red-500">{error}</p>}
         </div>
         <div className="flex flex-col items-center">
           <button
-            className="focus:shadow-outline mb-4 w-full rounded bg-primary px-4 py-2 text-white hover:bg-blue-500 transition duration-300"
+            className="focus:shadow-outline mb-4 w-full rounded bg-primary px-4 py-2 text-white transition duration-300 hover:bg-blue-500"
             type="button"
             onClick={handleLogin}
           >
