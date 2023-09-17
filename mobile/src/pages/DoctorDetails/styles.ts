@@ -90,9 +90,9 @@ export const SectionContent = styled.Text`
 
 export const AppointmentButton = styled.TouchableOpacity`
     width: 100%;
-    height: 50px;
-    margin-top: 20px;
+    padding: 8px;
     background-color: #0079ff;
+    margin: 8px 0;
     justify-content: center;
     align-items: center;
     border-radius: 5px;

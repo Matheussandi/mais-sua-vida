@@ -16,6 +16,6 @@ const Sequelize = require('sequelize');
 export const db = new Sequelize(dbName, dbUser, dbPassword, {
 	host: dbHost,
 	port: dbPort,
-	dialect: 'mysql',
+	dialect: 'postgres',
 	logging: false,
 });

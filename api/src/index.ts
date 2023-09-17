@@ -3,7 +3,7 @@ import path from 'node:path';
 import { db } from './app/db';
 
 const app = express();
-const port = 3000;
+const port = 3333;
 
 import { doctorRoutes } from './routes/doctorRoutes';
 import { especializationRoutes } from './routes/especializationRoutes';
