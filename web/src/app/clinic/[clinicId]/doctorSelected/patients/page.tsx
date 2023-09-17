@@ -30,63 +30,14 @@ interface AppointmentsProps {
 }
 
 export default function Patients() {
-  const searchParams = useSearchParams();
-  const search = searchParams.get("doctor");
-  const doctorId = search;
-
   const [filter, setFilter] = useState("today");
   const [appointments, setAppointments] = useState<AppointmentsProps[]>([]);
-  /*   const [filteredAppointments, setFilteredAppointments] = useState<
-    AppointmentsProps[]
-  >([]); */
   const [patients, setPatients] = useState<PatientsProps[]>([]);
 
-  /* useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const patientsData: PatientsProps[] = await getPatients();
-        const appointments: AppointmentsProps[] =
-          await getMedicalAppointments();
+  const searchParams = useSearchParams();
+  const search = searchParams.get("doctor");
 
-        const doctorAppointments = appointments.filter(
-          (appointment) => appointment.idMedico === doctorId
-        );
-
-        const today = dayjs().format("YYYY-MM-DD");
-        // const tomorrow = dayjs().add(1, 'day').format("YYYY-MM-DD");
-
-        let filtered: AppointmentsProps[] = [];
-
-        if (filter === "today") {
-          filtered = doctorAppointments.filter(
-            (appointment) => appointment.data === today
-          );
-        } else if (filter === "past") {
-          filtered = doctorAppointments.filter(
-            (appointment) => appointment.data < today
-          );
-        } else if (filter === "future") {
-          filtered = doctorAppointments.filter(
-            (appointment) => appointment.data > today
-          );
-        }
-
-        setFilteredAppointments(filtered);
-        setPatients(patientsData);
-      } catch (error) {
-        console.error("Erro ao buscar dados:", error);
-      }
-    };
-
-    fetchData();
-  }, [doctorId, filter]);
-
-  const getPatientName = (idPaciente: number) => {
-    const patient = patients.find((p) => p.id === idPaciente);
-    return patient
-      ? `${patient.nome} ${patient.sobrenome}`
-      : "Paciente não encontrado";
-  }; */
+  const doctorId = search;
 
   useEffect(() => {
     async function fetchData() {
@@ -149,47 +100,53 @@ export default function Patients() {
         </div>
 
         <div className="mt-7">
-          {filteredAppointments().map((appointment) => {
-            const patient = patientAppointments.find(
-              (p) => p.id === appointment.idPaciente
-            );
-            return (
-              <div key={appointment.id} className="mb-4">
-                <div className="h-150 w-200 flex items-center border-t-2 border-gray-300 py-2">
-                  <div className="h-20 w-20 overflow-hidden rounded-full">
-                    <Image
-                      src={Patient}
-                      alt={patient?.nome ?? ""}
-                      width={100}
-                      height={100}
-                      className="h-full w-full object-cover"
-                    />
-                  </div>
-                  <div className="ml-4 grid w-full grid-cols-3 gap-4">
-                    <div className="max-w-48 overflow-hidden">
-                      <span className="block">
-                        {patient?.nome} {patient?.sobrenome}
-                      </span>
+          {filteredAppointments().length === 0 ? (
+            <div className="text-center font-semibold">
+              Não há consultas
+            </div>
+          ) : (
+            filteredAppointments().map((appointment) => {
+              const patient = patientAppointments.find(
+                (p) => p.id === appointment.idPaciente
+              );
+              return (
+                <div key={appointment.id} className="mb-4">
+                  <div className="h-150 w-200 flex items-center border-t-2 border-gray-300 py-2">
+                    <div className="h-20 w-20 overflow-hidden rounded-full">
+                      <Image
+                        src={Patient}
+                        alt={patient?.nome ?? ""}
+                        width={100}
+                        height={100}
+                        className="h-full w-full object-cover"
+                      />
                     </div>
-                    <div>
-                      <div className="flex space-x-2">
-                        <MdDateRange size={20} />
-                        <span>
-                          {dayjs(appointment.data).format("D[ ]MMM[  ]YYYY")}
+                    <div className="ml-4 grid w-full grid-cols-3 gap-4">
+                      <div className="max-w-48 overflow-hidden">
+                        <span className="block">
+                          {patient?.nome} {patient?.sobrenome}
                         </span>
                       </div>
-                    </div>
-                    <div>
-                      <div className="flex space-x-2">
-                        <FiClock size={20} />
-                        <span>{appointment.hora}</span>
+                      <div>
+                        <div className="flex space-x-2">
+                          <MdDateRange size={20} />
+                          <span>
+                            {dayjs(appointment.data).format("D[ ]MMM[  ]YYYY")}
+                          </span>
+                        </div>
+                      </div>
+                      <div>
+                        <div className="flex space-x-2">
+                          <FiClock size={20} />
+                          <span>{appointment.hora}</span>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })
+          )}
         </div>
       </div>
     </div>

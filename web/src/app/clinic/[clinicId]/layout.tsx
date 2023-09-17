@@ -3,8 +3,6 @@ import { ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-import PhotoClinic from "../../../assets/photoClinic.png";
-
 import { getClinicById } from "@/services/get-clinic-by-id";
 
 import { ClinicNavigation } from "../components/ClinicNavigation";
@@ -23,23 +21,26 @@ interface ClinicIdProps {
 interface ClinicProps {
   nome: string;
   sobrenome: string;
-  image: string;
+  clinicImage: string;
 }
 
 async function ClinicDetails({ id }: ClinicIdProps) {
-  const doctor: ClinicProps = await getClinicById(id);
+  const clinic: ClinicProps = await getClinicById(id);
+
+  const urlBaseDasImagens = "http://localhost:3333/uploads/";
+  const imageComplete = `${urlBaseDasImagens}${clinic.clinicImage}`;
 
   return (
     <>
       <Image
-        src={PhotoClinic}
+        src={imageComplete}
         width={130}
         height={130}
         alt="Clinic"
-        className="w-130 h-130 mx-auto mb-4 rounded-full"
+        className="w-32 h-32 mx-auto mb-4 rounded-full"
       />
       <h1 className="mb-8 text-center text-xl font-bold uppercase">
-        {doctor.nome}
+        {clinic.nome}
       </h1>
     </>
   );

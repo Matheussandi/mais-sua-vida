@@ -3,11 +3,10 @@ import { ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-import PhotoDoctor from "../../../assets/doctor1.png";
-
 import { getDoctorById } from "@/services/get-doctor-by-id";
 
 import { DoctorNavigation } from "../components/DoctorNavigation";
+import { FiUser } from "react-icons/fi";
 
 interface DoctorLayoutProps {
   children: ReactNode;
@@ -23,21 +22,34 @@ interface DoctorIdProps {
 interface DoctorProps {
   nome: string;
   sobrenome: string;
-  image: string;
+  doctorImage: string;
 }
 
 async function DoctorDetails({ id }: DoctorIdProps) {
   const doctor: DoctorProps = await getDoctorById(id);
 
+  const urlBaseDasImagens = "http://localhost:3333/uploads/";
+  const imageComplete = `${urlBaseDasImagens}${doctor.doctorImage}`;
+
   return (
     <>
-      <Image
-        src={PhotoDoctor}
-        width={130}
-        height={130}
-        alt="Clinic"
-        className="w-130 h-130 mx-auto mb-4 rounded-full"
-      />
+      <div className="mb-4 h-32 w-full">
+        {doctor.doctorImage ? (
+          <Image
+            src={`http://localhost:3333/uploads/${doctor.doctorImage}`}
+            alt={doctor.nome}
+            width={200}
+            height={200}
+            className="mx-auto mb-4 h-32 w-32 rounded-full"
+          />
+        ) : (
+          <>
+            <div className="flex justify-center ">
+              <FiUser size={130} className="mx-auto mb-4 h-32 w-32" />
+            </div>
+          </>
+        )}
+      </div>
       <h1 className="mb-8 text-center text-xl font-bold uppercase">{`${doctor.nome} ${doctor.sobrenome}`}</h1>
     </>
   );

@@ -18,6 +18,7 @@ interface PatientProps {
   id: string;
   nome: string;
   sobrenome: string;
+  patientImage: string;
   email: string;
   telefone: string;
   dataNascimento: string;
@@ -41,11 +42,11 @@ export default async function PatientDetails({ params }: PatientId) {
           />
           <div className="absolute left-1/2 top-1/2 -translate-x-1/2 transform">
             <Image
-              src={Patient}
+              src={`http://localhost:3333/uploads/${patient.patientImage}`}
               alt=""
               width={120}
               height={120}
-              className="rounded-full"
+              className="h-32 w-32 rounded-full"
               style={{ border: "6px solid white" }}
             />
             <h1 className="my-2 text-2xl font-extrabold">{`${patient.nome} ${patient.sobrenome}`}</h1>

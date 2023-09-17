@@ -2,13 +2,17 @@
 
 import Link from "next/link";
 import {
+  FiUser,
   FiPlus,
   FiSearch,
   FiChevronLeft,
   FiChevronRight,
 } from "react-icons/fi";
+
 import { useCallback, useEffect, useState } from "react";
+
 import { api } from "@/lib/api";
+import Image from "next/image";
 
 interface ClinicId {
   params: string;
@@ -28,7 +32,11 @@ export default function DoctorList({ params }: ClinicId) {
   const [doctors, setDoctors] = useState<DoctorProps[]>([]);
   const [doctorsSearch, setDoctorsSearch] = useState("");
   const [page, setPage] = useState(1);
-  const doctorsPerPage = 12; // Número de médicos por página
+
+  const doctorsPerPage = 12;
+
+  const urlBaseDasImagens = "http://localhost:3333/uploads/";
+  const imageComplete = `${urlBaseDasImagens}${doctors.doctorImage}`;
 
   const fetchDoctors = useCallback(async () => {
     try {
@@ -94,14 +102,25 @@ export default function DoctorList({ params }: ClinicId) {
                     className="block rounded-lg border border-gray-300 hover:bg-gray-100"
                   >
                     <div className="h-32 w-full rounded-t-lg bg-blue-300">
-                      {/* Sem imagem por enquanto */}
-                      {/* <Image
-                        src={doctor.image}
-                        alt={doctor.nome}
-                        width={50}
-                        height={50}
-                        className="h-50 w-50 mx-auto"
-                      /> */}
+                      {doctor.doctorImage ? (
+                        <Image
+                          src={`http://localhost:3333/uploads/${doctor.doctorImage}`}
+                          alt={doctor.nome}
+                          width={200}
+                          height={200}
+                          className="mx-auto h-full w-full rounded-t-lg"
+                        />
+                      ) : (
+                        <>
+                          <div className="flex">
+                            <FiUser
+                              size={130}
+                              className="mx-6 my-auto"
+                              color="white"
+                            />
+                          </div>
+                        </>
+                      )}
                     </div>
                     <div className="p-4">
                       <h3 className="mb-2 text-center text-base font-bold">
@@ -124,7 +143,7 @@ export default function DoctorList({ params }: ClinicId) {
             {page > 1 && (
               <button
                 onClick={() => setPage(page - 1)}
-                className="cursor-pointer rounded bg-blue-500 px-3 py-1 text-white"
+                className="cursor-pointer rounded bg-primary px-3 py-1 text-white"
               >
                 <FiChevronLeft size={20} />
               </button>
@@ -135,7 +154,7 @@ export default function DoctorList({ params }: ClinicId) {
             {page < totalPages && (
               <button
                 onClick={() => setPage(page + 1)}
-                className="cursor-pointer rounded bg-blue-500 px-3 py-1 text-white"
+                className="cursor-pointer rounded bg-primary px-3 py-1 text-white"
               >
                 <FiChevronRight size={20} />
               </button>

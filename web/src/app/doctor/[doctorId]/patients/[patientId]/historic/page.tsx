@@ -22,12 +22,13 @@ interface PatientId {
 
 type Props = {
   searchParams: Record<string, string> | null | undefined;
-}
+};
 
 interface PatientProps {
   id: string;
   nome: string;
   sobrenome: string;
+  patientImage: string;
 }
 
 interface HistoryProps {
@@ -55,11 +56,12 @@ export default async function Historic({ params, searchParams }: PatientId) {
           />
           <div className="absolute left-1/2 top-1/2 -translate-x-1/2 transform">
             <Image
-              src={Patient}
+              src={`http://localhost:3333/uploads/${patient.patientImage}`}
               alt=""
               width={120}
               height={120}
-              className="rounded-full border-[6px] border-solid border-white"
+              className="h-32 w-32 rounded-full"
+              style={{ border: "6px solid white" }}
             />
             <h1 className="my-2 text-2xl font-extrabold">{`${patient.nome} ${patient.sobrenome}`}</h1>
           </div>
@@ -80,16 +82,17 @@ export default async function Historic({ params, searchParams }: PatientId) {
                       </p>
                     </div>
                     <p className="ml-7 text-gray-800">{item.descricao}</p>
-                    {/*                     {item.medicos.length > 0 && (
-                      <p className="ml-7 text-gray-800">Médico: {item.medicos[0].nome}</p>
-                    )} */}
+                    
                   </li>
                 ))}
               </ul>
             </div>
 
             <div className="mt-6 flex items-center justify-center">
-              <Link href="?modal=true" className="rounded-lg bg-primary px-16 py-5 font-bold text-white ">
+              <Link
+                href="?modal=true"
+                className="rounded-lg bg-primary px-16 py-5 font-bold text-white "
+              >
                 Adicionar
               </Link>
             </div>
