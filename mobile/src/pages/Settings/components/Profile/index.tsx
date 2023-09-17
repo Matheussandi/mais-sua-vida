@@ -17,16 +17,20 @@ import {
 	BackButton,
 } from './styles';
 
-import { Feather, FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
+import {
+	Feather,
+	FontAwesome5,
+	MaterialCommunityIcons,
+} from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 
-interface UserData {
-	nome: string;
-	sobrenome: string;
-	dataNascimento?: string;
-	altura?: string;
-	peso?: string;
-  }
+interface UserDataProps {
+    nome: string;
+    sobrenome: string;
+    dataNascimento?: string;
+    altura?: string;
+    peso?: string;
+}
 
 export function Profile() {
 	const { userData } = useUserContext();
@@ -56,12 +60,11 @@ export function Profile() {
 				</BackButton>
 
 				<UserContent>
-					{/* 				<Photo
-					source={{
-						uri: `${serverURL}/uploads/${userData?.patientImage}`
-					}}
-				/> */}
-					<Photo source={DocImage} />
+					<Photo
+						source={{
+							uri: `http://192.168.1.103:3333/uploads/${userData?.patientImage}`,
+						}}
+					/>
 					<UserName>
 						{userData?.nome} {userData?.sobrenome}
 					</UserName>
@@ -77,7 +80,8 @@ export function Profile() {
 
 							{userData?.dataNascimento ? (
 								<Text color="#fff" weight="500" size={18}>
-									{ageCalculation(userData?.dataNascimento)} anos
+									{ageCalculation(userData?.dataNascimento)}{' '}
+                                    anos
 								</Text>
 							) : (
 								<Text color="white">--</Text>
@@ -102,7 +106,11 @@ export function Profile() {
 						</UserItem>
 
 						<UserItem>
-							<FontAwesome5 name="weight" size={32} color="white" />
+							<FontAwesome5
+								name="weight"
+								size={32}
+								color="white"
+							/>
 							<Text color="#fff">Peso</Text>
 
 							{userData?.peso ? (

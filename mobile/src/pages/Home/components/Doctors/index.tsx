@@ -1,22 +1,15 @@
 import { FlatList, Image } from 'react-native';
 import { useState } from 'react';
 
-import { Text } from '../../../Text';
 import { Doctor } from '../../../../types/Doctors';
-
-import docImage from '../../../../assets/doctor.png';
 
 interface DoctorProps {
     doctors: Doctor[];
 }
 
-const serverUrl = process.env.SERVER;
-
 import {
-	DoctorContainer,
 	DoctorImage,
 	DoctorDetails,
-	Separator,
 	DoctorCardItemSeparator,
 	DoctorCard,
 	DoctorName,
@@ -58,7 +51,11 @@ export function Doctors({ doctors }: DoctorProps) {
 				ItemSeparatorComponent={() => <DoctorCardItemSeparator />}
 				renderItem={({ item: doctor }) => (
 					<DoctorCard onPress={() => handleOpenDoctorDetails(doctor)}>
-						<DoctorImage source={docImage} />
+						<DoctorImage
+							source={{
+								uri: `http://192.168.1.103:3333/uploads/${doctor?.doctorImage}`,
+							}}
+						/>
 						<DoctorDetails>
 							<DoctorName>
                                 Dr. {doctor.nome} {doctor.sobrenome}

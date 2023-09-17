@@ -68,7 +68,7 @@ export function Appointments() {
 		setModalVisible(false);
 	};
 
-	const today = dayjs(); // Obter a data de hoje
+	const today = dayjs();
 
 	// Filtrar consultas passadas e futuras
 	const pastAppointments = scheduledAppointments.filter((consulta) =>

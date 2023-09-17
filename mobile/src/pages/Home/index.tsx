@@ -6,13 +6,9 @@ import { ActivityIndicator, Image } from 'react-native';
 
 import { api } from '../../api';
 
-import DoctorImage from '../../assets/persona.jpg';
-
 import { Doctor } from '../../types/Doctors';
 import { Especialization } from '../../types/Especialization';
 import { useRoute, useNavigation } from '@react-navigation/native';
-
-const serverUrl = process.env.SERVER;
 
 import {
 	Container,
@@ -86,19 +82,24 @@ export default function Home() {
 				<HeaderContent>
 					<Greetings>
 						<GreetingsText>Olá, Bem-vindo(a) 🎉</GreetingsText>
-						<UserName>{userData?.nome} {userData?.sobrenome}</UserName>
+						<UserName>
+							{userData?.nome} {userData?.sobrenome}
+						</UserName>
 					</Greetings>
-					<TouchableOpacity onPress={() => navigation.navigate('Settings')}>
+					<TouchableOpacity
+						onPress={() => navigation.navigate('Settings')}
+					>
 						{userImage ? (
 							<UserImageContainer>
-								{/* <Image
-									source={{
-										uri: `${serverUrl}/uploads/${userData?.patientImage}`,
-									}}
-								/> */}
 								<Image
-									source={DoctorImage}
-									style={{ width: 60, height: 60, borderRadius: 30 }}
+									source={{
+										uri: `http://192.168.1.103:3333/uploads/${userData?.patientImage}`,
+									}}
+									style={{
+										width: 60,
+										height: 60,
+										borderRadius: 30,
+									}}
 								/>
 							</UserImageContainer>
 						) : (
@@ -156,3 +157,4 @@ export default function Home() {
 		</Container>
 	);
 }
+
