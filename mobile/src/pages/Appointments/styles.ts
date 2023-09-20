@@ -39,6 +39,7 @@ export const Title = styled.Text`
 
 export const TextModal = styled.Text`
   font-size: 20px;
+  margin-bottom: 8px;
 `;
 
 export const DoctorCard = styled.TouchableOpacity`
