@@ -23,6 +23,7 @@ import { ControlledInput } from '../../components/ControlledInput';
 import { Header } from '../../components/Header';
 
 import { useUserContext } from '../../context/UserContext';
+import React, { useEffect } from 'react';
 
 import { api } from '../../api';
 
@@ -75,6 +76,7 @@ export function InfoBasics() {
 		control,
 		handleSubmit,
 		formState: { errors },
+		setValue,
 	} = useForm<FormData>({
 		resolver: yupResolver(schema),
 	});
@@ -100,6 +102,21 @@ export function InfoBasics() {
 			}
 		}
 	}
+
+	useEffect(() => {
+		if (userData) {
+			const { nome, sobrenome, CPF, telefone, email, dataNascimento, altura, peso } = userData;
+
+			setValue('nome', nome);
+			setValue('sobrenome', sobrenome);
+			setValue('CPF', CPF);
+			setValue('telefone', telefone);
+			setValue('email', email);
+			setValue('dataNascimento', dataNascimento);
+			setValue('altura', altura);
+			setValue('peso', peso);
+		};
+	}, [userData, control])
 
 	return (
 		<KeyboardAvoidingView behavior={'padding'}>
@@ -170,7 +187,7 @@ export function InfoBasics() {
 
 							<ControlledInput
 								name="dataNascimento"
-								maxLength={8}
+								maxLength={10}
 								control={control}
 								icon="calendar"
 								placeholder="Data de Nascimento"
@@ -210,4 +227,3 @@ export function InfoBasics() {
 		</KeyboardAvoidingView>
 	);
 }
-
