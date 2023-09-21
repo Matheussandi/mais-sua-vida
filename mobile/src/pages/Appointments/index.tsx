@@ -92,9 +92,28 @@ export function Appointments() {
 		}
 	};
 
+	const fetchNewAppointments = async (patientId: string) => {
+		try {
+			const response = await api.get(`/consultas/${patientId}`);
+			setScheduledAppointments(response.data);
+			setError(null);
+		} catch (error) {
+			console.error('Erro na consulta à API:', error);
+			setError('Ocorreu um erro ao buscar as consultas.');
+		}
+	};
+
 	useEffect(() => {
 		if (userId) {
 			fetchAppointment(userId);
+
+			const interval = setInterval(() => {
+				fetchNewAppointments(userId)
+			}, 5000);
+
+			return () => {
+				clearInterval(interval);
+			}
 		}
 	}, [userId]);
 
