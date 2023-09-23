@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import { Text, Modal, ScrollView } from 'react-native';
+import { Text, Modal, ScrollView, Alert, TouchableOpacity } from 'react-native';
 import { useState, useEffect } from 'react';
 
 import {
@@ -45,12 +45,8 @@ interface Consulta {
 }
 
 export function Appointments() {
-	const [scheduledAppointments, setScheduledAppointments] = useState<
-        Consulta[]
-    >([]);
-	const [selectedConsulta, setSelectedConsulta] = useState<Consulta | null>(
-		null
-	);
+	const [scheduledAppointments, setScheduledAppointments] = useState<Consulta[]>([]);
+	const [selectedConsulta, setSelectedConsulta] = useState<Consulta | null>(null);
 	const [isModalVisible, setModalVisible] = useState(false);
 	const [error, setError] = useState<string | null>(null);
 
@@ -92,6 +88,19 @@ export function Appointments() {
 		}
 	};
 
+
+	const handleDesmarcarConsulta = async () => {
+		try {
+			await api.delete(`/consultas/${selectedConsulta?.id}`);
+			setModalVisible(false);
+			fetchAppointment(userId);
+			Alert.alert('Consulta Desmarcada', 'A consulta foi desmarcada com sucesso.');
+		} catch (error) {
+			console.error('Erro ao desmarcar consulta:', error);
+			Alert.alert('Erro', 'Ocorreu um erro ao desmarcar a consulta.');
+		}
+	};
+
 	const fetchNewAppointments = async (patientId: string) => {
 		try {
 			const response = await api.get(`/consultas/${patientId}`);
@@ -108,12 +117,12 @@ export function Appointments() {
 			fetchAppointment(userId);
 
 			const interval = setInterval(() => {
-				fetchNewAppointments(userId)
+				fetchNewAppointments(userId);
 			}, 5000);
 
 			return () => {
 				clearInterval(interval);
-			}
+			};
 		}
 	}, [userId]);
 
@@ -173,6 +182,11 @@ export function Appointments() {
 						</TextModal>
 						<TextModal>Horário: {selectedConsulta?.hora}</TextModal>
 						<TextModal>Local: {selectedConsulta?.local}</TextModal>
+
+	
+						<TouchableOpacity onPress={handleDesmarcarConsulta}>
+							<TextModal>Desmarcar Consulta</TextModal>
+						</TouchableOpacity>
 					</ModalContent>
 				</ModalBackground>
 			</Modal>
