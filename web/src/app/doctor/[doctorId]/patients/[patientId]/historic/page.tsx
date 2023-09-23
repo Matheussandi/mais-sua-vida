@@ -82,16 +82,15 @@ export default async function Historic({ params, searchParams }: PatientId) {
                       </p>
                     </div>
                     <p className="ml-7 text-gray-800">{item.descricao}</p>
-                    
                   </li>
                 ))}
               </ul>
             </div>
 
-            <div className="mt-6 flex items-center justify-center">
+            <div className="my-6 flex items-center justify-center">
               <Link
                 href="?modal=true"
-                className="rounded-lg bg-primary px-16 py-5 font-bold text-white "
+                className="rounded-lg bg-primary px-10 py-3 font-bold text-white "
               >
                 Adicionar
               </Link>

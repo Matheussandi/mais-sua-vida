@@ -1,12 +1,15 @@
 import { getPatientById } from "../../../../../services/get-patient-by-id";
 
 import Image from "next/image";
+import Link from "next/link";
 
 import Retangle from "../../../../../assets/Rectangle.svg";
-import Patient from "../../../../../assets/doctor1.png";
-import Link from "next/link";
+
 import { HeightConverter } from "@/utils/HeightConverter";
 import { WeightConverter } from "@/utils/WeightConverter";
+import { calculateAge } from "@/utils/calculateAge";
+
+import dayjs from "dayjs";
 
 interface PatientId {
   params: {
@@ -28,6 +31,8 @@ interface PatientProps {
 
 export default async function PatientDetails({ params }: PatientId) {
   const patient: PatientProps = await getPatientById(params.patientId);
+
+  const formattedDate = dayjs(patient.dataNascimento).format("DD/MM/YYYY");
 
   return (
     <div className="flex-grow p-10">
@@ -58,19 +63,12 @@ export default async function PatientDetails({ params }: PatientId) {
             <div className="flex justify-around gap-10 border-t-2 border-gray-200 p-10">
               <div>
                 <h2 className="font-bold uppercase">Sobre</h2>
-                <p>Gênero:</p>
-                <p>Idade:</p>
-                <p>Data de Nascimento: {patient.dataNascimento}</p>
+                <p>Idade: {calculateAge(patient.dataNascimento)}</p>
+                <p>Data de Nascimento: {formattedDate}</p>
                 <p>Altura: {HeightConverter(patient.altura)}</p>
                 <p>Peso: {WeightConverter(patient.peso)}</p>
               </div>
-              <div>
-                <h2 className="font-bold uppercase">Endereço</h2>
-                <p>CEP:</p>
-                <p>Estado:</p>
-                <p>Cidade:</p>
-                <p>Rua:</p>
-              </div>
+
               <div>
                 <h2 className="font-bold uppercase">Contato</h2>
                 <p>E-mail: {patient.email}</p>

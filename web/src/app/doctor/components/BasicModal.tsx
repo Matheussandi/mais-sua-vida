@@ -3,6 +3,7 @@
 import { Form } from "@/components/Form";
 import { api } from "@/lib/api";
 import { zodResolver } from "@hookform/resolvers/zod";
+import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
@@ -41,7 +42,6 @@ export function BasicModal() {
 
       console.log(requestData);
 
-      // Envia os dados para a API
       await api.post("/historico", requestData, {
         headers: {
           "Content-Type": "application/json",
@@ -100,12 +100,19 @@ export function BasicModal() {
               </div>
 
               <div className="flex justify-end gap-4">
-                <button
-                  onClick={router.back}
+                {/* <button
+                  onClick={() => router.back()}
                   className="rounded-lg bg-primary px-10 py-2 font-bold uppercase text-white hover:bg-blue-600"
                 >
                   Sair
-                </button>
+                </button> */}
+
+                <Link
+                  href="./historic"
+                  className="rounded-lg bg-primary px-10 py-3 font-bold text-white "
+                >
+                  Sair
+                </Link>
                 <button
                   disabled={isSubmitting}
                   className="rounded-lg bg-primary px-10 py-2 font-bold uppercase text-white hover:bg-blue-600"

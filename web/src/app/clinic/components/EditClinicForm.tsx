@@ -50,7 +50,10 @@ export function EditClinicForm() {
   const searchParams = useSearchParams();
   const search = searchParams.get("clinic");
   const [output, setOutput] = useState("");
+
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+
+  const [clinicImageUrl, setClinicImageUrl] = useState<string | null>(null);
 
   const editClinicForm = useForm<EditClinicFormData>({
     resolver: zodResolver(editClinicFormSchema),
@@ -83,6 +86,12 @@ export function EditClinicForm() {
     try {
       const response = await api.get(`/clinica/${search}`);
       const clinicData = await response.data;
+
+      if (clinicData.clinicImage) {
+        const urlBaseDasImagens = "http://localhost:3333/uploads/";
+        const imageComplete = `${urlBaseDasImagens}${clinicData.clinicImage}`;
+        setClinicImageUrl(imageComplete);
+      }
 
       const { senha, ...restClinicData } = clinicData;
       setFormData(restClinicData);
@@ -123,24 +132,24 @@ export function EditClinicForm() {
                 htmlFor="media"
                 className="h-100 w-100 relative cursor-pointer overflow-hidden"
               >
-                {/* Renderizar a imagem selecionada, imagem fixa ou espaço reservado */}
                 {selectedImage ? (
                   <Image
                     src={selectedImage}
                     width={130}
                     height={130}
-                    alt="Imagem do médico"
+                    alt="Imagem da clínica"
                     className="h-40 w-40 rounded-full object-cover"
                   />
                 ) : (
                   <Image
-                    src={PhotoClinic}
+                    src={clinicImageUrl !== null ? clinicImageUrl : PhotoClinic}
                     width={130}
                     height={130}
-                    alt="Imagem do médico"
+                    alt="Imagem da clínica padrão"
                     className="h-40 w-40 rounded-full object-cover"
                   />
                 )}
+
                 <input
                   onChange={handleFileInput}
                   name="doctorImage"
@@ -239,8 +248,6 @@ export function EditClinicForm() {
             </div>
           </form>
         </FormProvider>
-
-        <pre>{output}</pre>
       </div>
     </div>
   );

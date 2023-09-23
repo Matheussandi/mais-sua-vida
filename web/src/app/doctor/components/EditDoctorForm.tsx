@@ -4,7 +4,7 @@ import { ChangeEvent, useCallback, useEffect, useState } from "react";
 
 import { useSearchParams } from "next/navigation";
 
-import { useForm, FormProvider } from "react-hook-form";
+import { useForm, FormProvider, set } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 
@@ -22,7 +22,6 @@ interface SpecializationProps {
 }
 
 const editDoctorFormSchema = z.object({
-  // Lógica para converter a primeira letra para maísculo
   nome: z
     .string()
     .nonempty("Nome é obrigatório")
@@ -56,8 +55,10 @@ const editDoctorFormSchema = z.object({
     .string()
     .nonempty("Senha é obrigatória")
     .min(6, "Senha precisa de no mínimo 6 caracteres"),
-  sobre: z.string(),
-  experiencia: z.string(),
+  sobre: z.string().max(500, "O texto não pode ter mais de 500 caracteres"),
+  experiencia: z
+    .string()
+    .max(500, "O texto não pode ter mais de 500 caracteres"),
   idEspecializacao: z.string(),
   idClinica: z.string(),
   CRM: z
@@ -94,7 +95,6 @@ export function EditDoctorForm() {
   const search = searchParams.get("doctor");
   const [output, setOutput] = useState("");
 
-  // Função para lidar com alterações de entrada de arquivo
   const handleFileInput = (event: ChangeEvent<HTMLInputElement>) => {
     const { files } = event.target;
 
@@ -120,7 +120,6 @@ export function EditDoctorForm() {
 
   async function editDoctor(data: EditDoctorFormData) {
     try {
-      // Modifica os dados do médico
       await api.put(`/medico/${search}`, data, {
         headers: {
           "Content-Type": "application/json",
@@ -130,20 +129,21 @@ export function EditDoctorForm() {
       console.log("Dados enviados com sucesso");
       setOutput(JSON.stringify(data, null, 2));
 
-      // Define o estado como verdadeiro para mostrar a mensagem de sucesso
       setIsModificationSuccessful(true);
     } catch (error) {
       console.error("Erro ao enviar os dados", error);
     }
   }
 
-  // Utilizei useCallback para garantir que useEffect tenha acesso atualizado ao editDoctorForm
-  // useCallback é usado para memorizar a função handleGetRegisteredData,
-  // garantindo que ela tenha acesso à instância mais recente de editDoctorForm e evitando recriações desnecessárias.
   const handleGetRegisteredData = useCallback(async () => {
     try {
       const response = await api.get(`/medico/${search}`);
       const doctor = await response.data;
+
+      if (doctor.doctorImage) {
+        const imageComplete = `${process.env.NEXT_PUBLIC_API_IMAGE}/${doctor.doctorImage}`;
+        setSelectedImage(imageComplete);
+      }
 
       const { senha, ...restDoctorData } = doctor;
       setFormData(restDoctorData);
@@ -190,7 +190,6 @@ export function EditDoctorForm() {
                 htmlFor="media"
                 className="h-100 w-100 relative cursor-pointer overflow-hidden"
               >
-                {/* Renderizar a imagem selecionada, imagem fixa ou espaço reservado */}
                 {selectedImage ? (
                   <Image
                     src={selectedImage}
@@ -261,7 +260,6 @@ export function EditDoctorForm() {
                 <Form.ErrorMessage field="email" />
               </div>
 
-              {/* A senha está com hash */}
               <div className="flex flex-1 flex-col">
                 <Form.Label>Senha</Form.Label>
                 <Form.Input type="password" name="senha" />
@@ -296,12 +294,6 @@ export function EditDoctorForm() {
                 />
                 <Form.ErrorMessage field="idEspecializacao" />
               </div>
-
-              {/*               <div className="flex flex-1 flex-col">
-                <Form.Label>ID Clínica</Form.Label>
-                <Form.Input type="text" name="idClinica" />
-                <Form.ErrorMessage field="idClinica" />
-              </div> */}
             </Form.Field>
 
             <div className="flex items-center justify-end gap-4">

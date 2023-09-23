@@ -46,7 +46,6 @@ const createDoctorFormSchema = z.object({
         })
         .join(" ");
     }),
-  // avatar: z.instanceof(FileList).transform((list) => list.item(0)),
   email: z
     .string()
     .nonempty({ message: "E-mail obrigatório" })
@@ -56,8 +55,8 @@ const createDoctorFormSchema = z.object({
     .string()
     .nonempty({ message: "Senha é obrigatória" })
     .min(6, "Senha precisa de no mínimo 6 caracteres"),
-  sobre: z.string(),
-  experiencia: z.string(),
+  sobre: z.string().max(500, 'O texto não pode ter mais de 500 caracteres'),
+  experiencia: z.string().max(500, 'O texto não pode ter mais de 500 caracteres'),
   idEspecializacao: z
     .string()
     .nonempty({ message: "Especialização é obrigatória" }),
@@ -126,12 +125,13 @@ export function NewDoctorForm() {
 
     try {
       const formData = new FormData();
-      formData.append("doctorImage", data.avatar);
+      // formData.append("doctorImage", data.avatar);
 
       const requestData = {
         nome: data.nome,
         sobrenome: data.sobrenome,
         CRM: data.CRM,
+        doctorImage: selectedImage,
         email: data.email,
         senha: data.senha,
         sobre: data.sobre,
@@ -171,36 +171,6 @@ export function NewDoctorForm() {
           onSubmit={handleSubmit(createDoctor)}
           className="flex flex-1 flex-col gap-4"
         >
-          {/*           <div className="flex items-center">
-            <Form.Label
-              htmlFor="media"
-              className="h-100 w-100 relative cursor-pointer overflow-hidden"
-            >
-              <Image
-                src={ImageMedico}
-                width={100}
-                height={100}
-                alt="Imagem do médico"
-                className="h-full w-full rounded-full object-cover"
-              />
-
-              <div className="absolute bottom-0 right-0 rounded-full bg-primary p-2">
-                <MdModeEdit color="#fff" />
-              </div>
-            </Form.Label>
-
-            <div className="ml-4">
-              <span className="text-lg font-medium">Foto de perfil</span>
-              <div>
-                <span className="text-base text-gray-600">
-                  Isso será exibido em seu perfil.
-                </span>
-              </div>
-
-              <MediaPicker />
-            </div>
-          </div> */}
-
           <div className="flex items-center">
             <label
               htmlFor="media"
@@ -247,6 +217,8 @@ export function NewDoctorForm() {
               </div>
             </div>
           </div>
+
+          {selectedImage}
 
           <Form.Field>
             <div className="flex flex-1 flex-col">
@@ -328,6 +300,8 @@ export function NewDoctorForm() {
             </button>
           </div>
         </form>
+
+        {/* <pre>{output}</pre> */}
       </FormProvider>
     </main>
   );

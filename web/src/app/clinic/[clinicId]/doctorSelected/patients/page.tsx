@@ -1,13 +1,16 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+
+import { useSearchParams } from "next/navigation";
 import Image from "next/image";
-import { getPatients } from "../../../../../services/get-patients";
-import Patient from "../../../../../assets/doctor1.png";
+
 import { MdDateRange } from "react-icons/md";
 import { FiClock } from "react-icons/fi";
-import { useSearchParams } from "next/navigation";
+import { BiUserCircle } from "react-icons/bi";
+
 import { getMedicalAppointments } from "@/services/get-medical-appointments";
+import { getPatients } from "../../../../../services/get-patients";
 
 import ptBr from "dayjs/locale/pt-br";
 import dayjs from "dayjs";
@@ -18,6 +21,7 @@ interface PatientsProps {
   id: number;
   nome: string;
   sobrenome: string;
+  patientImage: string;
 }
 
 interface AppointmentsProps {
@@ -101,9 +105,7 @@ export default function Patients() {
 
         <div className="mt-7">
           {filteredAppointments().length === 0 ? (
-            <div className="text-center font-semibold">
-              Não há consultas
-            </div>
+            <div className="text-center font-semibold">Não há consultas</div>
           ) : (
             filteredAppointments().map((appointment) => {
               const patient = patientAppointments.find(
@@ -113,13 +115,17 @@ export default function Patients() {
                 <div key={appointment.id} className="mb-4">
                   <div className="h-150 w-200 flex items-center border-t-2 border-gray-300 py-2">
                     <div className="h-20 w-20 overflow-hidden rounded-full">
-                      <Image
-                        src={Patient}
-                        alt={patient?.nome ?? ""}
-                        width={100}
-                        height={100}
-                        className="h-full w-full object-cover"
-                      />
+                      {patient?.patientImage ? (
+                        <Image
+                          src={`${process.env.NEXT_PUBLIC_API_IMAGE}/${patient?.patientImage}`}
+                          alt={patient?.nome ?? ""}
+                          width={100}
+                          height={100}
+                          className="h-full w-full object-cover"
+                        />
+                      ) : (
+                        <BiUserCircle size={75} opacity={0.6} />
+                      )}
                     </div>
                     <div className="ml-4 grid w-full grid-cols-3 gap-4">
                       <div className="max-w-48 overflow-hidden">

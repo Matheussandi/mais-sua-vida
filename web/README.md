@@ -1,3 +1,4 @@
+
 ## Iniciando o Projeto
 
 Para começar a usar o projeto, siga os passos abaixo:
@@ -13,7 +14,16 @@ npm install
 ```
 Esse comando irá baixar e instalar todas as dependências necessárias para o projeto.
 
-### 2. Executando o Projeto
+### 2. Env
+
+Crie um arquivo .env e adione a url da api da imagem.
+
+```ts
+// Exemplo
+NEXT_PUBLIC_API_IMAGE=http://localhost:(porta)/uploads
+```
+
+### 3. Executando o Projeto
 
 ```bash
 npm run dev
@@ -21,7 +31,7 @@ npm run dev
 
 Este comando irá iniciar o servidor de desenvolvimento. Por padrão, o projeto estará disponível na porta 3000. Para visualizá-lo, basta abrir seu navegador e acessar o seguinte endereço: [http://localhost:3000](http://localhost:3000).
 
-### 3. Chamada à API
+### 4. Chamada à API
 A chamada à API está no arquivo `api.ts` da pasta `lib`, onde são feitas as requisições e interações com o servidor.
 
 
