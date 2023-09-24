@@ -73,7 +73,8 @@ export function EditDoctorForm() {
   const [isModificationSuccessful, setIsModificationSuccessful] =
     useState(false);
 
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [doctorImageUrl, setDoctorImageUrl] = useState<string | null>(null);
 
   const [specializations, setSpecializations] = useState<
     { value: string; label: string }[]
@@ -95,18 +96,6 @@ export function EditDoctorForm() {
   const search = searchParams.get("doctor");
   const [output, setOutput] = useState("");
 
-  const handleFileInput = (event: ChangeEvent<HTMLInputElement>) => {
-    const { files } = event.target;
-
-    if (!files || files.length === 0) {
-      return;
-    }
-
-    const previewURL = URL.createObjectURL(files[0]);
-
-    setSelectedImage(previewURL);
-  };
-
   const editDoctorForm = useForm<EditDoctorFormData>({
     resolver: zodResolver(editDoctorFormSchema),
     defaultValues: formData,
@@ -118,11 +107,36 @@ export function EditDoctorForm() {
     watch,
   } = editDoctorForm;
 
+  const handleFileInput = (event: ChangeEvent<HTMLInputElement>) => {
+    const { files } = event.target;
+
+    if (!files || files.length === 0) {
+      return;
+    }
+
+    setSelectedImage(files[0]);
+  };
+
   async function editDoctor(data: EditDoctorFormData) {
     try {
-      await api.put(`/medico/${search}`, data, {
+      const formData = new FormData();
+
+      if (selectedImage) {
+        formData.append("doctorImage", selectedImage);
+      }
+
+      for (const key in data) {
+        // Verifica se a chave é uma propriedade direta de 'data'
+        if (Object.prototype.hasOwnProperty.call(data, key)) {
+          // Adiciona a chave (key) e o valor correspondente de 'data' ao 'formData'
+          // Utiliza a notação de índice ['key'] para acessar dinamicamente a propriedade de 'data'
+          formData.append(key, data[key as keyof EditDoctorFormData]);
+        }
+      }
+
+      await api.put(`/medico/${search}`, formData, {
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "multipart/form-data",
         },
       });
 
@@ -142,7 +156,7 @@ export function EditDoctorForm() {
 
       if (doctor.doctorImage) {
         const imageComplete = `${process.env.NEXT_PUBLIC_API_IMAGE}/${doctor.doctorImage}`;
-        setSelectedImage(imageComplete);
+        setDoctorImageUrl(imageComplete);
       }
 
       const { senha, ...restDoctorData } = doctor;
@@ -192,7 +206,7 @@ export function EditDoctorForm() {
               >
                 {selectedImage ? (
                   <Image
-                    src={selectedImage}
+                    src={URL.createObjectURL(selectedImage)}
                     width={130}
                     height={130}
                     alt="Imagem do médico"
@@ -200,7 +214,7 @@ export function EditDoctorForm() {
                   />
                 ) : (
                   <Image
-                    src={doctoUm}
+                    src={doctorImageUrl !== null ? doctorImageUrl : doctoUm}
                     width={130}
                     height={130}
                     alt="Imagem do médico"
