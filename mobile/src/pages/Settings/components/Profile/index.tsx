@@ -1,11 +1,12 @@
-const serverURL = process.env.SERVER;
+import { TouchableOpacity, Modal, Button } from 'react-native';
+
+import { useState, useEffect } from 'react';
 
 import { useUserContext } from '../../../../context/UserContext';
 import { differenceInYears } from 'date-fns';
 
 import { Text } from '../../../Text';
-
-import DocImage from '../../../../assets/doctor.png';
+import * as ImagePicker from 'expo-image-picker';
 
 import {
 	Container,
@@ -15,6 +16,11 @@ import {
 	UserDetails,
 	UserItem,
 	BackButton,
+	ModalBackground,
+	ModalContent,
+	ModalCloseButton,
+	Title,
+	TextModal,
 } from './styles';
 
 import {
@@ -23,8 +29,9 @@ import {
 	MaterialCommunityIcons,
 } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import { api } from '../../../../api';
 
-interface UserDataProps {
+interface UserData {
     nome: string;
     sobrenome: string;
     dataNascimento?: string;
@@ -34,6 +41,11 @@ interface UserDataProps {
 
 export function Profile() {
 	const { userData } = useUserContext();
+
+	const userId = userData?.id;
+
+	const [isModalVisible, setModalVisible] = useState(false);
+	const [image, setImage] = useState('');
 
 	const navigation = useNavigation();
 
@@ -52,6 +64,91 @@ export function Profile() {
 		return convertedHeight;
 	}
 
+	useEffect(() => {
+		(async () => {
+			const { status } =
+                await ImagePicker.requestMediaLibraryPermissionsAsync();
+			if (status !== 'granted') {
+				alert('Permissão para acessar a galeria é necessária');
+			}
+		})();
+	}, []);
+
+	const handleSelectPhoto = () => {
+		setModalVisible(true);
+	};
+
+	const closeModal = () => {
+		setModalVisible(false);
+	};
+
+	const pickImage = async () => {
+		const { assets, canceled } = await ImagePicker.launchImageLibraryAsync({
+			allowsEditing: true,
+			mediaTypes: ImagePicker.MediaTypeOptions.Images,
+			base64: false,
+			aspect: [4, 4],
+			quality: 1,
+		});
+
+		console.log(assets);
+
+		if (!canceled) {
+			const filename = assets[0].uri.substring(
+				assets[0].uri.lastIndexOf('/') + 1,
+				assets[0].uri.length
+			);
+
+			//console.log(filename);
+			console.log(userData);
+			const extend = filename.split('.')[1];
+
+			const formData = new FormData();
+			formData.append(
+				'patientImage',
+				JSON.parse(
+					JSON.stringify({
+						name: filename,
+						uri: assets[0].uri,
+						type: 'image/' + extend,
+					})
+				)
+			);
+			formData.append('nome', userData?.nome);
+			formData.append('sobrenome', userData?.sobrenome);
+			formData.append('CPF', userData?.CPF);
+			formData.append('email', userData?.email);
+			formData.append('senha', userData?.senha);
+			formData.append('telefone', userData?.telefone);
+
+			try {
+				const response = await api.put(
+					`/paciente/${userId}`,
+					formData,
+					{
+						headers: {
+							'Content-Type': 'multipart/form-data',
+						},
+					}
+				);
+
+				if (response) {
+					console.log('sucesso');
+					setModalVisible(false);
+				} else {
+					console.error('Erro ao processar a resposta da API');
+				}
+			} catch (error) {
+				console.error(error);
+				if (error.response) {
+					console.error('Resposta da API:', error.response.data);
+				} else {
+					console.error('Erro na requisição para a API');
+				}
+			}
+		}
+	};
+
 	return (
 		<>
 			<Container>
@@ -60,11 +157,18 @@ export function Profile() {
 				</BackButton>
 
 				<UserContent>
-					<Photo
-						source={{
-							uri: `http://192.168.1.103:3333/uploads/${userData?.patientImage}`,
-						}}
-					/>
+					{/* 				<Photo
+					source={{
+						uri: `${serverURL}/uploads/${userData?.patientImage}`
+					}}
+				/> */}
+					<TouchableOpacity onPress={handleSelectPhoto}>
+						<Photo
+							source={{
+								uri: `http://192.168.1.103:3333/uploads/${userData?.patientImage}`,
+							}}
+						/>
+					</TouchableOpacity>
 					<UserName>
 						{userData?.nome} {userData?.sobrenome}
 					</UserName>
@@ -123,6 +227,28 @@ export function Profile() {
 						</UserItem>
 					</UserDetails>
 				</UserContent>
+
+				<Modal
+					visible={isModalVisible}
+					animationType="slide"
+					transparent={true}
+					onRequestClose={closeModal}
+				>
+					<ModalBackground>
+						<ModalContent>
+							<ModalCloseButton onPress={closeModal}>
+								<Feather name="x" size={24} color="#000" />
+							</ModalCloseButton>
+							<Title>Atualizar Foto</Title>
+							<TextModal>
+								<Button
+									title="Escolher imagem"
+									onPress={pickImage}
+								></Button>
+							</TextModal>
+						</ModalContent>
+					</ModalBackground>
+				</Modal>
 			</Container>
 		</>
 	);
