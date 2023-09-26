@@ -74,9 +74,22 @@ export async function updatePatient(request: Request, response: Response){
 			where: {
 				id: id
 			}
+		}).then((result: [number]) =>{
+			if(result[0] === 1){
+				Patient.findOne(
+					{ where: {
+						id: id
+					}
+				}).then((updatedPatient: any) => {
+					return response.status(200).json(updatedPatient);
+				})
+				
+			}else{
+				response.status(400)
+			}
 		});
 
-		response.status(201).json(patient);
+		
 	}catch(error){
 		if(request.file){
 			try{

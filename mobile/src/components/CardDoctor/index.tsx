@@ -6,9 +6,10 @@ import {
 	DoctorSpecialization,
 } from './styles';
 
+import { API_URL } from '@env';
 interface DoctorCardProps {
     doctor: Doctor;
-    onPress: () => void; // Função que será chamada quando o card do médico for pressionado
+    onPress: () => void;
 }
 
 export function CardDoctor({ doctor, onPress }: DoctorCardProps) {
@@ -16,7 +17,7 @@ export function CardDoctor({ doctor, onPress }: DoctorCardProps) {
 		<DoctorCard onPress={onPress}>
 			<DoctorImage
 				source={{
-					uri: `http://192.168.1.103:3333/uploads/${doctor?.doctorImage}`,
+					uri: `${API_URL}/uploads/${doctor?.doctorImage}`,
 				}}
 			/>
 			<DoctorDetails>

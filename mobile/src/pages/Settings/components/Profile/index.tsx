@@ -8,6 +8,8 @@ import { differenceInYears } from 'date-fns';
 import { Text } from '../../../Text';
 import * as ImagePicker from 'expo-image-picker';
 
+import { API_URL } from '@env';
+
 import {
 	Container,
 	Photo,
@@ -40,12 +42,11 @@ interface UserData {
 }
 
 export function Profile() {
-	const { userData } = useUserContext();
+	const { userData, updateProfileImage } = useUserContext();
 
 	const userId = userData?.id;
 
 	const [isModalVisible, setModalVisible] = useState(false);
-	const [image, setImage] = useState('');
 
 	const navigation = useNavigation();
 
@@ -122,29 +123,24 @@ export function Profile() {
 			formData.append('telefone', userData?.telefone);
 
 			try {
-				const response = await api.put(
-					`/paciente/${userId}`,
-					formData,
-					{
+				const response = await api
+					.put(`/paciente/${userId}`, formData, {
 						headers: {
 							'Content-Type': 'multipart/form-data',
 						},
-					}
-				);
+					})
+					.then((response) => {
+						const responseData = response.data;
 
-				if (response) {
-					console.log('sucesso');
-					setModalVisible(false);
-				} else {
-					console.error('Erro ao processar a resposta da API');
-				}
-			} catch (error) {
+						setModalVisible(false);
+						updateProfileImage(responseData.patientImage);
+					})
+					.catch((erro) => {
+						console.error(erro.response.data);
+					});
+			} catch (error: any) {
 				console.error(error);
-				if (error.response) {
-					console.error('Resposta da API:', error.response.data);
-				} else {
-					console.error('Erro na requisição para a API');
-				}
+				console.error('Resposta da API:', error.response.data);
 			}
 		}
 	};
@@ -157,15 +153,10 @@ export function Profile() {
 				</BackButton>
 
 				<UserContent>
-					{/* 				<Photo
-					source={{
-						uri: `${serverURL}/uploads/${userData?.patientImage}`
-					}}
-				/> */}
 					<TouchableOpacity onPress={handleSelectPhoto}>
 						<Photo
 							source={{
-								uri: `http://192.168.1.103:3333/uploads/${userData?.patientImage}`,
+								uri: `${API_URL}/uploads/${userData?.patientImage}`,
 							}}
 						/>
 					</TouchableOpacity>
