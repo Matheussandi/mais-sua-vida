@@ -1,4 +1,3 @@
-import { useNavigation } from '@react-navigation/native';
 import { Text, Modal, ScrollView, Alert, TouchableOpacity } from 'react-native';
 import { useState, useEffect } from 'react';
 
@@ -53,7 +52,6 @@ export function Appointments() {
 	const { userData } = useUserContext();
 
 	const userId = userData?.id;
-	const navigation = useNavigation();
 
 	const handleCardPress = (consulta: Consulta) => {
 		setSelectedConsulta(consulta);
@@ -81,10 +79,10 @@ export function Appointments() {
 		try {
 			const response = await api.get(`/consultas/${patientId}`);
 			setScheduledAppointments(response.data);
-			setError(null); // Limpar o erro se a busca for bem-sucedida
+			setError(null);
 		} catch (error) {
 			console.error('Erro na consulta à API:', error);
-			setError('Ocorreu um erro ao buscar as consultas.'); // Definir a mensagem de erro
+			setError('Ocorreu um erro ao buscar as consultas.');
 		}
 	};
 

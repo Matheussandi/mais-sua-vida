@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ScrollView, Button, View, Text, Alert } from 'react-native';
+import { ScrollView, View, Text, Alert } from 'react-native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 import {
@@ -16,12 +16,11 @@ import {
 	SectionTitle,
 } from './styles';
 
-import docImage from '../../assets/doctor.png';
-
 import { Header } from '../../components/Header';
 import { useUserContext } from '../../context/UserContext';
-import { Doctor } from '../../types/Doctors';
 import { api } from '../../api';
+
+import { API_URL } from '@env';
 
 export function DoctorDetails({ route, navigation }) {
 	const { doctor } = route.params;
@@ -129,7 +128,7 @@ export function DoctorDetails({ route, navigation }) {
 				<DoctorCard>
 					<DoctorImage
 						source={{
-							uri: `http://192.168.1.103:3333/uploads/${doctor?.doctorImage}`,
+							uri: API_URL + '/uploads/' + doctor?.doctorImage,
 						}}
 					/>
 				</DoctorCard>

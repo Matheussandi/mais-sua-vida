@@ -36,6 +36,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Especializations } from './components/Especializations';
 import { Doctors } from './components/Doctors';
 import { Feather } from '@expo/vector-icons';
+import { API_URL } from '@env';
 
 export default function Home() {
 	const [doctors, setDoctors] = useState<Doctor[]>([]);
@@ -93,7 +94,10 @@ export default function Home() {
 							<UserImageContainer>
 								<Image
 									source={{
-										uri: `http://192.168.1.103:3333/uploads/${userData?.patientImage}`,
+										uri:
+                                            API_URL +
+                                            '/uploads/' +
+                                            userData?.patientImage,
 									}}
 									style={{
 										width: 60,
@@ -124,7 +128,6 @@ export default function Home() {
 				<EspecializationsContainer>
 					<EspecializationsTitle>Especialistas</EspecializationsTitle>
 					<EspecializationsList>
-						{/* Render your list of specializations here */}
 						<Especializations
 							especializations={especialization}
 							onSelectEspecialization={
@@ -144,7 +147,6 @@ export default function Home() {
 							<Doctors doctors={doctors} />
 						) : (
 							<EmptyDoctorsContainer>
-								{/* <EmptyDoctorsIcon name="exclamation-circle" size={60} /> */}
 								<EmptyDoctorsText>
                                     Ainda não temos nenhum(a) Dr(a) com essa
                                     especialidade

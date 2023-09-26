@@ -17,7 +17,7 @@ export function CardDoctor({ doctor, onPress }: DoctorCardProps) {
 		<DoctorCard onPress={onPress}>
 			<DoctorImage
 				source={{
-					uri: `${API_URL}/uploads/${doctor?.doctorImage}`,
+					uri: API_URL + '/uploads/' + doctor?.doctorImage,
 				}}
 			/>
 			<DoctorDetails>
