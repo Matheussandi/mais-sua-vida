@@ -1,6 +1,6 @@
 import { ScrollView } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
-import { Image, TouchableOpacity } from 'react-native';
+import { TouchableOpacity } from 'react-native';
 
 import {
 	Container,
@@ -19,8 +19,6 @@ import {
 } from '@expo/vector-icons';
 
 import { Profile } from './components/Profile';
-
-import DocImage from '../../assets/doctor.png';
 
 export function Settings() {
 	const navigation = useNavigation();

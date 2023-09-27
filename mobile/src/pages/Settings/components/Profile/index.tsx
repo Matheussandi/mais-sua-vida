@@ -23,6 +23,9 @@ import {
 	ModalCloseButton,
 	Title,
 	TextModal,
+	UpdateImageButton,
+	UpdateImageText,
+	ModalHeader,
 } from './styles';
 
 import {
@@ -227,16 +230,19 @@ export function Profile() {
 				>
 					<ModalBackground>
 						<ModalContent>
-							<ModalCloseButton onPress={closeModal}>
-								<Feather name="x" size={24} color="#000" />
-							</ModalCloseButton>
-							<Title>Atualizar Foto</Title>
-							<TextModal>
-								<Button
-									title="Escolher imagem"
-									onPress={pickImage}
-								></Button>
-							</TextModal>
+							<ModalHeader>
+								<Title>Atualizar Foto</Title>
+
+								<ModalCloseButton onPress={closeModal}>
+									<Feather name="x" size={24} color="#000" />
+								</ModalCloseButton>
+							</ModalHeader>
+
+							<UpdateImageButton onPress={pickImage}>
+								<UpdateImageText>
+                                    Escolher imagem
+								</UpdateImageText>
+							</UpdateImageButton>
 						</ModalContent>
 					</ModalBackground>
 				</Modal>

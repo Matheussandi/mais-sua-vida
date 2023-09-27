@@ -38,66 +38,81 @@ export const Title = styled.Text`
 `;
 
 export const TextModal = styled.Text`
-  font-size: 20px;
-  margin-bottom: 8px;
+    font-size: 20px;
+    margin-bottom: 8px;
 `;
 
 export const DoctorCard = styled.TouchableOpacity`
-  background-color: #fff;
-  border-radius: 8px;
+    background-color: #fff;
+    border-radius: 8px;
 `;
 
 export const DoctorImage = styled.Image`
-  width: 100%;
-  height: 200px;
-  border-radius: 8px;
+    width: 100%;
+    height: 200px;
+    border-radius: 8px;
 `;
 
 export const DoctorDetails = styled.View`
-  margin: 12px 0 12px 8px;
+    margin: 12px 0 12px 8px;
 `;
 
 export const DoctorName = styled.Text`
-  font-size: 18px;
-  font-weight: 700;
+    font-size: 18px;
+    font-weight: 700;
 `;
 
 export const DoctorSpecialization = styled.Text`
-  font-size: 16px;
+    font-size: 16px;
 `;
 
 export const DoctorCardItemSeparator = styled.View`
-  height: 16px;
+    height: 16px;
 `;
 
 export const DoctorContainer = styled.TouchableOpacity`
-  flex-direction: row;
-  align-items: center;
+    flex-direction: row;
+    align-items: center;
 `;
 
 export const Separator = styled.View`
-  width: 100%;
-  height: 1px;
-  background: rgba(204, 204, 204, 0.3);
-  margin: 24px 0;
+    width: 100%;
+    height: 1px;
+    background: rgba(204, 204, 204, 0.3);
+    margin: 24px 0;
 `;
 
 export const ModalBackground = styled.View`
-  flex: 1;
-  justify-content: center;
-  align-items: center;
-  background-color: rgba(0, 0, 0, 0.5);
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.5);
 `;
 
 export const ModalContent = styled.View`
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  width: 80%;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    width: 80%;
 `;
 
 export const ModalCloseButton = styled.TouchableOpacity`
-  align-self: flex-end;
+    align-self: flex-end;
 `;
 
+export const UnselectButton = styled.TouchableOpacity`
+    width: 100%;
+    padding: 8px;
+    background-color: #ef4444;
+    margin: 8px 0;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+`;
+
+export const UnselectText = styled.Text`
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+`;
 

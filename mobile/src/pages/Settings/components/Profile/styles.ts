@@ -50,22 +50,25 @@ export const Separator = styled.View`
 `;
 
 export const ModalBackground = styled.View`
-  flex: 1;
-  justify-content: center;
-  align-items: center;
-  background-color: rgba(0, 0, 0, 0.5);
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.5);
 `;
 
 export const ModalContent = styled.View`
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  width: 80%;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    width: 80%;
 `;
 
-export const ModalCloseButton = styled.TouchableOpacity`
-  align-self: flex-end;
+export const ModalHeader = styled.View`
+    flex-direction: row;
+    justify-content: space-between;
 `;
+
+export const ModalCloseButton = styled.TouchableOpacity``;
 
 export const Title = styled.Text`
     color: #000;
@@ -76,6 +79,19 @@ export const Title = styled.Text`
     justify-content: center;
 `;
 
-export const TextModal = styled.Text`
-  font-size: 20px;
+export const UpdateImageButton = styled.TouchableOpacity`
+    width: 100%;
+    padding: 8px;
+    background-color: #0079ff;
+    margin: 8px 0;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
 `;
+
+export const UpdateImageText = styled.Text`
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+`;
+

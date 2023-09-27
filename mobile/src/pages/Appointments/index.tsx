@@ -1,4 +1,4 @@
-import { Text, Modal, ScrollView, Alert, TouchableOpacity } from 'react-native';
+import { Text, Modal, ScrollView, Alert } from 'react-native';
 import { useState, useEffect } from 'react';
 
 import {
@@ -9,6 +9,8 @@ import {
 	ModalCloseButton,
 	Title,
 	TextModal,
+	UnselectButton,
+	UnselectText,
 } from './styles';
 
 import { Feather } from '@expo/vector-icons';
@@ -182,9 +184,9 @@ export function Appointments() {
 						<TextModal>Local: {selectedConsulta?.local}</TextModal>
 
 	
-						<TouchableOpacity onPress={handleDesmarcarConsulta}>
-							<TextModal>Desmarcar Consulta</TextModal>
-						</TouchableOpacity>
+						<UnselectButton onPress={handleDesmarcarConsulta}>
+							<UnselectText>Desmarcar Consulta</UnselectText>
+						</UnselectButton>
 					</ModalContent>
 				</ModalBackground>
 			</Modal>
