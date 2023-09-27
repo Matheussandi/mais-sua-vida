@@ -8,7 +8,7 @@ import { api } from '../../api';
 
 import { Doctor } from '../../types/Doctors';
 import { Especialization } from '../../types/Especialization';
-import { useRoute, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 
 import {
 	Container,
@@ -45,10 +45,10 @@ export default function Home() {
 	);
 	const [isLoadingDoctors, setIsLoadingDoctors] = useState(false);
 	const [searchQuery, setSearchQuery] = useState('');
+	const [filteredDoctors, setFilteredDoctors] = useState<Doctor[]>([]);
 
 	const { userData } = useUserContext();
 
-	const route = useRoute();
 	const navigation = useNavigation();
 
 	useEffect(() => {
@@ -59,6 +59,23 @@ export default function Home() {
 			}
 		);
 	}, []);
+
+	const filterDoctors = () => {
+		const filtered = doctors.filter((doctor) => {
+			const fullName = `${doctor.nome} ${doctor.sobrenome}`;
+
+			return fullName.toLowerCase().includes(searchQuery.toLowerCase());
+		});
+		setFilteredDoctors(filtered);
+	};
+
+	useEffect(() => {
+		filterDoctors();
+	}, [searchQuery, doctors]);
+
+	const handleSearchSubmit = () => {
+		filterDoctors();
+	};
 
 	async function handleSelectEspecialization(especializationId: string) {
 		const route = !especializationId
@@ -119,6 +136,7 @@ export default function Home() {
 						placeholder="Pesquisar"
 						value={searchQuery}
 						onChangeText={setSearchQuery}
+						onSubmitEditing={handleSearchSubmit}
 					/>
 					<Feather name="search" size={24} color="#fff" />
 				</SearchInputContainer>
@@ -144,7 +162,7 @@ export default function Home() {
 				) : (
 					<DoctorsContainer>
 						{doctors.length > 0 ? (
-							<Doctors doctors={doctors} />
+							<Doctors doctors={filteredDoctors} />
 						) : (
 							<EmptyDoctorsContainer>
 								<EmptyDoctorsText>
