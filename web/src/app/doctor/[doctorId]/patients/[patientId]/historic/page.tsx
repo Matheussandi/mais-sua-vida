@@ -1,15 +1,16 @@
+"use client";
+
 import { getPatientById } from "../../../../../../services/get-patient-by-id";
 
 import Image from "next/image";
 
 import Retangle from "../../../../../../assets/Rectangle.svg";
-import Patient from "../../../../../../assets/doctor1.png";
 import { getHistoryByPatientId } from "@/services/get-history-by-patient-id";
 
 import ptBr from "dayjs/locale/pt-br";
 import dayjs from "dayjs";
-import Link from "next/link";
 import { BasicModal } from "@/app/doctor/components/BasicModal";
+import { useEffect, useState } from "react";
 
 dayjs.locale(ptBr);
 
@@ -17,12 +18,7 @@ interface PatientId {
   params: {
     patientId: string;
   };
-  searchParams: Record<string, string> | null | undefined;
 }
-
-type Props = {
-  searchParams: Record<string, string> | null | undefined;
-};
 
 interface PatientProps {
   id: string;
@@ -37,11 +33,49 @@ interface HistoryProps {
   descricao: string;
 }
 
-export default async function Historic({ params, searchParams }: PatientId) {
-  const patient: PatientProps = await getPatientById(params.patientId);
-  const history: HistoryProps[] = await getHistoryByPatientId(params.patientId);
+export default function Historic({ params }: PatientId) {
+  const [patient, setPatient] = useState<PatientProps>({
+    id: "",
+    nome: "",
+    sobrenome: "",
+    patientImage: "",
+  });
+  const [history, setHistory] = useState<HistoryProps[]>([]);
 
-  const showModal = searchParams?.modal;
+  async function getPatient() {
+    const patient: PatientProps = await getPatientById(params.patientId);
+    setPatient(patient);
+  }
+
+  async function getHistory() {
+    const history: HistoryProps[] = await getHistoryByPatientId(
+      params.patientId
+    );
+    setHistory(history);
+  }
+
+  useEffect(() => {
+    async function fetchData() {
+      await getPatient();
+      await getHistory();
+    }
+
+    fetchData();
+
+    const interval = setInterval(fetchData, 1000); // 1 seconds
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+
+  function handleOpenModal() {
+    setModalIsOpen(true);
+  }
+
+  function handleCloseModal() {
+    setModalIsOpen(false);
+  }
 
   return (
     <div className="flex-grow p-10">
@@ -67,12 +101,10 @@ export default async function Historic({ params, searchParams }: PatientId) {
           </div>
         </div>
 
-        {/* Listagem do histórico do paciente */}
         <div className="">
           <div className="mt-12 flex flex-col">
             <div className="relative mt-10 max-h-80 max-w-screen-xl overflow-y-scroll p-5">
               <ul className="divide-y divide-gray-300">
-                {/* Renderiza os itens do histórico dinamicamente */}
                 {history.map((item) => (
                   <li key={item.id} className="py-2">
                     <div className="flex items-center">
@@ -88,15 +120,21 @@ export default async function Historic({ params, searchParams }: PatientId) {
             </div>
 
             <div className="my-6 flex items-center justify-center">
-              <Link
-                href="?modal=true"
-                className="rounded-lg bg-primary px-10 py-3 font-bold text-white "
+              <button
+                className="rounded-lg bg-primary px-10 py-3 font-bold text-white"
+                onClick={handleOpenModal}
               >
                 Adicionar
-              </Link>
-            </div>
+              </button>
 
-            {showModal && <BasicModal />}
+              {modalIsOpen === true && (
+                <BasicModal
+                  isOpen={modalIsOpen}
+                  onClose={handleCloseModal}
+                  onOpen={handleOpenModal}
+                />
+              )}
+            </div>
           </div>
         </div>
       </div>
