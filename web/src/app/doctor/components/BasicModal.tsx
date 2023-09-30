@@ -3,25 +3,35 @@
 import { Form } from "@/components/Form";
 import { api } from "@/lib/api";
 import { zodResolver } from "@hookform/resolvers/zod";
-import Link from "next/link";
-import { useRouter, usePathname } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
+
+import { v4 as uuidv4 } from "uuid";
 
 const createHistoricFormSchema = z.object({
   descricao: z.string(),
 });
 
+export interface HistoryProps {
+  id: string;
+  data: string | Date;
+  descricao: string;
+}
+
 interface BasicModalProps {
   isOpen: boolean;
-  onOpen: () => void;
   onClose: () => void;
+  setHistory: (
+    newHistory:
+      | HistoryProps[]
+      | ((prevHistory: HistoryProps[]) => HistoryProps[])
+  ) => void;
 }
 
 type CreateHistoricFormData = z.infer<typeof createHistoricFormSchema>;
 
-export function BasicModal({ isOpen, onOpen, onClose }: BasicModalProps) {
-  const router = useRouter();
+export function BasicModal({ isOpen, onClose, setHistory }: BasicModalProps) {
   const pathname = usePathname();
 
   // Divide o pathname em partes, separando-as pelos caracteres '/'
@@ -36,13 +46,25 @@ export function BasicModal({ isOpen, onOpen, onClose }: BasicModalProps) {
 
   async function createHistoric(data: CreateHistoricFormData) {
     try {
-      // Cria um objeto com os dados do formulário
+      const newId = uuidv4();
+
       const requestData = {
         data: new Date(),
         descricao: data.descricao,
         idPaciente: patient,
         idMedico: doctor,
       };
+
+      const newHistoryEntry: HistoryProps = {
+        id: newId,
+        data: requestData.data,
+        descricao: requestData.descricao,
+      };
+
+      setHistory((prevHistory: HistoryProps[]) => [
+        ...prevHistory,
+        newHistoryEntry,
+      ]);
 
       console.log(requestData);
 

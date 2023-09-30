@@ -29,7 +29,7 @@ interface PatientProps {
 
 interface HistoryProps {
   id: string;
-  data: string;
+  data: string | Date;
   descricao: string;
 }
 
@@ -40,7 +40,7 @@ export default function Historic({ params }: PatientId) {
     sobrenome: "",
     patientImage: "",
   });
-  const [history, setHistory] = useState<HistoryProps[]>([]);
+  const [histories, setHistories] = useState<HistoryProps[]>([]);
 
   async function getPatient() {
     const patient: PatientProps = await getPatientById(params.patientId);
@@ -51,7 +51,7 @@ export default function Historic({ params }: PatientId) {
     const history: HistoryProps[] = await getHistoryByPatientId(
       params.patientId
     );
-    setHistory(history);
+    setHistories(history);
   }
 
   useEffect(() => {
@@ -59,12 +59,7 @@ export default function Historic({ params }: PatientId) {
       await getPatient();
       await getHistory();
     }
-
     fetchData();
-
-    const interval = setInterval(fetchData, 1000); // 1 seconds
-
-    return () => clearInterval(interval);
   }, []);
 
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -105,7 +100,7 @@ export default function Historic({ params }: PatientId) {
           <div className="mt-12 flex flex-col">
             <div className="relative mt-10 max-h-80 max-w-screen-xl overflow-y-scroll p-5">
               <ul className="divide-y divide-gray-300">
-                {history.map((item) => (
+                {histories.map((item) => (
                   <li key={item.id} className="py-2">
                     <div className="flex items-center">
                       <div className="h-4 w-4 rounded-full bg-blue-500"></div>
@@ -131,7 +126,7 @@ export default function Historic({ params }: PatientId) {
                 <BasicModal
                   isOpen={modalIsOpen}
                   onClose={handleCloseModal}
-                  onOpen={handleOpenModal}
+                  setHistory={setHistories}
                 />
               )}
             </div>
