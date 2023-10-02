@@ -3,19 +3,35 @@
 import { Form } from "@/components/Form";
 import { api } from "@/lib/api";
 import { zodResolver } from "@hookform/resolvers/zod";
-import Link from "next/link";
-import { useRouter, usePathname } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
+
+import { v4 as uuidv4 } from "uuid";
 
 const createHistoricFormSchema = z.object({
   descricao: z.string(),
 });
 
+export interface HistoryProps {
+  id: string;
+  data: string | Date;
+  descricao: string;
+}
+
+interface BasicModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  setHistory: (
+    newHistory:
+      | HistoryProps[]
+      | ((prevHistory: HistoryProps[]) => HistoryProps[])
+  ) => void;
+}
+
 type CreateHistoricFormData = z.infer<typeof createHistoricFormSchema>;
 
-export function BasicModal() {
-  const router = useRouter();
+export function BasicModal({ isOpen, onClose, setHistory }: BasicModalProps) {
   const pathname = usePathname();
 
   // Divide o pathname em partes, separando-as pelos caracteres '/'
@@ -30,15 +46,25 @@ export function BasicModal() {
 
   async function createHistoric(data: CreateHistoricFormData) {
     try {
-      const formData = new FormData();
+      const newId = uuidv4();
 
-      // Cria um objeto com os dados do formulário
       const requestData = {
         data: new Date(),
         descricao: data.descricao,
         idPaciente: patient,
         idMedico: doctor,
       };
+
+      const newHistoryEntry: HistoryProps = {
+        id: newId,
+        data: requestData.data,
+        descricao: requestData.descricao,
+      };
+
+      setHistory((prevHistory: HistoryProps[]) => [
+        ...prevHistory,
+        newHistoryEntry,
+      ]);
 
       console.log(requestData);
 
@@ -52,8 +78,7 @@ export function BasicModal() {
     } catch (error) {
       console.error("Erro ao enviar os dados", error);
     }
-
-    router.back();
+    onClose();
   }
 
   const {
@@ -100,19 +125,12 @@ export function BasicModal() {
               </div>
 
               <div className="flex justify-end gap-4">
-                {/* <button
-                  onClick={() => router.back()}
-                  className="rounded-lg bg-primary px-10 py-2 font-bold uppercase text-white hover:bg-blue-600"
+                <button
+                  onClick={onClose}
+                  className="rounded-lg bg-primary px-10 py-3 font-bold text-white"
                 >
                   Sair
-                </button> */}
-
-                <Link
-                  href="./historic"
-                  className="rounded-lg bg-primary px-10 py-3 font-bold text-white "
-                >
-                  Sair
-                </Link>
+                </button>
                 <button
                   disabled={isSubmitting}
                   className="rounded-lg bg-primary px-10 py-2 font-bold uppercase text-white hover:bg-blue-600"

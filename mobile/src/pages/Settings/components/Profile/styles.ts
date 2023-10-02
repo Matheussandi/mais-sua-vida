@@ -48,3 +48,50 @@ export const Separator = styled.View`
     background: rgba(204, 204, 204, 0.3);
     margin: 24px 0;
 `;
+
+export const ModalBackground = styled.View`
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.5);
+`;
+
+export const ModalContent = styled.View`
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    width: 80%;
+`;
+
+export const ModalHeader = styled.View`
+    flex-direction: row;
+    justify-content: space-between;
+`;
+
+export const ModalCloseButton = styled.TouchableOpacity``;
+
+export const Title = styled.Text`
+    color: #000;
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    align-items: center;
+    justify-content: center;
+`;
+
+export const UpdateImageButton = styled.TouchableOpacity`
+    width: 100%;
+    padding: 8px;
+    background-color: #0079ff;
+    margin: 8px 0;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+`;
+
+export const UpdateImageText = styled.Text`
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+`;
+
