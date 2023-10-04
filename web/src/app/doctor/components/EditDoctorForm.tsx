@@ -4,7 +4,7 @@ import { ChangeEvent, useCallback, useEffect, useState } from "react";
 
 import { useSearchParams } from "next/navigation";
 
-import { useForm, FormProvider, set } from "react-hook-form";
+import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 
@@ -14,7 +14,7 @@ import Image from "next/image";
 import { MdModeEdit } from "react-icons/md";
 import { MediaPicker } from "@/components/MediaPicker";
 
-import doctoUm from "../../../assets/doctor1.png";
+import user from "../../../assets/user.png";
 
 interface SpecializationProps {
   id: string;
@@ -144,6 +144,9 @@ export function EditDoctorForm() {
       setOutput(JSON.stringify(data, null, 2));
 
       setIsModificationSuccessful(true);
+
+      // Recarregar toda a página após o envio bem-sucedido
+      window.location.reload();
     } catch (error) {
       console.error("Erro ao enviar os dados", error);
     }
@@ -192,7 +195,7 @@ export function EditDoctorForm() {
   }, []);
 
   return (
-    <div className="flex-grow p-10">
+    <div className="flex-grow px-10 pt-10">
       <div className="rounded bg-gray-50 p-7">
         <FormProvider {...editDoctorForm}>
           <form
@@ -214,7 +217,7 @@ export function EditDoctorForm() {
                   />
                 ) : (
                   <Image
-                    src={doctorImageUrl !== null ? doctorImageUrl : doctoUm}
+                    src={doctorImageUrl !== null ? doctorImageUrl : user}
                     width={130}
                     height={130}
                     alt="Imagem do médico"
@@ -281,22 +284,25 @@ export function EditDoctorForm() {
               </div>
             </Form.Field>
 
-            <div className="flex flex-col">
+            <Form.Field>
+            <div className="flex flex-1 flex-col">
               <Form.Label>Sobre</Form.Label>
-              <Form.TextArea id="sobre" name="sobre" rows={3} cols={3} />
+              <Form.TextArea id="sobre" name="sobre" rows={2} cols={2} />
               <Form.ErrorMessage field="sobre" />
             </div>
 
-            <div className="flex flex-col">
+
+            <div className="flex flex-1 flex-col">
               <Form.Label>Experiência</Form.Label>
               <Form.TextArea
                 id="experiencia"
                 name="experiencia"
-                rows={3}
-                cols={3}
+                rows={2}
+                cols={2}
               />
               <Form.ErrorMessage field="experiencia" />
             </div>
+            </Form.Field>
 
             <Form.Field>
               <div className="flex flex-1 flex-col">

@@ -9,6 +9,8 @@ import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 
+import { useRouter } from "next/navigation";
+
 import { MediaPicker } from "@/components/MediaPicker";
 import { Form } from "../../../components/Form";
 
@@ -73,6 +75,8 @@ export function EditClinicForm() {
     setSelectedImage(files[0]);
   };
 
+  const router = useRouter();
+
   async function editClinic(data: EditClinicFormData) {
     try {
       const formData = new FormData();
@@ -98,6 +102,9 @@ export function EditClinicForm() {
 
       console.log("Dados enviados com sucesso");
       setIsModificationSuccessful(true);
+
+      // Recarregar toda a página após o envio bem-sucedido
+      window.location.reload();
     } catch (error) {
       console.error("Erro ao enviar os dados", error);
     }
