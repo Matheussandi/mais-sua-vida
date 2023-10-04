@@ -58,7 +58,6 @@ async function DoctorDetails({ id }: DoctorIdProps) {
 export default function DoctorLayout({ children, params }: DoctorLayoutProps) {
   return (
     <div className="flex h-screen bg-gray-50">
-      {/* Sidebar */}
       <div className="flex w-72 flex-col rounded-lg bg-gray-50 shadow-md">
         <div className="p-4">
           <DoctorDetails id={params.doctorId} />
@@ -72,7 +71,6 @@ export default function DoctorLayout({ children, params }: DoctorLayoutProps) {
           </Link>
         </div>
       </div>
-      {/* Main Content */}
       <div className="flex-grow bg-white">{children}</div>
     </div>
   );
