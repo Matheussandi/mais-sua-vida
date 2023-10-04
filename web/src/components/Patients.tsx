@@ -74,6 +74,7 @@ export function Patients() {
               <h3 className="mt-4 text-lg font-bold sm:text-xl">
                 Dê sua avaliação
               </h3>
+              <p className="text-sm text-gray-600">(Em breve)</p>
               <p className="mt-2 text-gray-600">
                 Deixe uma classificação e comentário para futuros pacientes
                 terem uma noção de como é a consulta.

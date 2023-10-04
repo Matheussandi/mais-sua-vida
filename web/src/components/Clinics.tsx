@@ -145,8 +145,8 @@ export function Clinics() {
                     <h3 className="text-lg font-bold">Pacientes</h3>
                     <div className="my-5 h-px w-full rounded-lg border-2 border-solid border-primary"></div>
                     <p className="text-gray-500">
-                      Busque informações do paciente. Busque informações do
-                      paciente. Busque informações do paciente.
+                      Gerencie os dados dos pacientes, incluindo históricos
+                      médicos e registros de consultas.
                     </p>
                   </div>
                 </div>
@@ -157,8 +157,9 @@ export function Clinics() {
                     <h3 className="text-lg font-bold">Médicos</h3>
                     <div className="my-5 h-px w-full rounded-lg border-2 border-solid border-primary"></div>
                     <p className="text-gray-500">
-                      Busque informações do paciente. Busque informações do
-                      paciente. Busque informações do paciente.
+                      Atribua consultas aos médicos disponíveis, acompanhe a
+                      agenda de cada profissional e evite sobrecargas ou lacunas
+                      de atendimento.
                     </p>
                   </div>
                 </div>
@@ -169,8 +170,9 @@ export function Clinics() {
                     <h3 className="text-lg font-bold">Agendamento</h3>
                     <div className="my-5 h-px w-full rounded-lg border-2 border-solid border-primary"></div>
                     <p className="text-gray-500">
-                      Busque informações do paciente. Busque informações do
-                      paciente. Busque informações do paciente.
+                      Automatize o processo de agendamento de consultas. Permita
+                      aos pacientes a conveniência de marcar consultas online,
+                      24 horas por dia.
                     </p>
                   </div>
                 </div>
@@ -181,8 +183,8 @@ export function Clinics() {
                     <h3 className="text-lg font-bold">Confirmação</h3>
                     <div className="my-5 h-px w-full rounded-lg border-2 border-solid border-primary"></div>
                     <p className="text-gray-500">
-                      Busque informações do paciente. Busque informações do
-                      paciente. Busque informações do paciente.
+                      Aumente a eficiência e reduza o número de consultas não
+                      comparecidas, reduzindo o desperdício de tempo e recursos.
                     </p>
                   </div>
                 </div>
