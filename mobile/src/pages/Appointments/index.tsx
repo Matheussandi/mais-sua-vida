@@ -46,9 +46,14 @@ interface Consulta {
 }
 
 export function Appointments() {
-	const [scheduledAppointments, setScheduledAppointments] = useState<Consulta[]>([]);
-	const [selectedConsulta, setSelectedConsulta] = useState<Consulta | null>(null);
+	const [scheduledAppointments, setScheduledAppointments] = useState<
+        Consulta[]
+    >([]);
+	const [selectedConsulta, setSelectedConsulta] = useState<Consulta | null>(
+		null
+	);
 	const [isModalVisible, setModalVisible] = useState(false);
+
 	const [error, setError] = useState<string | null>(null);
 
 	const { userData } = useUserContext();
@@ -66,7 +71,6 @@ export function Appointments() {
 
 	const today = dayjs();
 
-	// Filtrar consultas passadas e futuras
 	const pastAppointments = scheduledAppointments.filter((consulta) =>
 		dayjs(consulta.data).isBefore(today)
 	);
@@ -88,13 +92,15 @@ export function Appointments() {
 		}
 	};
 
-
 	const handleDesmarcarConsulta = async () => {
 		try {
 			await api.delete(`/consultas/${selectedConsulta?.id}`);
 			setModalVisible(false);
 			fetchAppointment(userId);
-			Alert.alert('Consulta Desmarcada', 'A consulta foi desmarcada com sucesso.');
+			Alert.alert(
+				'Consulta Desmarcada',
+				'A consulta foi desmarcada com sucesso.'
+			);
 		} catch (error) {
 			console.error('Erro ao desmarcar consulta:', error);
 			Alert.alert('Erro', 'Ocorreu um erro ao desmarcar a consulta.');
@@ -138,7 +144,7 @@ export function Appointments() {
 							{futureAppointments.map((consulta) => (
 								<CardDoctor
 									key={consulta.id}
-									doctor={consulta.medico}
+									doctorId={consulta.idMedico}
 									onPress={() => handleCardPress(consulta)}
 								/>
 							))}
@@ -151,7 +157,7 @@ export function Appointments() {
 							{pastAppointments.map((consulta) => (
 								<CardDoctor
 									key={consulta.id}
-									doctor={consulta.medico}
+									doctorId={consulta.idMedico}
 									onPress={() => handleCardPress(consulta)}
 								/>
 							))}
@@ -183,7 +189,6 @@ export function Appointments() {
 						<TextModal>Horário: {selectedConsulta?.hora}</TextModal>
 						<TextModal>Local: {selectedConsulta?.local}</TextModal>
 
-	
 						<UnselectButton onPress={handleDesmarcarConsulta}>
 							<UnselectText>Desmarcar Consulta</UnselectText>
 						</UnselectButton>
@@ -193,3 +198,4 @@ export function Appointments() {
 		</Container>
 	);
 }
+
