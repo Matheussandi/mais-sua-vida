@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { ScrollView, View, Text, Alert, TouchableOpacity } from 'react-native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
-
 import {
 	AppointmentButton,
 	AppointmentButtonText,
@@ -24,35 +23,42 @@ import { api } from '../../api';
 import { API_URL } from '@env';
 
 export function DoctorDetails({ route, navigation }) {
+	const { userData } = useUserContext();
+
 	const { doctor } = route.params;
 
 	const [isDateModalVisible, setDateModalVisible] = useState(false);
-	const [isTimeModalVisible, setTimeModalVisible] = useState(false);
+
 	const [selectedDate, setSelectedDate] = useState(null);
 	const [selectedTime, setSelectedTime] = useState(null);
 	const [showButtons, setShowButtons] = useState(false);
-	const { userData } = useUserContext();
+
 	const [data, setData] = useState('');
 	const [local, setLocal] = useState('Rua exemplo N278');
+
 	const [idPaciente, setIdPaciente] = useState(userData?.id || '');
 	const [idMedico, setIdMedico] = useState(doctor.id || '');
 	const [dateError, setDateError] = useState(false);
 	const [timeError, setTimeError] = useState(false);
-	const [horariosSelecionados, setHorariosSelecionados] = useState([]);
 
-	// Novos limites de horário
-	const inicioExpediente = 9 * 60; // 9:00 em minutos
-	const fimExpediente = 16 * 60;   // 16:00 em minutos
-	const intervalo = 30;            // Intervalo de 30 minutos
+	const inicioExpediente = 9 * 60;
+	const fimExpediente = 16 * 60;
+	const intervalo = 30;
 
-	// Função para calcular os horários disponíveis
 	const calcularHorariosDisponiveis = () => {
 		const horariosDisponiveis = [];
 
-		for (let minutos = inicioExpediente; minutos < fimExpediente; minutos += intervalo) {
+		for (
+			let minutos = inicioExpediente;
+			minutos < fimExpediente;
+			minutos += intervalo
+		) {
 			const hora = Math.floor(minutos / 60);
 			const minuto = minutos % 60;
-			const horario = `${hora.toString().padStart(2, '0')}:${minuto.toString().padStart(2, '0')}`;
+
+			const horario = `${hora.toString().padStart(2, '0')}:${minuto
+				.toString()
+				.padStart(2, '0')}`;
 			horariosDisponiveis.push(horario);
 		}
 
@@ -72,52 +78,42 @@ export function DoctorDetails({ route, navigation }) {
 		setDateModalVisible(true);
 	};
 
-	const openTimeModal = () => {
-		setTimeModalVisible(true);
-	};
-
 	const handleDateConfirm = (date) => {
-		const selectedDayOfWeek = date.getDay();
 		const currentDate = new Date();
 
-		if (selectedDayOfWeek >= 1 && selectedDayOfWeek <= 6) {
-			// Verificar se a data selecionada é maior ou igual à data atual
-			if (date >= currentDate) {
-				setSelectedDate(date);
-				setDateError(false);
-				setDateModalVisible(false);
+		if (
+			date >= currentDate ||
+            date.toDateString() === currentDate.toDateString()
+		) {
+			setSelectedDate(date);
+			setDateError(false);
+			setDateModalVisible(false);
 
-				const formattedDate = date.toISOString().split('T')[0];
-				setData(formattedDate);
-			} else {
-				setDateError(true);
-				setDateModalVisible(false);
-				Alert.alert('Selecione uma data igual ou posterior à data atual.');
-			}
+			const formattedDate = date.toISOString().split('T')[0];
+			setData(formattedDate);
 		} else {
 			setDateError(true);
 			setDateModalVisible(false);
-			Alert.alert('Selecione uma data de segunda-feira a sábado.');
+			Alert.alert('Selecione uma data válida.');
 		}
-	};
-
-	const handleTimeConfirm = (time) => {
-		const formattedTime = time.toLocaleTimeString();
-		setSelectedTime(formattedTime);
-		setTimeError(false);
-		setTimeModalVisible(false);
 	};
 
 	const handleMarcarConsulta = async () => {
 		try {
 			if (!data || !selectedTime || !local || !idPaciente || !idMedico) {
-				Alert.alert('Preencha todos os campos antes de agendar a consulta.');
+				Alert.alert(
+					'Preencha todos os campos antes de agendar a consulta.'
+				);
 				return;
 			}
 
-			// Verifique se o horário já foi selecionado por outro usuário
-			if (horariosSelecionados.includes(selectedTime)) {
-				Alert.alert('Este horário já foi selecionado por outro usuário. Por favor, escolha outro horário.');
+			const currentDate = new Date();
+			const selectedDateTime = new Date(data + 'T' + selectedTime);
+
+			if (selectedDateTime <= currentDate) {
+				Alert.alert(
+					'Não é possível marcar uma consulta neste horário.'
+				);
 				return;
 			}
 
@@ -132,11 +128,9 @@ export function DoctorDetails({ route, navigation }) {
 			if (response.status === 201) {
 				Alert.alert('Consulta marcada com sucesso!');
 
-				// Remova o horário selecionado da lista de horários disponíveis
-				setAvailableTimes((prevTimes) => prevTimes.filter((time) => time !== selectedTime));
-
-				// Adicione o horário à lista de horários selecionados
-				setHorariosSelecionados((prevHorarios) => [...prevHorarios, selectedTime]);
+				setAvailableTimes((prevTimes) =>
+					prevTimes.filter((time) => time !== selectedTime)
+				);
 
 				setSelectedDate(null);
 				setSelectedTime(null);
@@ -144,10 +138,12 @@ export function DoctorDetails({ route, navigation }) {
 				setShowButtons(false);
 				navigation.goBack();
 			} else {
-				Alert.alert('Erro ao marcar a consulta. Tente novamente mais tarde.');
+				Alert.alert(
+					'Erro ao marcar a consulta. Tente novamente mais tarde.'
+				);
 			}
 		} catch (error) {
-			Alert.alert('Erro ao marcar consulta. Já existe uma consulta marcada neste horário.');
+			Alert.alert('Horário indisponível. Por favor, selecione outro.');
 		}
 	};
 
@@ -157,6 +153,7 @@ export function DoctorDetails({ route, navigation }) {
 		setDateError(false);
 		setTimeError(false);
 		setShowButtons(false);
+		setAvailableTimes([]);
 	};
 
 	useEffect(() => {
@@ -181,7 +178,9 @@ export function DoctorDetails({ route, navigation }) {
 						{doctor.nome} {doctor.sobrenome}
 					</DoctorName>
 					{doctor.especializacao?.nome && (
-						<DoctorSpecialization>{doctor.especializacao.nome}</DoctorSpecialization>
+						<DoctorSpecialization>
+							{doctor.especializacao.nome}
+						</DoctorSpecialization>
 					)}
 					<Section>
 						<SectionTitle>Sobre</SectionTitle>
@@ -205,46 +204,101 @@ export function DoctorDetails({ route, navigation }) {
 					</Section>
 					<Section>
 						<SectionTitle>Horários de Atendimento</SectionTitle>
-						<SectionContent>9h as 16h</SectionContent>
+						<SectionContent>9h às 16h</SectionContent>
 					</Section>
 					<View>
 						{availableTimes.length > 0 ? (
-							availableTimes.map((horario) => (
-								<TouchableOpacity key={horario} onPress={() => setSelectedTime(horario)}>
-									<Text>{horario}</Text>
-								</TouchableOpacity>
-							))
+							<View
+								style={{
+									flexDirection: 'row',
+									flexWrap: 'wrap',
+									justifyContent: 'space-around',
+								}}
+							>
+								{availableTimes.map((item) => (
+									<TouchableOpacity
+										key={item}
+										style={{
+											width: '45%',
+											margin: 5,
+											borderWidth: 1.5,
+											padding: 10,
+											borderColor: '#0079ff',
+											borderRadius: 5,
+											alignItems: 'center',
+											justifyContent: 'center',
+											backgroundColor:
+                                                selectedTime === item
+                                                	? '#0079ff'
+                                                	: 'transparent',
+										}}
+										onPress={() => setSelectedTime(item)}
+									>
+										<Text
+											style={{
+												fontWeight: 'bold',
+												color:
+                                                    selectedTime === item
+                                                    	? 'white'
+                                                    	: 'black',
+											}}
+										>
+											{item}
+										</Text>
+									</TouchableOpacity>
+								))}
+							</View>
 						) : (
-							<Text>Nenhum horário disponível para a data selecionada.</Text>
+							<Text>Selecione uma data para consulta.</Text>
 						)}
 
 						{!dateError && !timeError && showButtons ? (
 							<>
-								<Text>Data: {data}</Text>
-								<Text>Hora: {selectedTime}</Text>
-								<AppointmentButton onPress={handleMarcarConsulta}>
-									<AppointmentButtonText>Confirmar</AppointmentButtonText>
-								</AppointmentButton>
+								<View style={{ alignItems: 'center' }}>
+									<Text
+										style={{
+											fontWeight: 'bold',
+											fontSize: 16,
+										}}
+									>
+                                        Data: {data}
+									</Text>
+									<Text
+										style={{
+											fontWeight: 'bold',
+											fontSize: 16,
+										}}
+									>
+                                        Hora: {selectedTime}
+									</Text>
+								</View>
+
 								<AppointmentButton onPress={handleCancelar}>
-									<AppointmentButtonText>Cancelar</AppointmentButtonText>
+									<AppointmentButtonText>
+                                        Cancelar
+									</AppointmentButtonText>
+								</AppointmentButton>
+								<AppointmentButton
+									onPress={handleMarcarConsulta}
+								>
+									<AppointmentButtonText>
+                                        Confirmar
+									</AppointmentButtonText>
 								</AppointmentButton>
 							</>
 						) : (
 							<>
 								<AppointmentButton onPress={openDateModal}>
-									<AppointmentButtonText>Data da Consulta</AppointmentButtonText>
+									<AppointmentButtonText>
+                                        Marcar Consulta
+									</AppointmentButtonText>
 								</AppointmentButton>
-
 							</>
 						)}
 					</View>
 				</DoctorContent>
 			</ScrollView>
-			{selectedDate && (
-				<View>
-					<Text>Data selecionada: {data}</Text>
-				</View>
-			)}
+
 			<DateTimePickerModal
 				isVisible={isDateModalVisible}
 				mode="date"
@@ -254,3 +308,4 @@ export function DoctorDetails({ route, navigation }) {
 		</Container>
 	);
 }
+
