@@ -8,7 +8,7 @@ import { api } from '../../api';
 
 import { Doctor } from '../../types/Doctors';
 import { Especialization } from '../../types/Especialization';
-import { useRoute, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 
 import {
 	Container,
@@ -36,6 +36,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Especializations } from './components/Especializations';
 import { Doctors } from './components/Doctors';
 import { Feather } from '@expo/vector-icons';
+import { API_URL } from '@env';
 
 export default function Home() {
 	const [doctors, setDoctors] = useState<Doctor[]>([]);
@@ -44,10 +45,10 @@ export default function Home() {
 	);
 	const [isLoadingDoctors, setIsLoadingDoctors] = useState(false);
 	const [searchQuery, setSearchQuery] = useState('');
+	const [filteredDoctors, setFilteredDoctors] = useState<Doctor[]>([]);
 
 	const { userData } = useUserContext();
 
-	const route = useRoute();
 	const navigation = useNavigation();
 
 	useEffect(() => {
@@ -58,6 +59,23 @@ export default function Home() {
 			}
 		);
 	}, []);
+
+	const filterDoctors = () => {
+		const filtered = doctors.filter((doctor) => {
+			const fullName = `${doctor.nome} ${doctor.sobrenome}`;
+
+			return fullName.toLowerCase().includes(searchQuery.toLowerCase());
+		});
+		setFilteredDoctors(filtered);
+	};
+
+	useEffect(() => {
+		filterDoctors();
+	}, [searchQuery, doctors]);
+
+	const handleSearchSubmit = () => {
+		filterDoctors();
+	};
 
 	async function handleSelectEspecialization(especializationId: string) {
 		const route = !especializationId
@@ -93,7 +111,10 @@ export default function Home() {
 							<UserImageContainer>
 								<Image
 									source={{
-										uri: `http://192.168.1.103:3333/uploads/${userData?.patientImage}`,
+										uri:
+                                            API_URL +
+                                            '/uploads/' +
+                                            userData?.patientImage,
 									}}
 									style={{
 										width: 60,
@@ -115,6 +136,7 @@ export default function Home() {
 						placeholder="Pesquisar"
 						value={searchQuery}
 						onChangeText={setSearchQuery}
+						onSubmitEditing={handleSearchSubmit}
 					/>
 					<Feather name="search" size={24} color="#fff" />
 				</SearchInputContainer>
@@ -124,7 +146,6 @@ export default function Home() {
 				<EspecializationsContainer>
 					<EspecializationsTitle>Especialistas</EspecializationsTitle>
 					<EspecializationsList>
-						{/* Render your list of specializations here */}
 						<Especializations
 							especializations={especialization}
 							onSelectEspecialization={
@@ -141,10 +162,9 @@ export default function Home() {
 				) : (
 					<DoctorsContainer>
 						{doctors.length > 0 ? (
-							<Doctors doctors={doctors} />
+							<Doctors doctors={filteredDoctors} />
 						) : (
 							<EmptyDoctorsContainer>
-								{/* <EmptyDoctorsIcon name="exclamation-circle" size={60} /> */}
 								<EmptyDoctorsText>
                                     Ainda não temos nenhum(a) Dr(a) com essa
                                     especialidade

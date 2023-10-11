@@ -14,10 +14,11 @@ export function Apresentation() {
             <span className="text-primary">consultas</span>
           </h1>
           <p className="mt-6 text-justify text-sm text-gray-500">
-            +SuaVida é uma nova maneira de marcar sua cotações de seguro de
-            saúde. Oferecemos ferramentas semelhantes às fornecidos por
-            seguradoras gratuitamente e os preços são baseados em doações e não
-            redes restritivas de planos de saúde.
+            +SuaVida simplifica o agendamento e gerenciamento de consultas
+            médicas, colocando o controle nas suas mãos. Nosso compromisso é
+            tornar o processo fácil, eficiente e acessível para todos -
+            pacientes e clínicas. Com nossa plataforma, agendar consultas nunca
+            foi tão simples e conveniente.
           </p>
           <button className="my-7 cursor-default rounded-xl bg-primary px-9 py-4 font-bold text-white">
             Contato

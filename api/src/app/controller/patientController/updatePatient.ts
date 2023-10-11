@@ -12,23 +12,12 @@ export async function updatePatient(request: Request, response: Response){
 	try{
 		const { id } = request.params;
 
+		let encryptedPassword = '';
 		const patientExists = await Patient.findByPk(id);
 
 		if(!patientExists){
 			return response.status(404).json({Erro: 'Patient not foud'});
 		}
-
-		if(patientExists.patientImage){
-			try{
-				const imagePath = path.resolve(__dirname, '..', '..', '..', '..', 'uploads', 'patientImages', `${patientExists.patientImage}`);
-
-				await deleteFile(imagePath);
-			}catch(error){
-				return response.json({Error: 'Unexpected error while updating image'});
-			}
-		}
-
-		const patientImage  = request.file?.filename;
 
 		const {
 			nome,
@@ -42,6 +31,18 @@ export async function updatePatient(request: Request, response: Response){
 			peso
 		} = request.body;
 
+		const existingPassword = patientExists.senha;
+
+
+		if(existingPassword === senha){
+			encryptedPassword = existingPassword;
+		}else {
+			encryptedPassword = await bcrypt.hash(senha, 10);
+		}
+
+		const patientImage  = request.file?.filename;
+
+	
 		const fields = [
 			{ value: nome, nome: 'Nome'},
 			{ value: sobrenome, nome: 'Sobrenome'},
@@ -57,7 +58,6 @@ export async function updatePatient(request: Request, response: Response){
 			return response.status(400).json(erros);
 		}
 
-		const encryptedPassword = await bcrypt.hash(senha, 10);
 
 		const patient = await Patient.update({
 			nome,
@@ -74,9 +74,22 @@ export async function updatePatient(request: Request, response: Response){
 			where: {
 				id: id
 			}
+		}).then((result: [number]) =>{
+			if(result[0] === 1){
+				Patient.findOne(
+					{ where: {
+						id: id
+					}
+				}).then((updatedPatient: any) => {
+					return response.status(200).json(updatedPatient);
+				})
+				
+			}else{
+				response.status(400)
+			}
 		});
 
-		response.status(201).json(patient);
+		
 	}catch(error){
 		if(request.file){
 			try{

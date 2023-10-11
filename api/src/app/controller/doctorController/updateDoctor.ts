@@ -13,6 +13,7 @@ export async function updateDoctor(request: Request, response: Response){
 	try{
 		const { id } = request.params;
 
+		let encryptedPassword = '';
 
 		const doctorExists = await Doctor.findByPk(id);
 
@@ -20,15 +21,7 @@ export async function updateDoctor(request: Request, response: Response){
 			response.status(404).json({Error: 'Doctor not found '});
 		}
 
-		if(doctorExists.doctorImage){
-			try{
-				const imagePath = path.resolve(__dirname, '..', '..', '..', '..', 'uploads', 'doctorImages', `${doctorExists.doctorImage}`);
-
-				await deleteFile(imagePath);
-			}catch(error){
-				return response.json({Error: 'Unexpected error while updating image'});
-			}
-		}
+		
 
 		const doctorImage = request.file?.filename;
 		const {
@@ -58,7 +51,13 @@ export async function updateDoctor(request: Request, response: Response){
 			return response.status(400).json(erros);
 		}
 
-		const encryptedPassword = await bcrypt.hash(senha, 10);
+		const existingPassword = doctorExists.senha;
+
+		if(existingPassword === senha){
+			encryptedPassword = existingPassword;
+		}else {
+			encryptedPassword = await bcrypt.hash(senha, 10);
+		}
 
 
 		const doctor = await Doctor.update({
@@ -91,4 +90,3 @@ export async function updateDoctor(request: Request, response: Response){
 		response.status(400).json({Erro: 'Something went wrong', error});
 	}
 }
-

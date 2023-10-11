@@ -13,32 +13,34 @@ export function About() {
             <h1 className="mb-4 text-center text-4xl font-bold">Sobre nós</h1>
             <div className="text-justify text-gray-500">
               <p>
-                +SuaVida é uma nova maneira de marcar sua cotações de seguro de
-                saúde. Oferecemos ferramentas semelhantes às fornecidos por
-                seguradoras gratuitamente e os preços são baseados em doações e
-                não redes restritivas de planos de saúde. Os preços são baseados
-                em doações e não redes restritivas de planos de saúde.
+                Bem-vindo à +Sua Vida, sua parceira confiável em soluções de
+                gerenciamento de clínica e cuidados médicos. Estamos
+                comprometidos em transformar a experiência de saúde para
+                empresas e pacientes, proporcionando eficiência, acessibilidade
+                e conveniência.
               </p>
               <p>
-                +SuaVida é uma nova maneira de marcar sua cotações de seguro de
-                saúde. Oferecemos ferramentas semelhantes às fornecidos por
-                seguradoras gratuitamente e os preços são baseados em doações e
-                não redes restritivas de planos de saúde. Os preços são baseados
-                em doações e não redes restritivas de planos de saúde.
+                Nossa missão é simplificar o acesso a cuidados de saúde de
+                qualidade. Acreditamos que todos merecem atendimento médico
+                acessível e eficiente, e estamos dedicados a tornar essa visão
+                uma realidade. Queremos fortalecer a relação entre clínicas e
+                pacientes, oferecendo ferramentas inovadoras para facilitar a
+                comunicação, agendamento de consultas e gestão de informações de
+                saúde.
               </p>
               <p>
-                +SuaVida é uma nova maneira de marcar sua cotações de seguro de
-                saúde. Oferecemos ferramentas semelhantes às fornecidos por
-                seguradoras gratuitamente e os preços são baseados em doações e
-                não redes restritivas de planos de saúde. Os preços são baseados
-                em doações e não redes restritivas de planos de saúde.
+                Estamos empenhados em continuar aprimorando nossas soluções e
+                expandir nossa oferta para melhor atender às necessidades em
+                constante evolução do setor de saúde. Acreditamos que a
+                tecnologia pode desempenhar um papel fundamental na melhoria do
+                acesso aos cuidados médicos, e continuaremos a trabalhar
+                incansavelmente para alcançar essa visão.
               </p>
               <p>
-                +SuaVida é uma nova maneira de marcar sua cotações de seguro de
-                saúde. Oferecemos ferramentas semelhantes às fornecidos por
-                seguradoras gratuitamente e os preços são baseados em doações e
-                não redes restritivas de planos de saúde. Os preços são baseados
-                em doações e não redes restritivas de planos de saúde.
+                Na +Sua Vida, valorizamos cada paciente e cada clínica que
+                confia em nossos serviços. Junte-se a nós em nossa jornada para
+                revolucionar a saúde e tornar o atendimento médico mais
+                acessível e conveniente para todos.
               </p>
             </div>
             <div className="mt-4 flex justify-between text-sm font-semibold md:text-base">
@@ -107,7 +109,7 @@ export function About() {
           </div>
         </div>
 
-        <div className="flex flex-col items-center p-6 sm:flex-row sm:justify-center">
+        {/*         <div className="flex flex-col items-center p-6 sm:flex-row sm:justify-center">
           <div className="mx-7 flex flex-col items-center">
             <span className="text-5xl font-bold text-primary">15k</span>
             <span className="mt-2 font-bold">Clínicas Satisfeitas</span>
@@ -124,7 +126,7 @@ export function About() {
             <span className="text-5xl font-bold text-primary">10+</span>
             <span className="mt-2 font-bold">Convênios</span>
           </div>
-        </div>
+        </div> */}
       </div>
     </section>
   );

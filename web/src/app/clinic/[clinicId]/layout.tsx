@@ -62,7 +62,7 @@ export default function ClinicLayout({ children, params }: ClinicLayoutProps) {
           </Link>
         </div>
       </div>
-      <div className="flex-grow bg-white">{children}</div>
+      <div className="flex-grow bg-white w-6/12">{children}</div>
     </div>
   );
 }

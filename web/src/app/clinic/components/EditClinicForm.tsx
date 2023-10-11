@@ -9,6 +9,8 @@ import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 
+import { useRouter } from "next/navigation";
+
 import { MediaPicker } from "@/components/MediaPicker";
 import { Form } from "../../../components/Form";
 
@@ -49,10 +51,8 @@ export function EditClinicForm() {
 
   const searchParams = useSearchParams();
   const search = searchParams.get("clinic");
-  const [output, setOutput] = useState("");
 
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
-
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [clinicImageUrl, setClinicImageUrl] = useState<string | null>(null);
 
   const editClinicForm = useForm<EditClinicFormData>({
@@ -65,18 +65,46 @@ export function EditClinicForm() {
     formState: { isSubmitting },
   } = editClinicForm;
 
+  const handleFileInput = (event: ChangeEvent<HTMLInputElement>) => {
+    const { files } = event.target;
+
+    if (!files || files.length === 0) {
+      return;
+    }
+
+    setSelectedImage(files[0]);
+  };
+
+  const router = useRouter();
+
   async function editClinic(data: EditClinicFormData) {
     try {
-      await api.put(`/clinica/${search}`, data, {
+      const formData = new FormData();
+
+      if (selectedImage) {
+        formData.append("clinicImage", selectedImage);
+      }
+
+      for (const key in data) {
+        // Verifica se a chave é uma propriedade direta de 'data'
+        if (Object.prototype.hasOwnProperty.call(data, key)) {
+          // Adiciona a chave (key) e o valor correspondente de 'data' ao 'formData'
+          // Utiliza a notação de índice ['key'] para acessar dinamicamente a propriedade de 'data'
+          formData.append(key, data[key as keyof EditClinicFormData]);
+        }
+      }
+
+      await api.put(`/clinica/${search}`, formData, {
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "multipart/form-data",
         },
       });
 
       console.log("Dados enviados com sucesso");
-      setOutput(JSON.stringify(data, null, 2));
-
       setIsModificationSuccessful(true);
+
+      // Recarregar toda a página após o envio bem-sucedido
+      window.location.reload();
     } catch (error) {
       console.error("Erro ao enviar os dados", error);
     }
@@ -102,19 +130,6 @@ export function EditClinicForm() {
     }
   }, [search, editClinicForm]);
 
-  // Função para lidar com alterações de entrada de arquivo
-  const handleFileInput = (event: ChangeEvent<HTMLInputElement>) => {
-    const { files } = event.target;
-
-    if (!files || files.length === 0) {
-      return;
-    }
-
-    const previewURL = URL.createObjectURL(files[0]);
-
-    setSelectedImage(previewURL);
-  };
-
   useEffect(() => {
     handleGetRegisteredData();
   }, [handleGetRegisteredData]);
@@ -134,7 +149,7 @@ export function EditClinicForm() {
               >
                 {selectedImage ? (
                   <Image
-                    src={selectedImage}
+                    src={URL.createObjectURL(selectedImage)}
                     width={130}
                     height={130}
                     alt="Imagem da clínica"
@@ -150,7 +165,7 @@ export function EditClinicForm() {
                   />
                 )}
 
-                <input
+                <Form.Input
                   onChange={handleFileInput}
                   name="doctorImage"
                   type="file"

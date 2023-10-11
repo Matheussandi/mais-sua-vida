@@ -4,7 +4,7 @@ import { ChangeEvent, useCallback, useEffect, useState } from "react";
 
 import { useSearchParams } from "next/navigation";
 
-import { useForm, FormProvider, set } from "react-hook-form";
+import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 
@@ -14,7 +14,7 @@ import Image from "next/image";
 import { MdModeEdit } from "react-icons/md";
 import { MediaPicker } from "@/components/MediaPicker";
 
-import doctoUm from "../../../assets/doctor1.png";
+import user from "../../../assets/user.png";
 
 interface SpecializationProps {
   id: string;
@@ -73,7 +73,8 @@ export function EditDoctorForm() {
   const [isModificationSuccessful, setIsModificationSuccessful] =
     useState(false);
 
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [doctorImageUrl, setDoctorImageUrl] = useState<string | null>(null);
 
   const [specializations, setSpecializations] = useState<
     { value: string; label: string }[]
@@ -95,18 +96,6 @@ export function EditDoctorForm() {
   const search = searchParams.get("doctor");
   const [output, setOutput] = useState("");
 
-  const handleFileInput = (event: ChangeEvent<HTMLInputElement>) => {
-    const { files } = event.target;
-
-    if (!files || files.length === 0) {
-      return;
-    }
-
-    const previewURL = URL.createObjectURL(files[0]);
-
-    setSelectedImage(previewURL);
-  };
-
   const editDoctorForm = useForm<EditDoctorFormData>({
     resolver: zodResolver(editDoctorFormSchema),
     defaultValues: formData,
@@ -118,11 +107,36 @@ export function EditDoctorForm() {
     watch,
   } = editDoctorForm;
 
+  const handleFileInput = (event: ChangeEvent<HTMLInputElement>) => {
+    const { files } = event.target;
+
+    if (!files || files.length === 0) {
+      return;
+    }
+
+    setSelectedImage(files[0]);
+  };
+
   async function editDoctor(data: EditDoctorFormData) {
     try {
-      await api.put(`/medico/${search}`, data, {
+      const formData = new FormData();
+
+      if (selectedImage) {
+        formData.append("doctorImage", selectedImage);
+      }
+
+      for (const key in data) {
+        // Verifica se a chave é uma propriedade direta de 'data'
+        if (Object.prototype.hasOwnProperty.call(data, key)) {
+          // Adiciona a chave (key) e o valor correspondente de 'data' ao 'formData'
+          // Utiliza a notação de índice ['key'] para acessar dinamicamente a propriedade de 'data'
+          formData.append(key, data[key as keyof EditDoctorFormData]);
+        }
+      }
+
+      await api.put(`/medico/${search}`, formData, {
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "multipart/form-data",
         },
       });
 
@@ -130,6 +144,9 @@ export function EditDoctorForm() {
       setOutput(JSON.stringify(data, null, 2));
 
       setIsModificationSuccessful(true);
+
+      // Recarregar toda a página após o envio bem-sucedido
+      window.location.reload();
     } catch (error) {
       console.error("Erro ao enviar os dados", error);
     }
@@ -142,7 +159,7 @@ export function EditDoctorForm() {
 
       if (doctor.doctorImage) {
         const imageComplete = `${process.env.NEXT_PUBLIC_API_IMAGE}/${doctor.doctorImage}`;
-        setSelectedImage(imageComplete);
+        setDoctorImageUrl(imageComplete);
       }
 
       const { senha, ...restDoctorData } = doctor;
@@ -178,7 +195,7 @@ export function EditDoctorForm() {
   }, []);
 
   return (
-    <div className="flex-grow p-10">
+    <div className="flex-grow px-10 pt-10">
       <div className="rounded bg-gray-50 p-7">
         <FormProvider {...editDoctorForm}>
           <form
@@ -192,7 +209,7 @@ export function EditDoctorForm() {
               >
                 {selectedImage ? (
                   <Image
-                    src={selectedImage}
+                    src={URL.createObjectURL(selectedImage)}
                     width={130}
                     height={130}
                     alt="Imagem do médico"
@@ -200,7 +217,7 @@ export function EditDoctorForm() {
                   />
                 ) : (
                   <Image
-                    src={doctoUm}
+                    src={doctorImageUrl !== null ? doctorImageUrl : user}
                     width={130}
                     height={130}
                     alt="Imagem do médico"
@@ -267,22 +284,25 @@ export function EditDoctorForm() {
               </div>
             </Form.Field>
 
-            <div className="flex flex-col">
+            <Form.Field>
+            <div className="flex flex-1 flex-col">
               <Form.Label>Sobre</Form.Label>
-              <Form.TextArea id="sobre" name="sobre" rows={3} cols={3} />
+              <Form.TextArea id="sobre" name="sobre" rows={2} cols={2} />
               <Form.ErrorMessage field="sobre" />
             </div>
 
-            <div className="flex flex-col">
+
+            <div className="flex flex-1 flex-col">
               <Form.Label>Experiência</Form.Label>
               <Form.TextArea
                 id="experiencia"
                 name="experiencia"
-                rows={3}
-                cols={3}
+                rows={2}
+                cols={2}
               />
               <Form.ErrorMessage field="experiencia" />
             </div>
+            </Form.Field>
 
             <Form.Field>
               <div className="flex flex-1 flex-col">

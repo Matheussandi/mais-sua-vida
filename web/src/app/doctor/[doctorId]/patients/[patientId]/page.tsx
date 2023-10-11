@@ -63,10 +63,21 @@ export default async function PatientDetails({ params }: PatientId) {
             <div className="flex justify-around gap-10 border-t-2 border-gray-200 p-10">
               <div>
                 <h2 className="font-bold uppercase">Sobre</h2>
-                <p>Idade: {calculateAge(patient.dataNascimento)}</p>
-                <p>Data de Nascimento: {formattedDate}</p>
-                <p>Altura: {HeightConverter(patient.altura)}</p>
-                <p>Peso: {WeightConverter(patient.peso)}</p>
+                <p>
+                  Idade:{" "}
+                  {patient.dataNascimento
+                    ? calculateAge(patient.dataNascimento)
+                    : ""}
+                </p>
+                <p>
+                  Data de Nascimento:{" "}
+                  {patient.dataNascimento ? formattedDate : ""}
+                </p>
+                <p>
+                  Altura:{" "}
+                  {patient.altura ? HeightConverter(patient.altura) : ""}
+                </p>
+                <p>Peso: {patient.peso ? WeightConverter(patient.peso) : ""}</p>
               </div>
 
               <div>

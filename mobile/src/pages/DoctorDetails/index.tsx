@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ScrollView, Button, View, Text, Alert } from 'react-native';
+import { ScrollView, View, Text, Alert, TouchableOpacity } from 'react-native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 import {
@@ -16,103 +16,144 @@ import {
 	SectionTitle,
 } from './styles';
 
-import docImage from '../../assets/doctor.png';
-
 import { Header } from '../../components/Header';
 import { useUserContext } from '../../context/UserContext';
-import { Doctor } from '../../types/Doctors';
 import { api } from '../../api';
 
+import { API_URL } from '@env';
+
 export function DoctorDetails({ route, navigation }) {
+	const { userData } = useUserContext();
+
 	const { doctor } = route.params;
 
 	const [isDateModalVisible, setDateModalVisible] = useState(false);
-	const [isTimeModalVisible, setTimeModalVisible] = useState(false);
+
 	const [selectedDate, setSelectedDate] = useState(null);
 	const [selectedTime, setSelectedTime] = useState(null);
-	const [showButtons, setShowButtons] = useState(false); // Estado para controlar a exibição dos botões
+	const [showButtons, setShowButtons] = useState(false);
 
-	const { userData } = useUserContext();
 	const [data, setData] = useState('');
-	const [hora, setHora] = useState('');
 	const [local, setLocal] = useState('Rua exemplo N278');
+
 	const [idPaciente, setIdPaciente] = useState(userData?.id || '');
 	const [idMedico, setIdMedico] = useState(doctor.id || '');
+	const [dateError, setDateError] = useState(false);
+	const [timeError, setTimeError] = useState(false);
+
+	const inicioExpediente = 9 * 60;
+	const fimExpediente = 16 * 60;
+	const intervalo = 30;
+
+	const calcularHorariosDisponiveis = () => {
+		const horariosDisponiveis = [];
+
+		for (
+			let minutos = inicioExpediente;
+			minutos < fimExpediente;
+			minutos += intervalo
+		) {
+			const hora = Math.floor(minutos / 60);
+			const minuto = minutos % 60;
+
+			const horario = `${hora.toString().padStart(2, '0')}:${minuto
+				.toString()
+				.padStart(2, '0')}`;
+			horariosDisponiveis.push(horario);
+		}
+
+		return horariosDisponiveis;
+	};
+
+	const [availableTimes, setAvailableTimes] = useState([]);
 
 	useEffect(() => {
-		setIdMedico(doctor.id);
-	}, []);
+		if (selectedDate) {
+			const horariosDisponiveis = calcularHorariosDisponiveis();
+			setAvailableTimes(horariosDisponiveis);
+		}
+	}, [selectedDate]);
 
 	const openDateModal = () => {
 		setDateModalVisible(true);
 	};
 
-	const openTimeModal = () => {
-		setTimeModalVisible(true);
-	};
-
 	const handleDateConfirm = (date) => {
-		setSelectedDate(date);
-		setDateModalVisible(false);
+		const currentDate = new Date();
 
-		const formattedDate = date.toISOString().split('T')[0];
-		setData(formattedDate);
-	};
+		if (
+			date >= currentDate ||
+            date.toDateString() === currentDate.toDateString()
+		) {
+			setSelectedDate(date);
+			setDateError(false);
+			setDateModalVisible(false);
 
-	const handleTimeConfirm = (time) => {
-		setSelectedTime(time);
-		setTimeModalVisible(false);
-
-		const formattedTime = time.toLocaleTimeString();
-		setHora(formattedTime);
+			const formattedDate = date.toISOString().split('T')[0];
+			setData(formattedDate);
+		} else {
+			setDateError(true);
+			setDateModalVisible(false);
+			Alert.alert('Selecione uma data válida.');
+		}
 	};
 
 	const handleMarcarConsulta = async () => {
 		try {
-			if (!data || !hora || !local || !idPaciente || !idMedico) {
+			if (!data || !selectedTime || !local || !idPaciente || !idMedico) {
 				Alert.alert(
 					'Preencha todos os campos antes de agendar a consulta.'
 				);
 				return;
 			}
-			console.log('Data:', data);
-			console.log('Hora:', hora);
+
+			const currentDate = new Date();
+			const selectedDateTime = new Date(data + 'T' + selectedTime);
+
+			if (selectedDateTime <= currentDate) {
+				Alert.alert(
+					'Não é possível marcar uma consulta neste horário.'
+				);
+				return;
+			}
 
 			const response = await api.post('/consultas', {
 				data,
-				hora,
+				hora: selectedTime,
 				local,
 				idPaciente,
 				idMedico,
 			});
 
 			if (response.status === 201) {
-				console.log(response.data);
 				Alert.alert('Consulta marcada com sucesso!');
+
+				setAvailableTimes((prevTimes) =>
+					prevTimes.filter((time) => time !== selectedTime)
+				);
 
 				setSelectedDate(null);
 				setSelectedTime(null);
 				setLocal('Rua exemplo N278');
-				setShowButtons(false); // Após marcar a consulta, oculta os botões
+				setShowButtons(false);
 				navigation.goBack();
 			} else {
-				console.log(response.data);
 				Alert.alert(
 					'Erro ao marcar a consulta. Tente novamente mais tarde.'
 				);
 			}
 		} catch (error) {
-			console.log(error);
-			Alert.alert(
-				'Erro ao marcar a consulta, verifique se todos os dados estão digitados de forma correta.'
-			);
+			Alert.alert('Horário indisponível. Por favor, selecione outro.');
 		}
 	};
 
 	const handleCancelar = () => {
 		setSelectedDate(null);
 		setSelectedTime(null);
+		setDateError(false);
+		setTimeError(false);
 		setShowButtons(false);
+		setAvailableTimes([]);
 	};
 
 	useEffect(() => {
@@ -124,16 +165,14 @@ export function DoctorDetails({ route, navigation }) {
 	return (
 		<Container>
 			<Header title={'Médico'} />
-
 			<ScrollView>
 				<DoctorCard>
 					<DoctorImage
 						source={{
-							uri: `http://192.168.1.103:3333/uploads/${doctor?.doctorImage}`,
+							uri: API_URL + '/uploads/' + doctor?.doctorImage,
 						}}
 					/>
 				</DoctorCard>
-
 				<DoctorContent>
 					<DoctorName>
 						{doctor.nome} {doctor.sobrenome}
@@ -143,32 +182,96 @@ export function DoctorDetails({ route, navigation }) {
 							{doctor.especializacao.nome}
 						</DoctorSpecialization>
 					)}
-
 					<Section>
 						<SectionTitle>Sobre</SectionTitle>
 						<SectionContent>{doctor.sobre}</SectionContent>
 					</Section>
-
 					<Section>
 						<SectionTitle>Experiência</SectionTitle>
 						<SectionContent>{doctor.experiencia}</SectionContent>
 					</Section>
-
 					<Section>
 						<SectionTitle>CRM</SectionTitle>
 						<SectionContent>{doctor.CRM}</SectionContent>
 					</Section>
-
 					<Section>
 						<SectionTitle>Local da Consulta</SectionTitle>
 						<SectionContent>{local}</SectionContent>
 					</Section>
-
+					<Section>
+						<SectionTitle>Dias de Atendimento</SectionTitle>
+						<SectionContent>Segunda a Sábado</SectionContent>
+					</Section>
+					<Section>
+						<SectionTitle>Horários de Atendimento</SectionTitle>
+						<SectionContent>9h às 16h</SectionContent>
+					</Section>
 					<View>
-						{showButtons ? ( // Mostra os botões apenas quando showButtons for true
+						{availableTimes.length > 0 ? (
+							<View
+								style={{
+									flexDirection: 'row',
+									flexWrap: 'wrap',
+									justifyContent: 'space-around',
+								}}
+							>
+								{availableTimes.map((item) => (
+									<TouchableOpacity
+										key={item}
+										style={{
+											width: '45%',
+											margin: 5,
+											borderWidth: 1.5,
+											padding: 10,
+											borderColor: '#0079ff',
+											borderRadius: 5,
+											alignItems: 'center',
+											justifyContent: 'center',
+											backgroundColor:
+                                                selectedTime === item
+                                                	? '#0079ff'
+                                                	: 'transparent',
+										}}
+										onPress={() => setSelectedTime(item)}
+									>
+										<Text
+											style={{
+												fontWeight: 'bold',
+												color:
+                                                    selectedTime === item
+                                                    	? 'white'
+                                                    	: 'black',
+											}}
+										>
+											{item}
+										</Text>
+									</TouchableOpacity>
+								))}
+							</View>
+						) : (
+							<Text>Selecione uma data para consulta.</Text>
+						)}
+
+						{!dateError && !timeError && showButtons ? (
 							<>
-								<Text>Data: {data}</Text>
-								<Text>Hora: {hora}</Text>
+								<View style={{ alignItems: 'center' }}>
+									<Text
+										style={{
+											fontWeight: 'bold',
+											fontSize: 16,
+										}}
+									>
+                                        Data: {data}
+									</Text>
+									<Text
+										style={{
+											fontWeight: 'bold',
+											fontSize: 16,
+										}}
+									>
+                                        Hora: {selectedTime}
+									</Text>
+								</View>
 
 								<AppointmentButton onPress={handleCancelar}>
 									<AppointmentButtonText>
@@ -187,13 +290,7 @@ export function DoctorDetails({ route, navigation }) {
 							<>
 								<AppointmentButton onPress={openDateModal}>
 									<AppointmentButtonText>
-                                        Data da Consulta
-									</AppointmentButtonText>
-								</AppointmentButton>
-
-								<AppointmentButton onPress={openTimeModal}>
-									<AppointmentButtonText>
-                                        Hora da Consulta
+                                        Marcar Consulta
 									</AppointmentButtonText>
 								</AppointmentButton>
 							</>
@@ -202,24 +299,11 @@ export function DoctorDetails({ route, navigation }) {
 				</DoctorContent>
 			</ScrollView>
 
-			{selectedDate && (
-				<View>
-					<Text>Data selecionada: {data}</Text>
-				</View>
-			)}
-
 			<DateTimePickerModal
 				isVisible={isDateModalVisible}
 				mode="date"
 				onConfirm={handleDateConfirm}
 				onCancel={() => setDateModalVisible(false)}
-			/>
-
-			<DateTimePickerModal
-				isVisible={isTimeModalVisible}
-				mode="time"
-				onConfirm={handleTimeConfirm}
-				onCancel={() => setTimeModalVisible(false)}
 			/>
 		</Container>
 	);

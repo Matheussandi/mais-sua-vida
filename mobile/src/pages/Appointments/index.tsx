@@ -1,5 +1,4 @@
-import { useNavigation } from '@react-navigation/native';
-import { Text, Modal, ScrollView } from 'react-native';
+import { Text, Modal, ScrollView, Alert } from 'react-native';
 import { useState, useEffect } from 'react';
 
 import {
@@ -10,6 +9,8 @@ import {
 	ModalCloseButton,
 	Title,
 	TextModal,
+	UnselectButton,
+	UnselectText,
 } from './styles';
 
 import { Feather } from '@expo/vector-icons';
@@ -52,12 +53,12 @@ export function Appointments() {
 		null
 	);
 	const [isModalVisible, setModalVisible] = useState(false);
+
 	const [error, setError] = useState<string | null>(null);
 
 	const { userData } = useUserContext();
 
 	const userId = userData?.id;
-	const navigation = useNavigation();
 
 	const handleCardPress = (consulta: Consulta) => {
 		setSelectedConsulta(consulta);
@@ -70,7 +71,6 @@ export function Appointments() {
 
 	const today = dayjs();
 
-	// Filtrar consultas passadas e futuras
 	const pastAppointments = scheduledAppointments.filter((consulta) =>
 		dayjs(consulta.data).isBefore(today)
 	);
@@ -85,10 +85,25 @@ export function Appointments() {
 		try {
 			const response = await api.get(`/consultas/${patientId}`);
 			setScheduledAppointments(response.data);
-			setError(null); // Limpar o erro se a busca for bem-sucedida
+			setError(null);
 		} catch (error) {
 			console.error('Erro na consulta à API:', error);
-			setError('Ocorreu um erro ao buscar as consultas.'); // Definir a mensagem de erro
+			setError('Ocorreu um erro ao buscar as consultas.');
+		}
+	};
+
+	const handleDesmarcarConsulta = async () => {
+		try {
+			await api.delete(`/consultas/${selectedConsulta?.id}`);
+			setModalVisible(false);
+			fetchAppointment(userId);
+			Alert.alert(
+				'Consulta Desmarcada',
+				'A consulta foi desmarcada com sucesso.'
+			);
+		} catch (error) {
+			console.error('Erro ao desmarcar consulta:', error);
+			Alert.alert('Erro', 'Ocorreu um erro ao desmarcar a consulta.');
 		}
 	};
 
@@ -108,12 +123,12 @@ export function Appointments() {
 			fetchAppointment(userId);
 
 			const interval = setInterval(() => {
-				fetchNewAppointments(userId)
+				fetchNewAppointments(userId);
 			}, 5000);
 
 			return () => {
 				clearInterval(interval);
-			}
+			};
 		}
 	}, [userId]);
 
@@ -129,7 +144,7 @@ export function Appointments() {
 							{futureAppointments.map((consulta) => (
 								<CardDoctor
 									key={consulta.id}
-									doctor={consulta.medico}
+									doctorId={consulta.idMedico}
 									onPress={() => handleCardPress(consulta)}
 								/>
 							))}
@@ -142,7 +157,7 @@ export function Appointments() {
 							{pastAppointments.map((consulta) => (
 								<CardDoctor
 									key={consulta.id}
-									doctor={consulta.medico}
+									doctorId={consulta.idMedico}
 									onPress={() => handleCardPress(consulta)}
 								/>
 							))}
@@ -173,9 +188,14 @@ export function Appointments() {
 						</TextModal>
 						<TextModal>Horário: {selectedConsulta?.hora}</TextModal>
 						<TextModal>Local: {selectedConsulta?.local}</TextModal>
+
+						<UnselectButton onPress={handleDesmarcarConsulta}>
+							<UnselectText>Desmarcar Consulta</UnselectText>
+						</UnselectButton>
 					</ModalContent>
 				</ModalBackground>
 			</Modal>
 		</Container>
 	);
 }
+

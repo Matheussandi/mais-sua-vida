@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { MedicalAppointment } from '../../models/MedicAppointmentModel';
 import { verifyEmpityFields } from '../../../utils/verifyEmptyFields';
 
-export async function createMedicalAppointments( request: Request, response: Response ) {
+export async function createMedicalAppointments(request: Request, response: Response) {
     try {
         const { data, hora, local, idPaciente, idMedico } = request.body;
 
@@ -22,9 +22,9 @@ export async function createMedicalAppointments( request: Request, response: Res
 
         const existingAppointment = await MedicalAppointment.findOne({
             where: {
-                idPaciente,
                 data,
                 hora,
+                idMedico
             },
         });
 
@@ -43,6 +43,6 @@ export async function createMedicalAppointments( request: Request, response: Res
         response.status(201).json(appointment);
 
     } catch (error) {
-        response.status(400).json({ error: 'Something went wrong'});
+        response.status(400).json({ error: 'Something went wrong' });
     }
 }

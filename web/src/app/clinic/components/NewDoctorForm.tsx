@@ -72,7 +72,7 @@ export function NewDoctorForm() {
   const [isModificationSuccessful, setIsModificationSuccessful] =
     useState(false);
 
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+    const [selectedImage, setSelectedImage] = useState<File | null>(null);
 
   const [specializations, setSpecializations] = useState<
     { value: string; label: string }[]
@@ -90,9 +90,9 @@ export function NewDoctorForm() {
       return;
     }
 
-    const previewURL = URL.createObjectURL(files[0]);
+    // const previewURL = URL.createObjectURL(files[0]);
 
-    setSelectedImage(previewURL);
+    setSelectedImage(files[0]);
   };
 
   useEffect(() => {
@@ -125,17 +125,21 @@ export function NewDoctorForm() {
 
     try {
       const formData = new FormData();
-      // formData.append("doctorImage", data.avatar);
+
+      // Adicione a imagem selecionada ao formData
+      if (selectedImage) {
+        formData.append("doctorImage", selectedImage);
+      }
 
       const requestData = {
         nome: data.nome,
         sobrenome: data.sobrenome,
         CRM: data.CRM,
-        doctorImage: selectedImage,
         email: data.email,
         senha: data.senha,
         sobre: data.sobre,
         experiencia: data.experiencia,
+        doctorImage: selectedImage,
         idEspecializacao: data.idEspecializacao,
         idClinica: singleClinic,
       };
@@ -153,8 +157,6 @@ export function NewDoctorForm() {
     }
 
     setOutput(JSON.stringify(data, null, 2));
-
-    // router.push("/");
   }
 
   const {
@@ -179,7 +181,7 @@ export function NewDoctorForm() {
               {/* Renderizar a imagem selecionada, imagem fixa ou espaço reservado */}
               {selectedImage ? (
                 <Image
-                  src={selectedImage}
+                  src={URL.createObjectURL(selectedImage)}
                   width={130}
                   height={130}
                   alt="Imagem do médico"
@@ -217,8 +219,6 @@ export function NewDoctorForm() {
               </div>
             </div>
           </div>
-
-          {selectedImage}
 
           <Form.Field>
             <div className="flex flex-1 flex-col">
