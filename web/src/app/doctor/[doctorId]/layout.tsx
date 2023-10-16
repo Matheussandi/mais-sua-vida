@@ -28,28 +28,24 @@ interface DoctorProps {
 async function DoctorDetails({ id }: DoctorIdProps) {
   const doctor: DoctorProps = await getDoctorById(id);
 
-  const urlBaseDasImagens = "http://localhost:3333/uploads/";
-  const imageComplete = `${urlBaseDasImagens}${doctor.doctorImage}`;
-
   return (
     <>
-      <div className="mb-4 h-32 w-full">
-        {doctor.doctorImage ? (
-          <Image
-            src={`http://localhost:3333/uploads/${doctor.doctorImage}`}
-            alt={doctor.nome}
-            width={200}
-            height={200}
-            className="mx-auto mb-4 h-32 w-32 rounded-full"
-          />
-        ) : (
-          <>
-            <div className="flex justify-center ">
-              <FiUser size={130} className="mx-auto mb-4 h-32 w-32" />
-            </div>
-          </>
-        )}
-      </div>
+      {doctor.doctorImage ? (
+        <Image
+          src={`http://localhost:3333/uploads/${doctor.doctorImage}`}
+          alt={doctor.nome}
+          width={200}
+          height={200}
+          className="mx-auto mb-4 h-32 w-32 rounded-full"
+        />
+      ) : (
+        <>
+          <div className="flex justify-center ">
+            <FiUser size={130} className="mx-auto mb-4 h-32 w-32" />
+          </div>
+        </>
+      )}
+
       <h1 className="mb-8 text-center text-xl font-bold uppercase">{`${doctor.nome} ${doctor.sobrenome}`}</h1>
     </>
   );
@@ -71,7 +67,7 @@ export default function DoctorLayout({ children, params }: DoctorLayoutProps) {
           </Link>
         </div>
       </div>
-      <div className="flex-grow bg-white">{children}</div>
+      <div className="w-6/12 flex-grow bg-white">{children}</div>
     </div>
   );
 }
