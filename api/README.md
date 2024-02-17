@@ -1,6 +1,18 @@
 # Descrição
 Esta é a API do +Sua Vida, nela teremos as rotas que serão acessadas pelos usuários e pelo sistema
 
+# Variáveis de Ambiente
+1. Na raiz do projeto, crie um novo arquivo chamado .env.
+
+2. Abra o arquivo .env e adicione as seguintes variáveis de ambiente:
+```bash
+DB_HOST=<seu_host_do_banco_de_dados>
+DB_PORT=<sua_porta_do_banco_de_dados>
+DB_USER=<seu_usuário_do_banco_de_dados>
+DB_PASSWORD=<sua_senha_do_banco_de_dados>
+DB_NAME=<seu_nome_do_banco_de_dados>
+```
+
 # Instalação
 
 1. Navegue até o diretório do projeto.
