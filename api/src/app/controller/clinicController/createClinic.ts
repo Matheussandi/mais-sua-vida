@@ -2,9 +2,21 @@ import { Request, Response } from 'express';
 
 import { Clinic } from '../../models/ClinicModel';
 
-import { verifyEmpityFields } from '../../../utils/verifyEmptyFields';
 import bcrypt from 'bcrypt';
 import fs from 'fs';
+
+import { z } from 'zod';
+
+const ClinicSchema = z.object({
+  nome: z.string(),
+  email: z.string().email(),
+  senha: z.string().min(6),
+  CNPJ: z.string().length(14),
+  cidade: z.string(),
+  estado: z.string(),
+  CEP: z.string(),
+  telefone: z.string().length(13)
+});
 
 export async function createClinic(request: Request, response: Response){
 	try{
@@ -20,21 +32,19 @@ export async function createClinic(request: Request, response: Response){
 			telefone
 		} = request.body;
 
-		const fields = [
-			{ value: nome, nome: 'Nome'},
-			{ value: email, nome: 'E-mail'},
-			{ value: senha, nome: 'Senha'},
-			{ value: CNPJ, nome: 'CNPJ'},
-			{ value: cidade, nome: 'Cidade'},
-			{ value: estado, nome: 'Estado'},
-			{ value: CEP, nome: 'CEP'},
-			{ value: telefone, nome: 'Telefone'}
-		];
+		const result = ClinicSchema.safeParse({
+			nome,
+			email,
+			senha,
+			CNPJ,
+			cidade,
+			estado,
+			CEP,
+			telefone
+		});
 
-		const erros = verifyEmpityFields(fields);
-
-		if(Object.keys(erros).length > 0 ){
-			return response.status(400).json(erros);
+		if (!result.success) {
+			return response.status(400).json(result.error);
 		}
 
 		const encryptedPassword = await bcrypt.hash(senha, 10);
