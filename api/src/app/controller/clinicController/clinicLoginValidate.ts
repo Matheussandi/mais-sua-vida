@@ -5,12 +5,12 @@ import jwt from "jsonwebtoken";
 import { Clinic } from "../../models/ClinicModel";
 
 export async function clinicLoginValidator(request: Request, response: Response) {
-  const { CNPJ, senha } = request.body;
+  const { email, senha } = request.body;
 
   try {
-    const clinic = await Clinic.findOne({ where: { CNPJ } });
+    const clinic = await Clinic.findOne({ where: { email } });
     if (!clinic) {
-      return response.status(404).json({ Erro: "Invalid CNPJ" });
+      return response.status(404).json({ Erro: "Invalid email" });
     }
 
     const isPasswordValid = await bcrypt.compare(senha, clinic.senha);

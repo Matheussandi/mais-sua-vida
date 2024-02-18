@@ -18,6 +18,7 @@ DB_PORT=<sua_porta_do_banco_de_dados>
 DB_USER=<seu_usuário_do_banco_de_dados>
 DB_PASSWORD=<sua_senha_do_banco_de_dados>
 DB_NAME=<seu_nome_do_banco_de_dados>
+JWT_SECRET=<sua_chave_secreta_para_jwt>
 ```
 
 # Instalação

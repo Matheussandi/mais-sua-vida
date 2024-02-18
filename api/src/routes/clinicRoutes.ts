@@ -19,7 +19,7 @@ router.post('/clinica/login', clinicLoginValidator);
 router.get('/clinica', verifyToken, listClinics);
 router.get('/clinica/:id', verifyToken, listClinicById);
 router.get('/clinica/:id/medico', verifyToken, listClinicDoctors);
-router.post('/clinica', verifyToken, upload.single('clinicImage'), createClinic);
+router.post('/clinica', upload.single('clinicImage'), createClinic);
 router.put('/clinica/:id', verifyToken, upload.single('clinicImage'), updateClinic);
 
 export const clinicRoutes = router;
