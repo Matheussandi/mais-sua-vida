@@ -11,12 +11,12 @@ export async function doctorLoginValidate(
   response: Response
 ) {
   try {
-    const { CRM, senha } = request.body;
+    const { email, senha } = request.body;
 
-    const validDoctor = await Doctor.findOne({ where: { CRM: CRM } });
+    const validDoctor = await Doctor.findOne({ where: { email: email } });
 
     if (!validDoctor) {
-      return response.status(404).json({ Error: "CRM não encontrado" });
+      return response.status(404).json({ Error: "E-mail não encontrado" });
     }
 
     const validPassword = await comparePasswords(senha, validDoctor.senha);
@@ -24,7 +24,7 @@ export async function doctorLoginValidate(
     if (!validPassword) {
       return response.status(401).json({ Error: "Senha inválida" });
     }
-    
+
     return response.status(200).json({ Doctor: validDoctor });
   } catch (error) {
     return response.status(500).json({ error });
