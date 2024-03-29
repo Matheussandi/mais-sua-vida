@@ -9,12 +9,13 @@ import Image from "next/image";
 import { MdModeEdit } from "react-icons/md";
 
 import { MediaPicker } from "@/components/MediaPicker";
-import ImageMedico from "../../../assets/doctor1.png";
+import ImageMedico from "../../../../assets/doctor1.png";
 import { api } from "@/lib/api";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Form } from "../../../components/Form";
+
 import { z } from "zod";
+import { Form } from "@/components/Form";
 
 interface SpecializationProps {
   id: string;

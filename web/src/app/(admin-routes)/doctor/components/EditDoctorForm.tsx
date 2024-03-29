@@ -8,13 +8,13 @@ import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 
-import { Form } from "../../../components/Form";
 import { api } from "@/lib/api";
 import Image from "next/image";
 import { MdModeEdit } from "react-icons/md";
 import { MediaPicker } from "@/components/MediaPicker";
 
 import user from "../../../assets/user.png";
+import { Form } from "@/components/Form";
 
 interface SpecializationProps {
   id: string;

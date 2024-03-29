@@ -15,7 +15,7 @@ import { api } from "@/lib/api";
 import Image from "next/image";
 
 interface ClinicId {
-  params: string;
+  params: string | undefined;
 }
 
 interface DoctorProps {
@@ -35,8 +35,6 @@ export default function DoctorList({ params }: ClinicId) {
 
   const doctorsPerPage = 12;
 
-  const urlBaseDasImagens = "http://localhost:3333/uploads/";
-  const imageComplete = `${urlBaseDasImagens}${doctors.doctorImage}`;
 
   const fetchDoctors = useCallback(async () => {
     try {
@@ -79,7 +77,7 @@ export default function DoctorList({ params }: ClinicId) {
             </div>
           </div>
           <div className="flex items-center">
-            <Link href={`/clinic/${params}/new`}>
+            <Link href={`/clinic/new`}>
               <FiPlus className="mr-2" color="#0079FF" size={20} />
             </Link>
           </div>

@@ -1,4 +1,4 @@
-import { getDoctorById } from "../../../services/get-doctor-by-id";
+import { getDoctorById } from "@/services/get-doctor-by-id";
 
 interface DoctorId {
   params: {

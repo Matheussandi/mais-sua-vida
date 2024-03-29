@@ -1,38 +1,34 @@
 "use client";
 
-import { useState } from "react";
-import { api } from "@/lib/api";
+import { SyntheticEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
+import { signIn } from "next-auth/react"
+
 export default function LoginClinic() {
-  const [CNPJ, setCNPJ] = useState("");
-  const [senha, setSenha] = useState("");
+  const [email, setEmail] = useState(""); 
+  const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
   const router = useRouter();
 
-  const handleLogin = async () => {
-    try {
-      const response = await api.post("/clinica/login", { CNPJ, senha });
+  async function handleSubmit(event: SyntheticEvent) {
+    event.preventDefault()
 
-      if (response.status === 200) {
-        // Autenticação bem-sucedida, redirecione para a página desejada
-        const clinic = response.data.Clinic;
-        console.log("Autenticação bem-sucedida");
-        router.push(`/clinic/${clinic.id}`);
-      } else {
-        // Autenticação falhou, exiba uma mensagem de erro
-        throw new Error("Erro durante a autenticação");
-      }
-    } catch (error) {
-      // Lidar com erros de autenticação ou chamada à API
-      console.error("Erro durante a autenticação:", error);
-      setError(
-        "CNPJ ou senha incorretos. Por favor, verifique suas credenciais."
-      );
+    const result = await signIn('credentials', {
+      email,
+      password,
+      redirect: false
+    })
+
+    if (result?.error) {
+      console.log(result)
+      return
     }
-  };
+
+    router.replace('/clinic')
+  }
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center">
@@ -40,38 +36,40 @@ export default function LoginClinic() {
       <p className="my-10 text-sm text-gray-600">
         Acesse a plataforma inserindo suas credenciais
       </p>
-      <form className="w-full max-w-sm">
+      <form className="w-full max-w-sm" onSubmit={handleSubmit}>
         <div className={`mb-4 ${error ? "border-red-500" : ""}`}>
           <input
             className={`focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none ${
               error ? "border-red-500" : ""
             }`}
-            id="CNPJ"
-            type="text"
-            placeholder="CNPJ"
-            value={CNPJ}
-            onChange={(e) => setCNPJ(e.target.value)}
+            id="email"
+            name="email"
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
           <input
             className={`focus:shadow-outline mt-2 w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none ${
               error ? "border-red-500" : ""
             }`}
-            id="senha"
+            id="password"
+            name="password"
             type="password"
             placeholder="Senha"
-            value={senha}
-            onChange={(e) => setSenha(e.target.value)}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
           />
           {error && <p className="mt-1 text-xs text-red-500">{error}</p>}
         </div>
         <div className="flex flex-col items-center">
           <button
             className="focus:shadow-outline mb-4 w-full rounded bg-primary px-4 py-2 text-white transition duration-300 hover:bg-blue-500"
-            type="button"
-            onClick={handleLogin}
+            type="submit"
           >
             Entrar
           </button>
+
           <Link
             className="inline-block align-baseline text-sm font-bold text-primary hover:text-blue-500"
             href="/"

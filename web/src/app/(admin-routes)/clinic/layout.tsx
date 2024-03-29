@@ -1,11 +1,14 @@
 import { ReactNode } from "react";
 
+import { FaRegUserCircle } from "react-icons/fa";
+
 import Image from "next/image";
-import Link from "next/link";
 
 import { getClinicById } from "@/services/get-clinic-by-id";
 
-import { ClinicNavigation } from "../components/ClinicNavigation";
+import { ClinicNavigation } from "./components/ClinicNavigation";
+import { ButtonLogout } from "@/components/ButtonLogout";
+
 
 interface ClinicLayoutProps {
   children: ReactNode;
@@ -27,18 +30,20 @@ interface ClinicProps {
 async function ClinicDetails({ id }: ClinicIdProps) {
   const clinic: ClinicProps = await getClinicById(id);
 
-  const urlBaseDasImagens = "http://localhost:3333/uploads/";
-  const imageComplete = `${urlBaseDasImagens}${clinic.clinicImage}`;
-
   return (
     <>
-      <Image
-        src={imageComplete}
-        width={130}
-        height={130}
-        alt="Clinic"
-        className="w-32 h-32 mx-auto mb-4 rounded-full"
-      />
+      {clinic.clinicImage ? (
+        <Image
+          src={process.env.NEXT_PUBLIC_API_IMAGE + clinic.clinicImage}
+          width={130}
+          height={130}
+          alt="Clinic"
+          className="w-32 h-32 mx-auto mb-4 rounded-full"
+        />
+
+      ) : (
+        <FaRegUserCircle className="w-32 h-32 mx-auto mb-4" />
+      )}
       <h1 className="mb-8 text-center text-xl font-bold uppercase">
         {clinic.nome}
       </h1>
@@ -55,11 +60,7 @@ export default function ClinicLayout({ children, params }: ClinicLayoutProps) {
           <ClinicNavigation params={params} />
         </div>
         <div className="mt-auto p-4">
-          <Link href="/login/clinic">
-            <button className="w-full rounded bg-red-500 px-4 py-2 text-white">
-              Sair
-            </button>
-          </Link>
+          <ButtonLogout />
         </div>
       </div>
       <div className="flex-grow bg-white w-6/12">{children}</div>
