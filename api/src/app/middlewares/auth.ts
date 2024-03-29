@@ -8,8 +8,14 @@ interface RequestWithUserDetails extends Request {
 
 export function verifyToken(request: RequestWithUserDetails, response: Response, next: NextFunction) {
     const headers: { [key: string]: string | string[] | undefined } = request.headers;
-    const token = typeof headers['authorization'] === 'string' ? headers['authorization'] : undefined;
-    if (!token) return response.status(403).json({ error: 'Token not provided' });
+    const authHeader = typeof headers['authorization'] === 'string' ? headers['authorization'] : undefined;
+    if (!authHeader) return response.status(403).json({ error: 'Authorization header not provided' });
+
+    const parts = authHeader.split(' ');
+    if (parts.length !== 2) return response.status(403).json({ error: 'Token error' });
+
+    const [ scheme, token ] = parts;
+    if (!/^Bearer$/i.test(scheme)) return response.status(403).json({ error: 'Token malformatted' });
 
     const secret = process.env.JWT_SECRET;
     if (!secret) return response.status(500).json({ error: 'Secret key not defined' });
