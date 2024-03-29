@@ -25,7 +25,14 @@ export async function clinicLoginValidator(request: Request, response: Response)
 
     const token = jwt.sign({ id: clinic.id }, secret, { expiresIn: "1h" });
 
-    return response.status(200).json({ token });
+    return response.status(200).json({ 
+      user: {
+        id: clinic.id,
+        name: clinic.nome,
+        email: clinic.email,
+      },
+      token 
+    });
   } catch (error) {
     console.error("Error during authentication:", error);
     return response.status(500).json({ Error: "Something went wrong" });

@@ -19,26 +19,20 @@ export function ClinicNavigation({ params }: ClinicLayoutProps) {
       <ul className="mt-5 list-none">
         <li>
           <Link
-            href={`/clinic/${params.clinicId}`}
-            className={`flex items-center py-2 hover:text-primary ${
-              pathname === `/clinic/${params.clinicId}`
+            href={`/clinic`}
+            className={`flex items-center py-2 hover:text-primary ${pathname === `/clinic/`
                 ? "text-primary"
                 : "text-black"
-            }`}
+              }`}
           >
             <BsFillFilePersonFill className="mr-2" size={20} />
             <span>Médicos</span>
           </Link>
         </li>
         <li>
-          <Link
-            href={{
-              pathname: `/clinic/${params.clinicId}/settings`,
-              query: { clinic: params.clinicId },
-            }}
-            className={`flex items-center py-2 hover:text-primary ${
-              pathname.includes("/settings") ? "text-primary" : "text-black"
-            }`}
+          <Link href={{ pathname: `/clinic/settings` }}
+            className={`flex items-center py-2 hover:text-primary ${pathname.includes("/settings") ? "text-primary" : "text-black"
+              }`}
           >
             <AiFillTool className="mr-2" size={20} />
             <span>Configurações</span>
@@ -46,12 +40,11 @@ export function ClinicNavigation({ params }: ClinicLayoutProps) {
         </li>
         <li>
           <Link
-            href={`/clinic/${params.clinicId}/plans`}
-            className={`flex items-center py-2 hover:text-primary ${
-              pathname === `/clinic/${params.clinicId}/plans`
+            href={`/clinic/plans`}
+            className={`flex items-center py-2 hover:text-primary ${pathname === `/clinic/plans`
                 ? "text-primary"
                 : "text-black"
-            }`}
+              }`}
           >
             <BsShieldFillCheck className="mr-2" size={20} />
             <span>Planos</span>

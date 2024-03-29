@@ -12,12 +12,12 @@ import { z } from "zod";
 import { useRouter } from "next/navigation";
 
 import { MediaPicker } from "@/components/MediaPicker";
-import { Form } from "../../../components/Form";
 
 import { api } from "@/lib/api";
 import { MdModeEdit } from "react-icons/md";
 
-import PhotoClinic from "../../../assets/photoClinic.png";
+import PhotoClinic from "../../../../assets/photoClinic.png";
+import { Form } from "@/components/Form";
 
 const editClinicFormSchema = z.object({
   nome: z.string().nonempty("Nome é obrigatório"),

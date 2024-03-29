@@ -1,3 +1,4 @@
+import NextAuthSessionProvider from "@/providers/sessionProvider";
 import "./globals.css";
 import { Inter, Manrope } from "next/font/google";
 
@@ -16,7 +17,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${manrope.variable} font-sans`}>{children}</body>
+      <NextAuthSessionProvider>
+        <body className={`${manrope.variable} font-sans`}>{children}</body>
+      </NextAuthSessionProvider>
     </html>
   );
 }
