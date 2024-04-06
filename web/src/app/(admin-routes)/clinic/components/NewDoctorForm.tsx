@@ -3,7 +3,6 @@
 import { useForm, FormProvider } from "react-hook-form";
 import { ChangeEvent, useEffect, useState } from "react";
 
-import { usePathname } from "next/navigation";
 import Image from "next/image";
 
 import { MdModeEdit } from "react-icons/md";
@@ -67,9 +66,13 @@ const createDoctorFormSchema = z.object({
     .length(12, "CRM deve ter 12 caracteres"),
 });
 
+type NewDoctorFormProps = {
+  clinicId: string;
+};
+
 type CreateDoctorFormData = z.infer<typeof createDoctorFormSchema>;
 
-export function NewDoctorForm() {
+export function NewDoctorForm({ clinicId }: NewDoctorFormProps) {
   const [isModificationSuccessful, setIsModificationSuccessful] =
     useState(false);
 
@@ -79,11 +82,8 @@ export function NewDoctorForm() {
     { value: string; label: string }[]
   >([]);
 
-  const pathname = usePathname();
-
   const [output, setOutput] = useState("");
 
-  // Função para lidar com alterações de entrada de arquivo
   const handleFileInput = (event: ChangeEvent<HTMLInputElement>) => {
     const { files } = event.target;
 
@@ -120,14 +120,9 @@ export function NewDoctorForm() {
   });
 
   async function createDoctor(data: CreateDoctorFormData) {
-    const pathParts = pathname.split("/");
-
-    const singleClinic = pathParts[2];
-
     try {
       const formData = new FormData();
 
-      // Adicione a imagem selecionada ao formData
       if (selectedImage) {
         formData.append("doctorImage", selectedImage);
       }
@@ -142,7 +137,7 @@ export function NewDoctorForm() {
         experiencia: data.experiencia,
         doctorImage: selectedImage,
         idEspecializacao: data.idEspecializacao,
-        idClinica: singleClinic,
+        idClinica: clinicId,
       };
 
       await api.post("/medico", requestData, {
@@ -151,9 +146,9 @@ export function NewDoctorForm() {
         },
       });
 
-      console.log("Dados enviados com sucesso");
       setIsModificationSuccessful(true);
     } catch (error) {
+      alert("Erro ao enviar os dados");
       console.error("Erro ao enviar os dados", error);
     }
 

@@ -20,7 +20,7 @@ export function ClinicNavigation({ params }: ClinicLayoutProps) {
         <li>
           <Link
             href={`/clinic`}
-            className={`flex items-center py-2 hover:text-primary ${pathname === `/clinic/`
+            className={`flex items-center py-2 hover:text-primary ${pathname === `/clinic`
                 ? "text-primary"
                 : "text-black"
               }`}
