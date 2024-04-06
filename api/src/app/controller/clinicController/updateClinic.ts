@@ -8,7 +8,7 @@ import { deleteFile } from "../../../utils/fileUtils";
 const clinicUpdateSchema = z.object({
 	nome: z.string(),
 	email: z.string().email(),
-	senha: z.string().min(8),
+	senha: z.string().min(6),
 	CNPJ: z.string().length(14),
 	telefone: z.string(),
 	cidade: z.string(),

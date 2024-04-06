@@ -21,7 +21,7 @@ export function verifyToken(request: RequestWithUserDetails, response: Response,
     if (!secret) return response.status(500).json({ error: 'Secret key not defined' });
 
     jwt.verify(token, secret, (err, decoded) => {
-        if (err) return response.status(500).json({ error: 'Failed to authenticate token' });
+        if (err) return response.status(401).json({ error: 'Failed to authenticate token' });
 
         const payload = decoded as JwtPayload & { userType: 'clinic' | 'doctor' | 'patient' };
         request.userId = payload.id;
