@@ -1,4 +1,4 @@
-import { TouchableOpacity, Modal, Button } from 'react-native';
+import { TouchableOpacity, Modal } from 'react-native';
 
 import { useState, useEffect } from 'react';
 
@@ -22,10 +22,11 @@ import {
 	ModalContent,
 	ModalCloseButton,
 	Title,
-	TextModal,
 	UpdateImageButton,
 	UpdateImageText,
 	ModalHeader,
+	UserIcon,
+	BackgroundIcon,
 } from './styles';
 
 import {
@@ -37,11 +38,11 @@ import { useNavigation } from '@react-navigation/native';
 import { api } from '../../../../api';
 
 interface UserData {
-    nome: string;
-    sobrenome: string;
-    dataNascimento?: string;
-    altura?: string;
-    peso?: string;
+	nome: string;
+	sobrenome: string;
+	dataNascimento?: string;
+	altura?: string;
+	peso?: string;
 }
 
 export function Profile() {
@@ -71,7 +72,7 @@ export function Profile() {
 	useEffect(() => {
 		(async () => {
 			const { status } =
-                await ImagePicker.requestMediaLibraryPermissionsAsync();
+				await ImagePicker.requestMediaLibraryPermissionsAsync();
 			if (status !== 'granted') {
 				alert('Permissão para acessar a galeria é necessária');
 			}
@@ -157,11 +158,18 @@ export function Profile() {
 
 				<UserContent>
 					<TouchableOpacity onPress={handleSelectPhoto}>
-						<Photo
-							source={{
-								uri: `${API_URL}/uploads/${userData?.patientImage}`,
-							}}
-						/>
+						{userData?.patientImage ? (
+							<Photo
+								source={{
+									uri: `${API_URL}/uploads/${userData?.patientImage}`,
+								}}
+							/>
+						) : (
+							<BackgroundIcon>
+								<UserIcon name="user" size={60} />
+							</BackgroundIcon>
+						)}
+
 					</TouchableOpacity>
 					<UserName>
 						{userData?.nome} {userData?.sobrenome}
@@ -179,7 +187,7 @@ export function Profile() {
 							{userData?.dataNascimento ? (
 								<Text color="#fff" weight="500" size={18}>
 									{ageCalculation(userData?.dataNascimento)}{' '}
-                                    anos
+									anos
 								</Text>
 							) : (
 								<Text color="white">--</Text>
@@ -240,7 +248,7 @@ export function Profile() {
 
 							<UpdateImageButton onPress={pickImage}>
 								<UpdateImageText>
-                                    Escolher imagem
+									Escolher imagem
 								</UpdateImageText>
 							</UpdateImageButton>
 						</ModalContent>

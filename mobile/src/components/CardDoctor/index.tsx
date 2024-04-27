@@ -10,6 +10,7 @@ import {
 import { API_URL } from '@env';
 
 import { Text } from 'react-native';
+import axios from 'axios';
 
 interface Doctor {
     id: string;
@@ -31,9 +32,8 @@ export function CardDoctor({ doctorId, onPress }: DoctorCardProps) {
 
 	async function getDoctorData() {
 		try {
-			const response = await fetch(API_URL + `/medico/${doctorId}`);
-			const data = await response.json();
-			setDoctorData(data);
+			const response = await axios.get(API_URL + `/medico/${doctorId}`);
+			setDoctorData(response.data);
 		} catch (error) {
 			console.error('Erro ao obter dados do médico: ', error);
 		}

@@ -1,5 +1,6 @@
 import styled from 'styled-components/native';
 import { Platform, StatusBar } from 'react-native';
+import { Feather } from '@expo/vector-icons';
 
 const isAndroid = Platform.OS === 'android';
 
@@ -31,6 +32,19 @@ export const Photo = styled.Image`
     height: 100px;
     border-radius: 50px;
     background-color: #fff;
+`;
+
+export const BackgroundIcon = styled.View`
+    background-color: #fff;
+    width: 100px;
+    height: 100px;
+    border-radius: 50px;
+    justify-content: center;
+    align-items: center;
+`;
+
+export const UserIcon = styled(Feather)`
+    color: #0079ff;
 `;
 
 export const UserDetails = styled.View`
