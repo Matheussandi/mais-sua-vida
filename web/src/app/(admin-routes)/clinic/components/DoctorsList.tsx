@@ -28,8 +28,14 @@ interface DoctorProps {
   idMedico: string | null;
 }
 
+interface SpecializationProps {
+  id: string;
+  nome: string;
+}
+
 export default function DoctorList({ params }: ClinicId) {
   const [doctors, setDoctors] = useState<DoctorProps[]>([]);
+  const [specializations, setSpecializations] = useState<SpecializationProps[]>([]);
   const [doctorsSearch, setDoctorsSearch] = useState("");
   const [page, setPage] = useState(1);
 
@@ -46,9 +52,15 @@ export default function DoctorList({ params }: ClinicId) {
     }
   }, [params]);
 
-  useEffect(() => {
-    fetchDoctors();
-  }, [fetchDoctors]);
+  const fetchSpecializations = useCallback(async () => {
+    try {
+      const response = await api.get("/especializacao");
+      const specializationsData = response.data;
+      setSpecializations(specializationsData);
+    } catch (error) {
+      console.error("Erro ao carregar lista de especializações:", error);
+    }
+  }, []);
 
   const filteredDoctors = doctors.filter((doctor) =>
     doctor.nome.toLowerCase().includes(doctorsSearch.toLowerCase())
@@ -59,6 +71,11 @@ export default function DoctorList({ params }: ClinicId) {
   const currentDoctors = filteredDoctors.slice(startIndex, endIndex);
 
   const totalPages = Math.ceil(filteredDoctors.length / doctorsPerPage);
+
+  useEffect(() => {
+    fetchDoctors();
+    fetchSpecializations();
+  }, [fetchDoctors, fetchSpecializations]);
 
   return (
     <div>
@@ -87,50 +104,54 @@ export default function DoctorList({ params }: ClinicId) {
         <div className="mt-7 border-t border-gray-300">
           <div className="mt-4 flex flex-wrap">
             {currentDoctors.length > 0 ? (
-              currentDoctors.map((doctor) => (
-                <div
-                  key={doctor.id}
-                  className="w-full p-2 sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/6"
-                >
-                  <Link
-                    href={{
-                      pathname: `/clinic/${params}/doctorSelected`,
-                      query: { doctor: doctor.id },
-                    }}
-                    className="block rounded-lg border border-gray-300 hover:bg-gray-100"
+              currentDoctors.map((doctor) => {
+                const specialization = specializations.find(s => s.id === doctor.idEspecializacao);
+                return (
+                  <div
+                    key={doctor.id}
+                    className="w-full p-2 sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/6"
                   >
-                    <div className="h-32 w-full rounded-t-lg bg-blue-300">
-                      {doctor.doctorImage ? (
-                        <Image
-                          src={`http://localhost:3333/uploads/${doctor.doctorImage}`}
-                          alt={doctor.nome}
-                          width={200}
-                          height={200}
-                          className="mx-auto h-full w-full rounded-t-lg"
-                        />
-                      ) : (
-                        <>
-                          <div className="flex">
-                            <FiUser
-                              size={130}
-                              className="mx-6 my-auto"
-                              color="white"
-                            />
-                          </div>
-                        </>
-                      )}
-                    </div>
-                    <div className="p-4">
-                      <h3 className="mb-2 text-center text-base font-bold">
-                        {doctor.nome}
-                      </h3>
-                      {/* <p className="text-center text-sm text-gray-500">
-                        {doctor.idEspecializacao}
-                      </p> */}
-                    </div>
-                  </Link>
-                </div>
-              ))
+                    <Link
+                      href={{
+                        pathname: `/clinic/doctorSelected`,
+                        query: { doctor: doctor.id },
+                      }}
+                      className="block rounded-lg border border-gray-300 hover:bg-gray-100"
+                    >
+                      <div className="h-40 w-full rounded-t-lg bg-blue-300">
+                        {doctor.doctorImage ? (
+                          <Image
+                            src={`http://localhost:3333/uploads/${doctor.doctorImage}`}
+                            alt={doctor.nome}
+                            width={200}
+                            height={200}
+                            priority={true}
+                            className="mx-auto object-cover h-full w-full rounded-t-lg"
+                          />
+                        ) : (
+                          <>
+                            <div className="flex">
+                              <FiUser
+                                size={160}
+                                className="mx-6 my-auto"
+                                color="white"
+                              />
+                            </div>
+                          </>
+                        )}
+                      </div>
+                      <div className="p-4">
+                        <h3 className="text-center text-base font-bold">
+                          {doctor.nome}
+                        </h3>
+                        <p className="text-center flex-wrap text-sm text-gray-500">
+                          {specialization ? specialization.nome : '-'}
+                        </p>
+                      </div>
+                    </Link>
+                  </div>
+                )
+              })
             ) : (
               <p className="w-full text-center">Nenhum médico encontrado.</p>
             )}

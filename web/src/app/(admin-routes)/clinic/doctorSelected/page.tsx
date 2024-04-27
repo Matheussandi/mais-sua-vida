@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { getDoctorById } from "@/services/get-doctor-by-id";
 import Link from "next/link";
 import { MdModeEdit } from "react-icons/md";
+import { useEffect, useState } from "react";
 
 interface DoctorProps {
   id: string;
@@ -20,12 +21,41 @@ interface DoctorProps {
   image: string;
 }
 
-export default async function DoctorSelected() {
+export default function DoctorSelected() {
   const searchParams = useSearchParams();
-
   const search = searchParams.get("doctor");
+  
+  const [doctor, setDoctor] = useState<DoctorProps>({
+    id: "",
+    nome: "",
+    sobrenome: "",
+    CRM: "",
+    email: "",
+    sobre: "",
+    experiencia: "",
+    especializacao: {
+      nome: "",
+    },
+    image: "",
+  });
 
-  const doctor: DoctorProps = await getDoctorById(search);
+  async function getDoctor() {
+    try {
+      const doctor: DoctorProps = await getDoctorById(search as string);
+      setDoctor(doctor);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  useEffect(() => {
+    async function fetchData() {
+      await getDoctor();
+    }
+    fetchData();
+  }, []);
+
+
 
   return (
     <div className="flex-grow p-10">

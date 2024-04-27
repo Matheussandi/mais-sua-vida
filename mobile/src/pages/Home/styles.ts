@@ -71,14 +71,14 @@ export const UserImageContainer = styled.TouchableOpacity`
     width: 60px;
     height: 60px;
     border-radius: 30px;
-    background-color: #fafafa;
+    background-color: #FFF;
     margin-top: ${isAndroid ? `${StatusBar.currentHeight}px` : '0'};
     align-items: center;
     justify-content: center;
 `;
 
 export const UserIcon = styled(Feather)`
-    color: lightgrey;
+    color: #0079ff;
 `;
 
 export const EspecializationsContainer = styled.View`

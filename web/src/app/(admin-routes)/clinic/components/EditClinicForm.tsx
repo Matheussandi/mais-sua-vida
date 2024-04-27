@@ -2,7 +2,6 @@
 
 import { useCallback, useEffect, useState, ChangeEvent } from "react";
 
-import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 
 import { useForm, FormProvider } from "react-hook-form";
@@ -33,9 +32,13 @@ const editClinicFormSchema = z.object({
   telefone: z.string(),
 });
 
+type EditClinicFormProps = {
+  id: string;
+}
+
 type EditClinicFormData = z.infer<typeof editClinicFormSchema>;
 
-export function EditClinicForm() {
+export function EditClinicForm({ id }: EditClinicFormProps) {
   const [isModificationSuccessful, setIsModificationSuccessful] =
     useState(false);
   const [formData, setFormData] = useState<EditClinicFormData>({
@@ -49,11 +52,11 @@ export function EditClinicForm() {
     telefone: "",
   });
 
-  const searchParams = useSearchParams();
-  const search = searchParams.get("clinic");
-
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [clinicImageUrl, setClinicImageUrl] = useState<string | null>(null);
+
+
+  const [output, setOutput] = useState("");
 
   const editClinicForm = useForm<EditClinicFormData>({
     resolver: zodResolver(editClinicFormSchema),
@@ -75,8 +78,6 @@ export function EditClinicForm() {
     setSelectedImage(files[0]);
   };
 
-  const router = useRouter();
-
   async function editClinic(data: EditClinicFormData) {
     try {
       const formData = new FormData();
@@ -94,25 +95,26 @@ export function EditClinicForm() {
         }
       }
 
-      await api.put(`/clinica/${search}`, formData, {
+      await api.put(`/clinica/${id}`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
 
-      console.log("Dados enviados com sucesso");
       setIsModificationSuccessful(true);
 
-      // Recarregar toda a página após o envio bem-sucedido
       window.location.reload();
     } catch (error) {
+      alert("Erro ao enviar os dados");
       console.error("Erro ao enviar os dados", error);
     }
+
+    setOutput(JSON.stringify(data, null, 2));
   }
 
   const handleGetRegisteredData = useCallback(async () => {
     try {
-      const response = await api.get(`/clinica/${search}`);
+      const response = await api.get(`/clinica/${id}`);
       const clinicData = await response.data;
 
       if (clinicData.clinicImage) {
@@ -126,9 +128,10 @@ export function EditClinicForm() {
 
       editClinicForm.reset(restClinicData);
     } catch (error) {
+      alert("Erro ao buscar dados da API");
       console.error("Erro ao buscar dados da API:", error);
     }
-  }, [search, editClinicForm]);
+  }, [ editClinicForm, id ]);
 
   useEffect(() => {
     handleGetRegisteredData();

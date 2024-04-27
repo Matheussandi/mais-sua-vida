@@ -34,10 +34,11 @@ async function ClinicDetails({ id }: ClinicIdProps) {
     <>
       {clinic.clinicImage ? (
         <Image
-          src={process.env.NEXT_PUBLIC_API_IMAGE + clinic.clinicImage}
+          src={`${process.env.NEXT_PUBLIC_API_IMAGE}/${clinic.clinicImage}`}
           width={130}
           height={130}
           alt="Clinic"
+          priority={true}
           className="w-32 h-32 mx-auto mb-4 rounded-full"
         />
 

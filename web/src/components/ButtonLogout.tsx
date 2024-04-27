@@ -11,7 +11,7 @@ export function ButtonLogout() {
             redirect: false,
         })
 
-        router.replace("/login")
+        router.replace("/")
     }
 
     return (

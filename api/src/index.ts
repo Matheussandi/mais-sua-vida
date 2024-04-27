@@ -1,5 +1,6 @@
 import express from "express";
 import path from "node:path";
+import fs from 'fs';
 import { db } from "./app/db";
 import dotenv from "dotenv";
 
@@ -7,6 +8,12 @@ dotenv.config();
 
 const app = express();
 const port = 3333;
+
+const uploadsDir = path.resolve(__dirname, '..', 'uploads');
+
+if (!fs.existsSync(uploadsDir)){
+    fs.mkdirSync(uploadsDir);
+}
 
 import { doctorRoutes } from "./routes/doctorRoutes";
 import { especializationRoutes } from "./routes/especializationRoutes";

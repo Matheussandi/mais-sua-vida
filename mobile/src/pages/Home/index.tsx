@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 
 import { useUserContext } from '../../context/UserContext';
 
-import { ActivityIndicator, Image } from 'react-native';
+import { ActivityIndicator, Alert, Image } from 'react-native';
 
-import { api } from '../../api';
+import axios from 'axios';
 
 import { Doctor } from '../../types/Doctors';
 import { Especialization } from '../../types/Especialization';
@@ -38,44 +38,38 @@ import { Doctors } from './components/Doctors';
 import { Feather } from '@expo/vector-icons';
 import { API_URL } from '@env';
 
+
 export default function Home() {
 	const [doctors, setDoctors] = useState<Doctor[]>([]);
-	const [especialization, setEspecialization] = useState<Especialization[]>(
-		[]
-	);
+	const [especialization, setEspecialization] = useState<Especialization[]>([]);
 	const [isLoadingDoctors, setIsLoadingDoctors] = useState(false);
 	const [searchQuery, setSearchQuery] = useState('');
 	const [filteredDoctors, setFilteredDoctors] = useState<Doctor[]>([]);
 
 	const { userData } = useUserContext();
-
 	const navigation = useNavigation();
 
+	async function fetchData<T>(url: string, setData: React.Dispatch<React.SetStateAction<T[]>>) {
+		try {
+			const response = await axios.get<T[]>(API_URL + url);
+			setData(response.data);
+		} catch (error) {
+			console.error(`Erro ao buscar dados de ${url}:`, error);
+			Alert.alert('Erro ao buscar dados');
+		}
+	}
 	useEffect(() => {
-		Promise.all([api.get('/medico'), api.get('especializacao')]).then(
-			([doctorResponse, especializationResponse]) => {
-				setDoctors(doctorResponse.data);
-				setEspecialization(especializationResponse.data);
-			}
-		);
+		fetchData('/medico', setDoctors);
+		fetchData('/especializacao', setEspecialization);
 	}, []);
 
-	const filterDoctors = () => {
+	useEffect(() => {
 		const filtered = doctors.filter((doctor) => {
 			const fullName = `${doctor.nome} ${doctor.sobrenome}`;
-
 			return fullName.toLowerCase().includes(searchQuery.toLowerCase());
 		});
 		setFilteredDoctors(filtered);
-	};
-
-	useEffect(() => {
-		filterDoctors();
 	}, [searchQuery, doctors]);
-
-	const handleSearchSubmit = () => {
-		filterDoctors();
-	};
 
 	async function handleSelectEspecialization(especializationId: string) {
 		const route = !especializationId
@@ -85,14 +79,18 @@ export default function Home() {
 		setIsLoadingDoctors(true);
 
 		await new Promise((resolve) => setTimeout(resolve, 500));
-		const { data } = await api.get(route);
-
-		setDoctors(data);
-		setIsLoadingDoctors(false);
+		try {
+			const { data } = await axios.get(API_URL + route);
+			setDoctors(data);
+			setFilteredDoctors(data);
+		} catch (error) {
+			console.error('Erro ao buscar dados:', error);
+		} finally {
+			setIsLoadingDoctors(false);
+		}
 	}
 
-	// const userImage = userData?.patientImage;
-	const userImage = 'abc';
+	const userImage = userData?.patientImage;
 
 	return (
 		<Container>
@@ -104,17 +102,15 @@ export default function Home() {
 							{userData?.nome} {userData?.sobrenome}
 						</UserName>
 					</Greetings>
-					<TouchableOpacity
-						onPress={() => navigation.navigate('Settings')}
-					>
+					<TouchableOpacity onPress={() => navigation.navigate('Settings')}>
 						{userImage ? (
 							<UserImageContainer>
 								<Image
 									source={{
 										uri:
-                                            API_URL +
-                                            '/uploads/' +
-                                            userData?.patientImage,
+											API_URL +
+											'/uploads/' +
+											userData?.patientImage,
 									}}
 									style={{
 										width: 60,
@@ -134,9 +130,9 @@ export default function Home() {
 				<SearchInputContainer>
 					<SearchInput
 						placeholder="Pesquisar"
+						placeholderTextColor="#fff"
 						value={searchQuery}
 						onChangeText={setSearchQuery}
-						onSubmitEditing={handleSearchSubmit}
 					/>
 					<Feather name="search" size={24} color="#fff" />
 				</SearchInputContainer>
@@ -148,9 +144,7 @@ export default function Home() {
 					<EspecializationsList>
 						<Especializations
 							especializations={especialization}
-							onSelectEspecialization={
-								handleSelectEspecialization
-							}
+							onSelectEspecialization={handleSelectEspecialization}
 						/>
 					</EspecializationsList>
 				</EspecializationsContainer>
@@ -166,8 +160,7 @@ export default function Home() {
 						) : (
 							<EmptyDoctorsContainer>
 								<EmptyDoctorsText>
-                                    Ainda não temos nenhum(a) Dr(a) com essa
-                                    especialidade
+									Ainda não temos nenhum(a) Dr(a) com essa especialidade.
 								</EmptyDoctorsText>
 							</EmptyDoctorsContainer>
 						)}

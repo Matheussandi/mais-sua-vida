@@ -1,6 +1,5 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { useUserContext } from '../../context/UserContext';
 
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -11,6 +10,8 @@ import {
 	TouchableWithoutFeedback,
 	Keyboard,
 	Alert,
+	TouchableOpacity,
+	ActivityIndicator,
 } from 'react-native';
 
 import { api } from '../../api';
@@ -32,10 +33,12 @@ import {
 } from './styles';
 
 import { ControlledInput } from '../../components/ControlledInput';
+import { useAuth } from '../../context/AuthContext';
+import { Feather } from '@expo/vector-icons';
 
 interface FormData {
-    email: string;
-    senha: string;
+	email: string;
+	senha: string;
 }
 
 const schema = yup
@@ -46,7 +49,10 @@ const schema = yup
 	.required();
 
 export default function SignIn() {
-	const { setUserData } = useUserContext();
+	const { onLogin, authState } = useAuth();
+
+	const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+	const [isLoading, setIsLoading] = useState(false);
 
 	const {
 		control,
@@ -58,25 +64,24 @@ export default function SignIn() {
 
 	const navigation = useNavigation();
 
-	async function handleSignIn(data: FormData) {
-		await api
-			.post('paciente/login', data)
-			.then((response) => {
-				const userData = response.data;
-				const userId = userData.id;
-
-				setUserData(userData);
-				navigation.reset({
-					index: 0,
-					routes: [{ name: 'Main', params: { userId } }],
-				});
-			})
-			.catch((error) => {
-				Alert.alert('Usuário inválido');
-				console.log(data);
-				console.log(error);
-			});
-	}
+	const login = async (data: FormData) => {
+		setIsLoading(true);
+		try {
+			if (onLogin) {
+				const result = await onLogin(data.email.toLowerCase(), data.senha);
+				if (result && result.error) {
+					Alert.alert('Erro', result.error);
+				}
+				navigation.navigate('Main');
+			} else {
+				throw new Error('onLogin function is not defined');
+			}
+		} catch (error) {
+			Alert.alert('Erro', 'Ocorreu um erro durante o login. Por favor, tente novamente.');
+		} finally {
+			setIsLoading(false);
+		}
+	};
 
 	async function handleSignUp() {
 		navigation.navigate('SignUp');
@@ -85,6 +90,12 @@ export default function SignIn() {
 	async function handleForgotPassword() {
 		navigation.navigate('ForgotPassword');
 	}
+
+	useEffect(() => {
+		if (authState?.authenticated === true) {
+			navigation.navigate('Main');
+		}
+	}, [authState]);
 
 	return (
 		<KeyboardAvoidingView behavior={'padding'}>
@@ -107,26 +118,37 @@ export default function SignIn() {
 
 						<ControlledInput
 							name="senha"
-							secureTextEntry={true}
+							secureTextEntry={!isPasswordVisible}
 							maxLength={16}
 							control={control}
 							icon="lock"
 							placeholder="Senha"
 							error={errors.senha}
+							rightIcon={
+								<TouchableOpacity onPress={() => setIsPasswordVisible(!isPasswordVisible)}>
+									<Feather name={isPasswordVisible ? 'eye-off' : 'eye'} size={24} color="#777" />
+								</TouchableOpacity>
+							}
 						/>
 
 						<ForgotPasswordContainer>
 							<ForgotPasswordLink onPress={handleForgotPassword}>
-                                Esqueceu a senha?
+								Esqueceu a senha?
 							</ForgotPasswordLink>
 						</ForgotPasswordContainer>
-						<LoginButton onPress={handleSubmit(handleSignIn)}>
-							<LoginButtonText>Acessar</LoginButtonText>
+
+						<LoginButton onPress={handleSubmit(login)}>
+							{isLoading ? (
+								<ActivityIndicator size="small" color="#fff" />
+							) : (
+								<LoginButtonText>Acessar</LoginButtonText>
+							)}
 						</LoginButton>
+
 						<SignUpText>
-                            Não tem uma conta?{' '}
+							Não tem uma conta?{' '}
 							<SignUpLink onPress={handleSignUp}>
-                                Inscreva-se
+								Inscreva-se
 							</SignUpLink>
 						</SignUpText>
 					</CenteredView>

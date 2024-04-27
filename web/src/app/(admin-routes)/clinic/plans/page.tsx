@@ -4,7 +4,7 @@ import { BsStars } from "react-icons/bs";
 export default function Plans() {
   return (
     <div className="flex h-screen items-center justify-center">
-      <div className="flex flex-col justify-between gap-8 sm:flex-row">
+      <div className="flex flex-col justify-between gap-8 lg:flex-row">
         <div className="flex h-72 w-full flex-col rounded-lg bg-gray-100 p-6 sm:w-96">
           <h2 className="mb-4 mt-4 text-center text-3xl font-bold">Básico</h2>
           <p className="text-center text-xl font-semibold">

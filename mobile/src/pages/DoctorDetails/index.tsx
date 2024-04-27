@@ -5,15 +5,17 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import {
 	AppointmentButton,
 	AppointmentButtonText,
+	CardDoctorImage,
+	CardDoctorView,
 	Container,
 	DoctorCard,
 	DoctorContent,
-	DoctorImage,
 	DoctorName,
 	DoctorSpecialization,
 	Section,
 	SectionContent,
 	SectionTitle,
+	UserIcon,
 } from './styles';
 
 import { Header } from '../../components/Header';
@@ -21,6 +23,7 @@ import { useUserContext } from '../../context/UserContext';
 import { api } from '../../api';
 
 import { API_URL } from '@env';
+import axios from 'axios';
 
 export function DoctorDetails({ route, navigation }) {
 	const { userData } = useUserContext();
@@ -83,7 +86,7 @@ export function DoctorDetails({ route, navigation }) {
 
 		if (
 			date >= currentDate ||
-            date.toDateString() === currentDate.toDateString()
+			date.toDateString() === currentDate.toDateString()
 		) {
 			setSelectedDate(date);
 			setDateError(false);
@@ -117,7 +120,7 @@ export function DoctorDetails({ route, navigation }) {
 				return;
 			}
 
-			const response = await api.post('/consultas', {
+			const response = await axios.post(`${API_URL}/consultas`, {
 				data,
 				hora: selectedTime,
 				local,
@@ -167,11 +170,17 @@ export function DoctorDetails({ route, navigation }) {
 			<Header title={'Médico'} />
 			<ScrollView>
 				<DoctorCard>
-					<DoctorImage
-						source={{
-							uri: API_URL + '/uploads/' + doctor?.doctorImage,
-						}}
-					/>
+					{doctor.doctorImage ? (
+						<CardDoctorImage
+							source={{
+								uri: API_URL + '/uploads/' + doctor?.doctorImage,
+							}}
+						/>
+					) : (
+						<CardDoctorView>
+							<UserIcon name="user" size={150} />
+						</CardDoctorView>
+					)}
 				</DoctorCard>
 				<DoctorContent>
 					<DoctorName>
@@ -190,10 +199,10 @@ export function DoctorDetails({ route, navigation }) {
 						<SectionTitle>Experiência</SectionTitle>
 						<SectionContent>{doctor.experiencia}</SectionContent>
 					</Section>
-					<Section>
+					{/* 					<Section>
 						<SectionTitle>CRM</SectionTitle>
 						<SectionContent>{doctor.CRM}</SectionContent>
-					</Section>
+					</Section> */}
 					<Section>
 						<SectionTitle>Local da Consulta</SectionTitle>
 						<SectionContent>{local}</SectionContent>
@@ -228,9 +237,9 @@ export function DoctorDetails({ route, navigation }) {
 											alignItems: 'center',
 											justifyContent: 'center',
 											backgroundColor:
-                                                selectedTime === item
-                                                	? '#0079ff'
-                                                	: 'transparent',
+												selectedTime === item
+													? '#0079ff'
+													: 'transparent',
 										}}
 										onPress={() => setSelectedTime(item)}
 									>
@@ -238,9 +247,9 @@ export function DoctorDetails({ route, navigation }) {
 											style={{
 												fontWeight: 'bold',
 												color:
-                                                    selectedTime === item
-                                                    	? 'white'
-                                                    	: 'black',
+													selectedTime === item
+														? 'white'
+														: 'black',
 											}}
 										>
 											{item}
@@ -261,7 +270,7 @@ export function DoctorDetails({ route, navigation }) {
 											fontSize: 16,
 										}}
 									>
-                                        Data: {data}
+										Data: {data}
 									</Text>
 									<Text
 										style={{
@@ -269,20 +278,20 @@ export function DoctorDetails({ route, navigation }) {
 											fontSize: 16,
 										}}
 									>
-                                        Hora: {selectedTime}
+										Hora: {selectedTime}
 									</Text>
 								</View>
 
 								<AppointmentButton onPress={handleCancelar}>
 									<AppointmentButtonText>
-                                        Cancelar
+										Cancelar
 									</AppointmentButtonText>
 								</AppointmentButton>
 								<AppointmentButton
 									onPress={handleMarcarConsulta}
 								>
 									<AppointmentButtonText>
-                                        Confirmar
+										Confirmar
 									</AppointmentButtonText>
 								</AppointmentButton>
 							</>
@@ -290,7 +299,7 @@ export function DoctorDetails({ route, navigation }) {
 							<>
 								<AppointmentButton onPress={openDateModal}>
 									<AppointmentButtonText>
-                                        Marcar Consulta
+										Marcar Consulta
 									</AppointmentButtonText>
 								</AppointmentButton>
 							</>
