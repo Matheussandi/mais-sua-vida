@@ -91,8 +91,7 @@ export default function Home() {
 		setIsLoadingDoctors(false);
 	}
 
-	// const userImage = userData?.patientImage;
-	const userImage = 'abc';
+	const userImage = userData?.patientImage;
 
 	return (
 		<Container>
@@ -104,17 +103,15 @@ export default function Home() {
 							{userData?.nome} {userData?.sobrenome}
 						</UserName>
 					</Greetings>
-					<TouchableOpacity
-						onPress={() => navigation.navigate('Settings')}
-					>
+					<TouchableOpacity onPress={() => navigation.navigate('Settings')}>
 						{userImage ? (
 							<UserImageContainer>
 								<Image
 									source={{
 										uri:
-                                            API_URL +
-                                            '/uploads/' +
-                                            userData?.patientImage,
+											API_URL +
+											'/uploads/' +
+											userData?.patientImage,
 									}}
 									style={{
 										width: 60,
@@ -134,6 +131,7 @@ export default function Home() {
 				<SearchInputContainer>
 					<SearchInput
 						placeholder="Pesquisar"
+						placeholderTextColor="#fff"
 						value={searchQuery}
 						onChangeText={setSearchQuery}
 						onSubmitEditing={handleSearchSubmit}
@@ -166,8 +164,8 @@ export default function Home() {
 						) : (
 							<EmptyDoctorsContainer>
 								<EmptyDoctorsText>
-                                    Ainda não temos nenhum(a) Dr(a) com essa
-                                    especialidade
+									Ainda não temos nenhum(a) Dr(a) com essa
+									especialidade
 								</EmptyDoctorsText>
 							</EmptyDoctorsContainer>
 						)}

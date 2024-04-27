@@ -10,13 +10,13 @@ import { Feather } from '@expo/vector-icons';
 type IconNames = 'mail' | 'lock' | 'user' | 'phone' | 'calendar'
 
 type Props = InputProps & {
-    control: Control<any>;
-    name: string;
+	control: Control<any>;
+	name: string;
 	icon: IconNames;
-    error?: FieldError;
+	error?: FieldError;
+	rightIcon?: React.ReactNode;
 }
-
-export function ControlledInput({ control, name, icon, error, ...rest }: Props) {
+export function ControlledInput({ control, name, icon, error, rightIcon, ...rest }: Props) {
 	return (
 		<>
 			<InputWrapper>
@@ -32,6 +32,7 @@ export function ControlledInput({ control, name, icon, error, ...rest }: Props) 
 						/>
 					)}
 				/>
+				{rightIcon}
 			</InputWrapper>
 
 			{

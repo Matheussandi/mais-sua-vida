@@ -78,7 +78,7 @@ export const UserImageContainer = styled.TouchableOpacity`
 `;
 
 export const UserIcon = styled(Feather)`
-    color: lightgrey;
+    color: #0079ff;
 `;
 
 export const EspecializationsContainer = styled.View`
