@@ -27,13 +27,11 @@ import { Faq } from './src/pages/Faq';
 import { InfoBasics } from './src/pages/InfoBasics';
 import { ForgotPassword } from './src/pages/ForgotPassword';
 import { UpdatePassword } from './src/pages/UpdatePassword';
-import { AuthProvider, useAuth } from './src/context/AuthContext';
+import { AuthProvider } from './src/context/AuthContext';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
 export default function App() {
-	const { authState } = useAuth();
-
 	const [appLoaded, setAppLoaded] = useState(false);
 	const [fontsLoaded] = useFonts({
 		Inter_400: require('./src/assets/fonts/Inter-Regular.otf'),

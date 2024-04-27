@@ -65,7 +65,7 @@ export default function SignIn() {
 	const navigation = useNavigation();
 
 	const login = async (data: FormData) => {
-		setIsLoading(true); // inicia o spinner
+		setIsLoading(true);
 		try {
 			if (onLogin) {
 				const result = await onLogin(data.email.toLowerCase(), data.senha);
@@ -79,7 +79,7 @@ export default function SignIn() {
 		} catch (error) {
 			Alert.alert('Erro', 'Ocorreu um erro durante o login. Por favor, tente novamente.');
 		} finally {
-			setIsLoading(false); // para o spinner
+			setIsLoading(false);
 		}
 	};
 
@@ -92,10 +92,10 @@ export default function SignIn() {
 	}
 
 	useEffect(() => {
-		if (authState?.authenticated) {
+		if (authState?.authenticated === true) {
 			navigation.navigate('Main');
 		}
-	}, []);
+	}, [authState]);
 
 	return (
 		<KeyboardAvoidingView behavior={'padding'}>

@@ -96,7 +96,6 @@ export function Profile() {
 			quality: 1,
 		});
 
-		console.log(assets);
 
 		if (!canceled) {
 			const filename = assets[0].uri.substring(
@@ -104,8 +103,6 @@ export function Profile() {
 				assets[0].uri.length
 			);
 
-			//console.log(filename);
-			console.log(userData);
 			const extend = filename.split('.')[1];
 
 			const formData = new FormData();

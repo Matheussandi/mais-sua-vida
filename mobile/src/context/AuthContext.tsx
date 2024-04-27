@@ -53,15 +53,9 @@ interface AuthProviderProps {
 }
 
 const TOKEN_KEY = 'token';
-const AuthContext = createContext<AuthProps>({});
+const USER_ID_KEY = 'userId';
 
-const loadToken = async (setAuthState: (value: AuthState) => void) => {
-	const token = await SecureStore.getItemAsync(TOKEN_KEY);
-	if (token) {
-		axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
-		setAuthState({ token, authenticated: true, userId: 'null' });
-	}
-};
+const AuthContext = createContext<AuthProps>({});
 
 export const useAuth = () => {
 	return useContext(AuthContext);
@@ -70,27 +64,47 @@ export const useAuth = () => {
 export const AuthProvider = ({ children }: AuthProviderProps) => {
 	const [authState, setAuthState] = useState<AuthState>({ token: null, authenticated: false, userId: null });
 
-	/* 	useEffect(() => {
-		loadToken(setAuthState);
-	}, []); */
+	useEffect(() => {
+		async function fetchAuthData() {
+			try {
+				const [token, userId] = await Promise.all([
+					SecureStore.getItemAsync(TOKEN_KEY),
+					SecureStore.getItemAsync(USER_ID_KEY),
+				]);
+
+				if (token && userId) {
+					setAuthState({ token, authenticated: true, userId });
+					axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
+					axios.defaults.headers.common['UserId'] = userId;
+				}
+			} catch (e) {
+				console.error('Erro ao buscar token ou userId:', e);
+			}
+		}
+
+		fetchAuthData();
+	}, []);
 
 	const onRegister = async (data: RegisterData): Promise<RegisterResponse> => {
 		const response = await api.post(`${API_URL}/paciente`, data);
 		const { token, user } = response.data;
 		const { id } = user;
-
+	
 		await SecureStore.setItemAsync(TOKEN_KEY, token);
-
+		await SecureStore.setItemAsync(USER_ID_KEY, id.toString());
+	
 		setAuthState({ token, authenticated: true, userId: id });
-
+	
 		return response.data;
 	};
+	
 	const onLogin = async (email: string, senha: string): Promise<LoginResponse> => {
 		const response = await api.post('/paciente/login', { email, senha });
 		const { token, user } = response.data;
 		const { id } = user;
 
 		await SecureStore.setItemAsync(TOKEN_KEY, token);
+		await SecureStore.setItemAsync(USER_ID_KEY, id.toString());
 
 		setAuthState({ token, authenticated: true, userId: id });
 

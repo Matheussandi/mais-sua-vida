@@ -28,15 +28,15 @@ import React, { useEffect } from 'react';
 import { api } from '../../api';
 
 interface FormData {
-    nome: string;
-    sobrenome: string;
-    CPF: string;
-    telefone: string;
-    email: string;
-    senha: string;
-    dataNascimento: string;
-    altura: string;
-    peso: string;
+	nome: string;
+	sobrenome: string;
+	CPF: string;
+	telefone: string;
+	email: string;
+	senha: string;
+	dataNascimento: string;
+	altura: string;
+	peso: string;
 }
 
 const schema = yup
@@ -87,18 +87,17 @@ export function InfoBasics() {
 				.put(`paciente/${userId}`, data) // Use o ID do usuário na rota
 				.then((response) => {
 					const userData = response.data;
-					console.log('Usuário atualizado com sucesso');
 					navigation.navigate('home');
 				})
 				.catch((error) => {
-					console.log(error);
+					console.error(error);
 				});
 		} catch (erro: any) {
-			console.log(erro);
+			console.error(erro);
 
 			if (erro.response) {
 				const { data } = erro.response;
-				console.log('Dados do Erro: ', data);
+				console.error('Dados do Erro: ', data);
 			}
 		}
 	}
@@ -115,8 +114,8 @@ export function InfoBasics() {
 			setValue('dataNascimento', dataNascimento);
 			setValue('altura', altura);
 			setValue('peso', peso);
-		};
-	}, [userData, control])
+		}
+	}, [userData, control]);
 
 	return (
 		<KeyboardAvoidingView behavior={'padding'}>
@@ -194,7 +193,7 @@ export function InfoBasics() {
 								error={errors.dataNascimento}
 								autoCapitalize="none"
 							/>
-							
+
 							<ControlledInput
 								name="altura"
 								maxLength={3}
