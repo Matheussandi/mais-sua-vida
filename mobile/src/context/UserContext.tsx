@@ -10,10 +10,11 @@ interface User {
 	email: string;
 	patientImage?: string | null;
 	CPF: string;
+	senha: string;
 	telefone: string;
 	dataNascimento: string | null;
-	altura: number | null;
-	peso: number | null;
+	altura: string | null;
+	peso: string | null;
 	createdAt: string;
 	updatedAt: string;
 }
