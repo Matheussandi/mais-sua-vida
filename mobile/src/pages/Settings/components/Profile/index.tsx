@@ -36,19 +36,25 @@ import {
 } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { api } from '../../../../api';
+import axios from 'axios';
 
 interface UserData {
-	nome: string;
-	sobrenome: string;
-	dataNascimento?: string;
-	altura?: string;
-	peso?: string;
+    nome: string;
+    sobrenome: string;
+    CPF: string;
+    email: string;
+    senha: string;
+    telefone: string;
+    dataNascimento?: string;
+    altura?: number;
+    peso?: number;
 }
 
 export function Profile() {
 	const { userData, updateProfileImage } = useUserContext();
 
 	const userId = userData?.id;
+	const url = API_URL + '/paciente/' + userId;
 
 	const [isModalVisible, setModalVisible] = useState(false);
 
@@ -87,6 +93,7 @@ export function Profile() {
 		setModalVisible(false);
 	};
 
+
 	const pickImage = async () => {
 		const { assets, canceled } = await ImagePicker.launchImageLibraryAsync({
 			allowsEditing: true,
@@ -108,13 +115,11 @@ export function Profile() {
 			const formData = new FormData();
 			formData.append(
 				'patientImage',
-				JSON.parse(
-					JSON.stringify({
-						name: filename,
-						uri: assets[0].uri,
-						type: 'image/' + extend,
-					})
-				)
+				{
+					name: filename,
+					uri: assets[0].uri,
+					type: 'image/' + extend,
+				}
 			);
 			formData.append('nome', userData?.nome);
 			formData.append('sobrenome', userData?.sobrenome);
@@ -124,20 +129,21 @@ export function Profile() {
 			formData.append('telefone', userData?.telefone);
 
 			try {
-				const response = await api
-					.put(`/paciente/${userId}`, formData, {
+				await axios
+					.put(url, formData, {
 						headers: {
 							'Content-Type': 'multipart/form-data',
 						},
 					})
 					.then((response) => {
+						console.log('🚀 ~ .then ~ response:', response);
 						const responseData = response.data;
 
 						setModalVisible(false);
 						updateProfileImage(responseData.patientImage);
 					})
 					.catch((erro) => {
-						console.error(erro.response.data);
+						console.error(erro.response);
 					});
 			} catch (error: any) {
 				console.error(error);

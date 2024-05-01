@@ -8,7 +8,7 @@ export function Footer() {
             <p className="mr-0 lg:mr-12 text-justify">
               Este aplicativo gratuito fornece uma solução para suas
               necessidades de saúde, oferecendo a você acesso único às
-              informações de agendamento, consultas e exames médicos.
+              informações de agendamentos de consultas.
             </p>
           </div>
           <div className="w-full">
@@ -50,7 +50,7 @@ export function Footer() {
                     Google Play Store
                   </a>
                   <a href="#" className="hover:text-primary">
-                    App Stores
+                    App Store
                   </a>
                 </div>
               </div>

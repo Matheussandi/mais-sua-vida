@@ -6,6 +6,7 @@ import { getDoctorById } from "@/services/get-doctor-by-id";
 import Link from "next/link";
 import { MdModeEdit } from "react-icons/md";
 import { useEffect, useState } from "react";
+import { FaTrash } from "react-icons/fa";
 
 interface DoctorProps {
   id: string;
@@ -24,7 +25,7 @@ interface DoctorProps {
 export default function DoctorSelected() {
   const searchParams = useSearchParams();
   const search = searchParams.get("doctor");
-  
+
   const [doctor, setDoctor] = useState<DoctorProps>({
     id: "",
     nome: "",
@@ -68,6 +69,9 @@ export default function DoctorSelected() {
                 {doctor.especializacao.nome}
               </p>
             </div>
+{/*             <div>
+              <FaTrash size={20} className="text-red-500" onClick={() => {}}/>
+            </div> */}
           </div>
 
           <div className="mt-4 flex flex-col gap-10">

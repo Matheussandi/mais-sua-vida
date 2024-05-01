@@ -306,7 +306,7 @@ export function EditDoctorForm() {
 
             <Form.Field>
               <div className="flex flex-1 flex-col">
-                <Form.Label>Especialização</Form.Label>
+                <Form.Label>Especialidade</Form.Label>
                 <Form.Select
                   name="idEspecializacao"
                   options={specializations}
