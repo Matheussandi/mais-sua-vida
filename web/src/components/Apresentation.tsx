@@ -9,9 +9,9 @@ import DoisMedicos from "../assets/twodoctors.png";
 export function Apresentation() {
   return (
     <>
-       <div className="relative z-10 mt-16 grid grid-cols-1 gap-4 md:grid-cols-2 space-x-4">
+       <div className="relative z-10 grid grid-cols-1 gap-4 md:grid-cols-2 space-x-4">
         {/* Conteúdo da primeira coluna */}
-        <div>
+        <div className="mt-52">
           <h1 className="text-2xl font-bold md:text-5xl">
             Simplifique, organize e gerencie as{" "}
             <span className="text-primary">consultas</span>
