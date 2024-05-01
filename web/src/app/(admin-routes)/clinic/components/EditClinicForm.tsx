@@ -17,6 +17,7 @@ import { MdModeEdit } from "react-icons/md";
 
 import PhotoClinic from "../../../../assets/photoClinic.png";
 import { Form } from "@/components/Form";
+import { FaRegUserCircle } from "react-icons/fa";
 
 const editClinicFormSchema = z.object({
   nome: z.string().nonempty("Nome é obrigatório"),
@@ -101,8 +102,7 @@ export function EditClinicForm({ id }: EditClinicFormProps) {
         },
       });
 
-      setIsModificationSuccessful(true);
-
+      alert("Dados atualizados com sucesso!");
       window.location.reload();
     } catch (error) {
       alert("Erro ao enviar os dados");
@@ -131,7 +131,7 @@ export function EditClinicForm({ id }: EditClinicFormProps) {
       alert("Erro ao buscar dados da API");
       console.error("Erro ao buscar dados da API:", error);
     }
-  }, [ editClinicForm, id ]);
+  }, [editClinicForm, id]);
 
   useEffect(() => {
     handleGetRegisteredData();
@@ -159,13 +159,17 @@ export function EditClinicForm({ id }: EditClinicFormProps) {
                     className="h-40 w-40 rounded-full object-cover"
                   />
                 ) : (
-                  <Image
-                    src={clinicImageUrl !== null ? clinicImageUrl : PhotoClinic}
-                    width={130}
-                    height={130}
-                    alt="Imagem da clínica padrão"
-                    className="h-40 w-40 rounded-full object-cover"
-                  />
+                  clinicImageUrl ? (
+                    <Image
+                      src={clinicImageUrl}
+                      width={130}
+                      height={130}
+                      alt="Imagem da clínica padrão"
+                      className="h-40 w-40 rounded-full object-cover"
+                    />
+                  ) : (
+                    <FaRegUserCircle className="h-40 w-40 rounded-full object-cover" />
+                  )
                 )}
 
                 <Form.Input
@@ -176,7 +180,7 @@ export function EditClinicForm({ id }: EditClinicFormProps) {
                   accept="image/*"
                   className="invisible h-0 w-0"
                 />
-                <div className="absolute bottom-6 right-0 rounded-full bg-primary p-2">
+                <div className="absolute bottom-8 right-0 rounded-full bg-primary p-2">
                   <MdModeEdit color="#fff" />
                 </div>
               </label>
@@ -201,7 +205,7 @@ export function EditClinicForm({ id }: EditClinicFormProps) {
 
               <div className="flex flex-1 flex-col">
                 <Form.Label>Senha</Form.Label>
-                <Form.Input type="password" name="senha" />
+                <Form.InputPassword name="senha" />
                 <Form.ErrorMessage field="senha" />
               </div>
             </Form.Field>
@@ -232,7 +236,7 @@ export function EditClinicForm({ id }: EditClinicFormProps) {
 
               <div className="flex flex-1 flex-col">
                 <Form.Label>Estado</Form.Label>
-                <Form.Input type="text" name="estado" />
+                <Form.Input type="text" name="estado" maxLength={2}/>
                 <Form.ErrorMessage field="estado" />
               </div>
             </Form.Field>

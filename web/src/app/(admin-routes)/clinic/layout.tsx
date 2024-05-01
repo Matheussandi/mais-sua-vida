@@ -32,19 +32,19 @@ async function ClinicDetails({ id }: ClinicIdProps) {
 
   return (
     <>
-      {clinic.clinicImage ? (
-        <Image
-          src={`${process.env.NEXT_PUBLIC_API_IMAGE}/${clinic.clinicImage}`}
-          width={130}
-          height={130}
-          alt="Clinic"
-          priority={true}
-          className="w-32 h-32 mx-auto mb-4 rounded-full"
-        />
-
-      ) : (
-        <FaRegUserCircle className="w-32 h-32 mx-auto mb-4" />
-      )}
+      <div className="w-32 h-32 mx-auto mb-4 rounded-full flex items-center justify-center">
+        {clinic.clinicImage ? (
+          <Image
+            src={`${process.env.NEXT_PUBLIC_API_IMAGE}/${clinic.clinicImage}`}
+            width={130}
+            height={130}
+            alt="Clinic"
+            className="h-full w-full object-cover"
+          />
+        ) : (
+          <FaRegUserCircle className="w-full h-full" />
+        )}
+      </div>
       <h1 className="mb-8 text-center text-xl font-bold uppercase">
         {clinic.nome}
       </h1>

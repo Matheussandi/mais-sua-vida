@@ -8,13 +8,16 @@ import Image from "next/image";
 import { MdModeEdit } from "react-icons/md";
 
 import { MediaPicker } from "@/components/MediaPicker";
-import ImageMedico from "../../../../assets/doctor1.png";
 import { api } from "@/lib/api";
+
+import { useRouter } from 'next/navigation'
 
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { z } from "zod";
 import { Form } from "@/components/Form";
+import { FiUser } from "react-icons/fi";
+import Spinner from "@/components/Spinner";
 
 interface SpecializationProps {
   id: string;
@@ -59,7 +62,7 @@ const createDoctorFormSchema = z.object({
   experiencia: z.string().max(500, 'O texto não pode ter mais de 500 caracteres'),
   idEspecializacao: z
     .string()
-    .nonempty({ message: "Especialização é obrigatória" }),
+    .nonempty({ message: "Especialidade é obrigatória" }),
   CRM: z
     .string()
     .nonempty({ message: "CRM é obrigatório" })
@@ -75,14 +78,17 @@ type CreateDoctorFormData = z.infer<typeof createDoctorFormSchema>;
 export function NewDoctorForm({ clinicId }: NewDoctorFormProps) {
   const [isModificationSuccessful, setIsModificationSuccessful] =
     useState(false);
+  const [loading, setLoading] = useState(false);
 
-    const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
 
   const [specializations, setSpecializations] = useState<
     { value: string; label: string }[]
   >([]);
 
   const [output, setOutput] = useState("");
+
+  const router = useRouter()
 
   const handleFileInput = (event: ChangeEvent<HTMLInputElement>) => {
     const { files } = event.target;
@@ -120,6 +126,7 @@ export function NewDoctorForm({ clinicId }: NewDoctorFormProps) {
   });
 
   async function createDoctor(data: CreateDoctorFormData) {
+    setLoading(true);
     try {
       const formData = new FormData();
 
@@ -146,13 +153,14 @@ export function NewDoctorForm({ clinicId }: NewDoctorFormProps) {
         },
       });
 
-      setIsModificationSuccessful(true);
+      alert("Médico cadastrado com sucesso");
+      router.push('/clinic')
     } catch (error) {
       alert("Erro ao enviar os dados");
-      console.error("Erro ao enviar os dados", error);
+    } finally {
+      setLoading(false);
+      setOutput(JSON.stringify(data, null, 2));
     }
-
-    setOutput(JSON.stringify(data, null, 2));
   }
 
   const {
@@ -174,7 +182,6 @@ export function NewDoctorForm({ clinicId }: NewDoctorFormProps) {
               htmlFor="media"
               className="h-100 w-100 relative cursor-pointer overflow-hidden"
             >
-              {/* Renderizar a imagem selecionada, imagem fixa ou espaço reservado */}
               {selectedImage ? (
                 <Image
                   src={URL.createObjectURL(selectedImage)}
@@ -184,13 +191,12 @@ export function NewDoctorForm({ clinicId }: NewDoctorFormProps) {
                   className="h-40 w-40 rounded-full object-cover"
                 />
               ) : (
-                <Image
-                  src={ImageMedico}
-                  width={130}
-                  height={130}
-                  alt="Imagem do médico"
-                  className="h-40 w-40 rounded-full object-cover"
-                />
+                <div className="h-40 w-40 rounded-full bg-blue-300 flex items-center justify-center">
+                  <FiUser
+                    size={120}
+                    className="text-white"
+                  />
+                </div>
               )}
               <input
                 onChange={handleFileInput}
@@ -200,7 +206,7 @@ export function NewDoctorForm({ clinicId }: NewDoctorFormProps) {
                 accept="image/*"
                 className="invisible h-0 w-0"
               />
-              <div className="absolute bottom-6 right-0 rounded-full bg-primary p-2">
+              <div className="absolute bottom-8 right-0 rounded-full bg-primary p-2">
                 <MdModeEdit color="#fff" />
               </div>
             </label>
@@ -271,7 +277,7 @@ export function NewDoctorForm({ clinicId }: NewDoctorFormProps) {
 
           <Form.Field>
             <div className="flex flex-1 flex-col">
-              <Form.Label>Especialização</Form.Label>
+              <Form.Label>Especialidade</Form.Label>
               <Form.Select
                 name="idEspecializacao"
                 options={specializations}
@@ -288,11 +294,12 @@ export function NewDoctorForm({ clinicId }: NewDoctorFormProps) {
                 Cadastro realizadao com sucesso!
               </span>
             )}
+
             <button
-              disabled={isSubmitting}
-              className="rounded-lg bg-primary px-10 py-2 font-bold uppercase text-white hover:bg-blue-600"
+              disabled={loading}
+              className={`rounded-lg bg-primary px-10 py-2 font-bold uppercase text-white ${loading ? 'pointer-events-none' : 'hover:bg-blue-600'}`}
             >
-              Salvar
+              {loading ? <Spinner /> : "Salvar"}
             </button>
           </div>
         </form>
