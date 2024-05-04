@@ -39,7 +39,7 @@ async function ClinicDetails({ id }: ClinicIdProps) {
             width={130}
             height={130}
             alt="Clinic"
-            className="h-full w-full object-cover"
+            className="h-full w-full object-cover rounded-full"
           />
         ) : (
           <FaRegUserCircle className="w-full h-full" />

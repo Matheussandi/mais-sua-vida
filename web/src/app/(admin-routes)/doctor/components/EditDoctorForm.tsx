@@ -2,8 +2,6 @@
 
 import { ChangeEvent, useCallback, useEffect, useState } from "react";
 
-import { useSearchParams } from "next/navigation";
-
 import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -13,8 +11,9 @@ import Image from "next/image";
 import { MdModeEdit } from "react-icons/md";
 import { MediaPicker } from "@/components/MediaPicker";
 
-import user from "../../../assets/user.png";
 import { Form } from "@/components/Form";
+import { FaRegUserCircle } from "react-icons/fa";
+import { useSession } from "next-auth/react";
 
 interface SpecializationProps {
   id: string;
@@ -70,6 +69,8 @@ const editDoctorFormSchema = z.object({
 type EditDoctorFormData = z.infer<typeof editDoctorFormSchema>;
 
 export function EditDoctorForm() {
+  const { data } = useSession();
+
   const [isModificationSuccessful, setIsModificationSuccessful] =
     useState(false);
 
@@ -92,9 +93,9 @@ export function EditDoctorForm() {
     CRM: "",
   });
 
-  const searchParams = useSearchParams();
-  const search = searchParams.get("doctor");
   const [output, setOutput] = useState("");
+
+  const doctorId = data?.user.id;
 
   const editDoctorForm = useForm<EditDoctorFormData>({
     resolver: zodResolver(editDoctorFormSchema),
@@ -134,13 +135,12 @@ export function EditDoctorForm() {
         }
       }
 
-      await api.put(`/medico/${search}`, formData, {
+      await api.put(`/medico/${doctorId}`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
 
-      console.log("Dados enviados com sucesso");
       setOutput(JSON.stringify(data, null, 2));
 
       setIsModificationSuccessful(true);
@@ -154,7 +154,7 @@ export function EditDoctorForm() {
 
   const handleGetRegisteredData = useCallback(async () => {
     try {
-      const response = await api.get(`/medico/${search}`);
+      const response = await api.get(`/medico/${doctorId}`);
       const doctor = await response.data;
 
       if (doctor.doctorImage) {
@@ -169,7 +169,7 @@ export function EditDoctorForm() {
     } catch (error) {
       console.error("Erro ao buscar dados da API:", error);
     }
-  }, [search, editDoctorForm]);
+  }, [doctorId, editDoctorForm]);
 
   useEffect(() => {
     handleGetRegisteredData();
@@ -212,18 +212,23 @@ export function EditDoctorForm() {
                     src={URL.createObjectURL(selectedImage)}
                     width={130}
                     height={130}
-                    alt="Imagem do médico"
+                    alt="Imagem da clínica"
                     className="h-40 w-40 rounded-full object-cover"
                   />
                 ) : (
-                  <Image
-                    src={doctorImageUrl !== null ? doctorImageUrl : user}
-                    width={130}
-                    height={130}
-                    alt="Imagem do médico"
-                    className="h-40 w-40 rounded-full object-cover"
-                  />
+                  doctorImageUrl ? (
+                    <Image
+                      src={doctorImageUrl}
+                      width={130}
+                      height={130}
+                      alt="Imagem da clínica padrão"
+                      className="h-40 w-40 rounded-full object-cover"
+                    />
+                  ) : (
+                    <FaRegUserCircle className="h-40 w-40 rounded-full object-cover" />
+                  )
                 )}
+
                 <input
                   onChange={handleFileInput}
                   name="doctorImage"
@@ -232,7 +237,7 @@ export function EditDoctorForm() {
                   accept="image/*"
                   className="invisible h-0 w-0"
                 />
-                <div className="absolute bottom-6 right-0 rounded-full bg-primary p-2">
+                <div className="absolute bottom-8 right-0 rounded-full bg-primary p-2">
                   <MdModeEdit color="#fff" />
                 </div>
               </label>
@@ -285,23 +290,23 @@ export function EditDoctorForm() {
             </Form.Field>
 
             <Form.Field>
-            <div className="flex flex-1 flex-col">
-              <Form.Label>Sobre</Form.Label>
-              <Form.TextArea id="sobre" name="sobre" rows={2} cols={2} />
-              <Form.ErrorMessage field="sobre" />
-            </div>
+              <div className="flex flex-1 flex-col">
+                <Form.Label>Sobre</Form.Label>
+                <Form.TextArea id="sobre" name="sobre" rows={2} cols={2} />
+                <Form.ErrorMessage field="sobre" />
+              </div>
 
 
-            <div className="flex flex-1 flex-col">
-              <Form.Label>Experiência</Form.Label>
-              <Form.TextArea
-                id="experiencia"
-                name="experiencia"
-                rows={2}
-                cols={2}
-              />
-              <Form.ErrorMessage field="experiencia" />
-            </div>
+              <div className="flex flex-1 flex-col">
+                <Form.Label>Experiência</Form.Label>
+                <Form.TextArea
+                  id="experiencia"
+                  name="experiencia"
+                  rows={2}
+                  cols={2}
+                />
+                <Form.ErrorMessage field="experiencia" />
+              </div>
             </Form.Field>
 
             <Form.Field>

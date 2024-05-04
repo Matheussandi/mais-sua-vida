@@ -30,6 +30,7 @@ export default function LoginClinic() {
     const result = await signIn('credentials', {
       email,
       password,
+      route: 'clinica',
       redirect: false
     })
 
