@@ -36,4 +36,9 @@ A chamada à API está no arquivo `api.ts` da pasta `lib`, onde são feitas as r
 
 
 
+### Imagens 
+Imagens utilizadas através dos sites:
+- [Unsplash](https://unsplash.com/)
+- [Freepik](https://www.freepik.com/)
+
 

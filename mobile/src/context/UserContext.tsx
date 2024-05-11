@@ -1,26 +1,65 @@
-import React, { createContext, useContext, useState } from 'react';
+import axios from 'axios';
+import React, { ReactNode, useContext, useEffect, useState } from 'react';
+import { useAuth } from './AuthContext';
+import { API_URL } from '@env';
 
-const UserContext = createContext({
-	userData: null,
-	setUserData: (data) => {},
-	updateProfileImage: (newImageUrl) => {},
-});
+interface User {
+	id: string;
+	nome: string;
+	sobrenome: string;
+	email: string;
+	patientImage?: string | null;
+	CPF: string;
+	senha: string;
+	telefone: string;
+	dataNascimento: string | null;
+	altura: string | null;
+	peso: string | null;
+	createdAt: string;
+	updatedAt: string;
+}
 
-export const UserProvider = ({ children }) => {
-	const [userData, setUserData] = useState(null);
+interface UserContextData {
+	userData: User | null;
+	setUserData: (user: User | null) => void;
+	updateProfileImage: (newImageUrl: string) => void;
+}
+
+interface UserProviderProps {
+	children: ReactNode;
+}
+
+const UserContext = React.createContext<UserContextData>({} as UserContextData);
+
+export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
+	const { authState } = useAuth();
+	const [userData, setUserData] = useState<User | null>(null);
+
+	useEffect(() => {
+		if (authState?.authenticated) {
+			loadUserData();
+		}
+	}, [authState]);
+
+	const loadUserData = async () => {
+		try {
+			const response = await axios.get(`${API_URL}/paciente/${authState?.userId}`);
+			setUserData(response.data);
+		} catch (error) {
+			console.error(error);
+		}
+	};
 
 	const updateProfileImage = (newImageUrl: string) => {
 		if (userData === null) {
-			// Se userData for null, crie um novo objeto com a propriedade patientImage.
-			setUserData({ patientImage: newImageUrl });
+			setUserData({ patientImage: newImageUrl } as User);
 		} else {
-			// Se userData já contém dados, atualize a propriedade patientImage.
 			setUserData({ ...userData, patientImage: newImageUrl });
 		}
 	};
 
-	return(
-		<UserContext.Provider value={{ userData, setUserData, updateProfileImage}}>
+	return (
+		<UserContext.Provider value={{ userData, setUserData, updateProfileImage }}>
 			{children}
 		</UserContext.Provider>
 	);

@@ -24,6 +24,8 @@ import { CardDoctor } from '../../components/CardDoctor';
 import dayjs from 'dayjs';
 import ptBr from 'dayjs/locale/pt-br';
 import { Header } from '../../components/Header';
+import axios from 'axios';
+import { API_URL } from '@env';
 
 dayjs.locale(ptBr);
 
@@ -83,7 +85,7 @@ export function Appointments() {
 
 	const fetchAppointment = async (patientId: string) => {
 		try {
-			const response = await api.get(`/consultas/${patientId}`);
+			const response = await axios.get(`${API_URL}/consultas/${patientId}`);
 			setScheduledAppointments(response.data);
 			setError(null);
 		} catch (error) {
@@ -94,7 +96,7 @@ export function Appointments() {
 
 	const handleDesmarcarConsulta = async () => {
 		try {
-			await api.delete(`/consultas/${selectedConsulta?.id}`);
+			await axios.delete(`${API_URL}/consultas/${selectedConsulta?.id}`);
 			setModalVisible(false);
 			fetchAppointment(userId);
 			Alert.alert(
@@ -109,7 +111,7 @@ export function Appointments() {
 
 	const fetchNewAppointments = async (patientId: string) => {
 		try {
-			const response = await api.get(`/consultas/${patientId}`);
+			const response = await axios.get(`${API_URL}/consultas/${patientId}`);
 			setScheduledAppointments(response.data);
 			setError(null);
 		} catch (error) {

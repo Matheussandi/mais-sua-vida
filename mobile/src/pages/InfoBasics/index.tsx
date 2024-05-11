@@ -1,3 +1,4 @@
+import React, { useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 
 import {
@@ -5,8 +6,10 @@ import {
 	ScrollView,
 	TouchableWithoutFeedback,
 	Keyboard,
-	View,
+	Alert,
 } from 'react-native';
+
+import { API_URL } from '@env';
 
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
@@ -18,25 +21,23 @@ import {
 	LoginButton,
 	LoginButtonText,
 } from './styles';
+import axios from 'axios';
+
+import { useUserContext } from '../../context/UserContext';
 
 import { ControlledInput } from '../../components/ControlledInput';
 import { Header } from '../../components/Header';
 
-import { useUserContext } from '../../context/UserContext';
-import React, { useEffect } from 'react';
-
-import { api } from '../../api';
-
 interface FormData {
-    nome: string;
-    sobrenome: string;
-    CPF: string;
-    telefone: string;
-    email: string;
-    senha: string;
-    dataNascimento: string;
-    altura: string;
-    peso: string;
+	nome: string;
+	sobrenome: string;
+	CPF: string;
+	telefone: string;
+	email: string;
+	senha: string;
+	dataNascimento: string | null;
+	altura: string | null;
+	peso: string | null;
 }
 
 const schema = yup
@@ -66,9 +67,10 @@ const schema = yup
 	.required();
 
 export function InfoBasics() {
-	const { setUserData, userData } = useUserContext();
+	const { userData } = useUserContext();
 
-	const userId = userData.id;
+	const userId = userData?.id;
+	const url = API_URL + '/paciente/' + userId;
 
 	const navigation = useNavigation();
 
@@ -83,22 +85,25 @@ export function InfoBasics() {
 
 	async function handleUpdateUser(data: FormData) {
 		try {
-			const updatedUser = await api
-				.put(`paciente/${userId}`, data) // Use o ID do usuário na rota
+			await axios
+				.put(url, data)
 				.then((response) => {
-					const userData = response.data;
-					console.log('Usuário atualizado com sucesso');
+					const responseData = response.data;
+
+					if (responseData) {
+						Alert.alert('Dados atualizados com sucesso!');
+					}
 					navigation.navigate('home');
 				})
 				.catch((error) => {
-					console.log(error);
+					console.error(error);
 				});
 		} catch (erro: any) {
-			console.log(erro);
+			console.error(erro);
 
 			if (erro.response) {
 				const { data } = erro.response;
-				console.log('Dados do Erro: ', data);
+				console.error('Dados do Erro: ', data);
 			}
 		}
 	}
@@ -115,8 +120,8 @@ export function InfoBasics() {
 			setValue('dataNascimento', dataNascimento);
 			setValue('altura', altura);
 			setValue('peso', peso);
-		};
-	}, [userData, control])
+		}
+	}, [userData, control]);
 
 	return (
 		<KeyboardAvoidingView behavior={'padding'}>
@@ -194,7 +199,7 @@ export function InfoBasics() {
 								error={errors.dataNascimento}
 								autoCapitalize="none"
 							/>
-							
+
 							<ControlledInput
 								name="altura"
 								maxLength={3}

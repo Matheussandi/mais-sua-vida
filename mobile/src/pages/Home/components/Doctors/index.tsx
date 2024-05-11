@@ -1,10 +1,9 @@
-import { FlatList, Image } from 'react-native';
-import { useState } from 'react';
+import { FlatList } from 'react-native';
 
 import { Doctor } from '../../../../types/Doctors';
 
 interface DoctorProps {
-    doctors: Doctor[];
+	doctors: Doctor[];
 }
 
 import {
@@ -15,33 +14,22 @@ import {
 	DoctorName,
 	DoctorSpecialization,
 	Title,
+	UserIcon,
+	DoctorImageCard,
 } from './styles';
-import { DoctorModal } from '../DoctorModal';
+
 import { useNavigation } from '@react-navigation/native';
+import { API_URL } from '@env';
 
 export function Doctors({ doctors }: DoctorProps) {
-	const [isModalVisible, setIsModalVisible] = useState(false);
-	const [selectedDoctor, setSelectedDoctor] = useState<null | Doctor>(null);
-
-	function handleOpenModal(doctor: Doctor) {
-		setIsModalVisible(true);
-		setSelectedDoctor(doctor);
-	}
-
-	const navigation = useNavigation(); // Obtém o objeto de navegação
+	const navigation = useNavigation();
 
 	function handleOpenDoctorDetails(doctor: Doctor) {
-		navigation.navigate('DoctorDetails', { doctor }); // Navega para a tela "DoctorDetails" com os dados do médico selecionado
+		navigation.navigate('DoctorDetails', { doctor });
 	}
 
 	return (
 		<>
-			<DoctorModal
-				visible={isModalVisible}
-				onClose={() => setIsModalVisible(false)}
-				doctor={selectedDoctor}
-			/>
-
 			<Title>Médicos Recomendados</Title>
 
 			<FlatList
@@ -51,14 +39,20 @@ export function Doctors({ doctors }: DoctorProps) {
 				ItemSeparatorComponent={() => <DoctorCardItemSeparator />}
 				renderItem={({ item: doctor }) => (
 					<DoctorCard onPress={() => handleOpenDoctorDetails(doctor)}>
-						<DoctorImage
-							source={{
-								uri: `http://192.168.1.103:3333/uploads/${doctor?.doctorImage}`,
-							}}
-						/>
+						{doctor.doctorImage ? (
+							<DoctorImage
+								source={{
+									uri: API_URL + '/uploads/' + doctor.doctorImage,
+								}}
+							/>
+						) : (
+							<DoctorImageCard>
+								<UserIcon name="user" size={150} />
+							</DoctorImageCard>
+						)}
 						<DoctorDetails>
 							<DoctorName>
-                                Dr. {doctor.nome} {doctor.sobrenome}
+								Dr. {doctor.nome} {doctor.sobrenome}
 							</DoctorName>
 							<DoctorSpecialization>
 								{doctor.especializacao?.nome}

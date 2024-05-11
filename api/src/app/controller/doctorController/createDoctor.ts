@@ -1,15 +1,25 @@
-import { Request, Response } from 'express';
-
-import { Doctor } from '../../models/DoctorModel';
-
-import { verifyEmpityFields } from '../../../utils/verifyEmptyFields';
-import  bcrypt  from 'bcrypt';
+import { Request, Response } from "express";
+import bcrypt from "bcrypt";
 import fs from 'fs';
+import { z } from 'zod';
+import { Doctor } from "../../models/DoctorModel";
 
+const doctorCreateSchema = z.object({
+	nome: z.string(),
+	sobrenome: z.string(),
+	email: z.string().email(),
+	senha: z.string().min(6),
+	sobre: z.string().optional(),
+	experiencia: z.string(),
+	CRM: z.string(),
+	idEspecializacao: z.string(),
+	idClinica: z.string(),
+});
 
 export async function createDoctor(request: Request, response: Response){
 	try{
 		const doctorImage = request.file?.filename;
+
 		const {
 			nome,
 			sobrenome,
@@ -19,26 +29,10 @@ export async function createDoctor(request: Request, response: Response){
 			experiencia,
 			CRM,
 			idEspecializacao,
-			idClinica
-		} = request.body;
-
-		const fields = [
-			{ value: nome, nome: 'Nome'},
-			{ value: sobrenome, nome: 'Sobrenome'},
-			{ value: email, nome: 'E-mail'},
-			{ value: senha, nome: 'Senha'},
-			{ value: CRM, nome: 'CRM'},
-			{ value: idEspecializacao, nome: 'idEspecializacao'}
-		];
-
-		const erros = verifyEmpityFields(fields);
-
-		if(Object.keys(erros).length > 0) {
-			return response.status(400).json(erros);
-		}
+			idClinica,
+		} = doctorCreateSchema.parse(request.body);
 
 		const encryptedPassword = await bcrypt.hash(senha, 10);
-
 
 		const doctor = await Doctor.create({
 			nome,
@@ -55,6 +49,9 @@ export async function createDoctor(request: Request, response: Response){
 
 		response.status(201).json(doctor);
 	}catch(error){
+		if (error instanceof z.ZodError) {
+			return response.status(400).json({ error: error.errors });
+		}
 
 		if(request.file){
 			try{
@@ -63,7 +60,6 @@ export async function createDoctor(request: Request, response: Response){
 				console.error('Something went wrong while deleting file');
 			}
 		}
-		response.status(400).json({Erro: 'Something went wrong'});
+		response.status(400).json({Erro: 'Something went wrong', error});
 	}
-
 }

@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import { useState } from "react";
 import { AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
 
@@ -14,30 +13,50 @@ export function NavBar() {
     setExpanded(!expanded);
   };
 
+  const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    e.preventDefault();
+    const targetElement = document.getElementById(href.slice(1));
+
+    if (targetElement) {
+      window.scrollTo({
+        top: targetElement.offsetTop,
+        behavior: "smooth",
+      });
+    }
+  };
+
   return (
     <div>
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-        <Link href="/">
+        <a href="/" onClick={(e) => handleLinkClick(e, "/")}>
           <Image src={LogoImg} width={60} height={60} alt="+Sua Vida" />
-        </Link>
+        </a>
 
         <ul className="hidden sm:flex">
           <li className="p-4 hover:text-primary">
-            <Link href="#about">Sobre</Link>
+            <a href="#about" onClick={(e) => handleLinkClick(e, "#about")}>
+              Sobre
+            </a>
           </li>
           <li className="p-4 hover:text-primary">
-            <Link href="#clinics">Clínicas</Link>
+            <a href="#clinics" onClick={(e) => handleLinkClick(e, "#clinics")}>
+              Clínicas
+            </a>
           </li>
           <li className="p-4 hover:text-primary">
-            <Link href="#patients">Pacientes</Link>
+            <a href="#patients" onClick={(e) => handleLinkClick(e, "#patients")}>
+              Pacientes
+            </a>
           </li>
           <li className="p-4 hover:text-primary">
-            <Link href="#footer">Contato</Link>
+            <a href="#footer" onClick={(e) => handleLinkClick(e, "#footer")}>
+              Contato
+            </a>
           </li>
           <button className="bg-primary px-4 rounded-xl my-2 hover:bg-[#136edd] transition-colors duration-300">
-            <Link className="text-white font-semibold" href="/login">
+            <a className="text-white font-semibold" href="/login">
               Entrar
-            </Link>
+            </a>
           </button>
         </ul>
 
@@ -60,21 +79,29 @@ export function NavBar() {
         >
           <ul>
             <li className="p-4 text-xl hover:text-primary">
-              <Link href="/">Sobre</Link>
+              <a href="/" onClick={(e) => handleLinkClick(e, "/")}>
+                Sobre
+              </a>
             </li>
             <li className="p-4 text-xl hover:text-primary">
-              <Link href="/">Clínicas</Link>
+              <a href="/" onClick={(e) => handleLinkClick(e, "/")}>
+                Clínicas
+              </a>
             </li>
             <li className="p-4 text-xl hover:text-primary">
-              <Link href="/">Pacientes</Link>
+              <a href="/" onClick={(e) => handleLinkClick(e, "/")}>
+                Pacientes
+              </a>
             </li>
             <li className="p-4 text-xl hover:text-primary">
-              <Link href="/">Contato</Link>
+              <a href="/" onClick={(e) => handleLinkClick(e, "/")}>
+                Contato
+              </a>
             </li>
             <button className="bg-primary p-4 rounded-xl text-xl hover:bg-[#136edd] transition-colors duration-300">
-              <Link className="text-white font-semibold" href="/login">
+              <a className="text-white font-semibold" href="/login">
                 Entrar
-              </Link>
+              </a>
             </button>
           </ul>
         </div>

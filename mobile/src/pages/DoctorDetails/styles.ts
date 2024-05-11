@@ -1,5 +1,6 @@
 import styled from 'styled-components/native';
 import { Platform, StatusBar } from 'react-native';
+import { Feather } from '@expo/vector-icons';
 
 const isAndroid = Platform.OS === 'android';
 
@@ -42,10 +43,31 @@ export const DoctorCard = styled.View`
     margin: 0 16px;
 `;
 
-export const DoctorImage = styled.Image`
+export const CardDoctorImage = styled.Image`
     width: 100%;
     height: 200px;
     border-radius: 8px;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #ddd;
+    box-shadow: 0px 2px 3.84px rgba(0, 0, 0, 0.25);
+    elevation: 5;
+`;
+
+export const CardDoctorView = styled.View`
+    width: 100%;
+    height: 200px;
+    border-radius: 8px;
+    background-color: #f0f0f0;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #ddd;
+    box-shadow: 0px 2px 3.84px rgba(0, 0, 0, 0.25);
+    elevation: 5;
+`;
+
+export const UserIcon = styled(Feather)`
+    color: #0079ff;
 `;
 
 export const DoctorContent = styled.View`

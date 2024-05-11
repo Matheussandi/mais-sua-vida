@@ -19,15 +19,18 @@ import {
 } from '@expo/vector-icons';
 
 import { Profile } from './components/Profile';
+import { useAuth } from '../../context/AuthContext';
 
 export function Settings() {
+	const { onLogout } = useAuth();
+
 	const navigation = useNavigation();
 
 	function handleDisconnect() {
-		navigation.reset({
-			index: 0,
-			routes: [{ name: 'SignIn' }],
-		});
+		if (onLogout) {
+			onLogout();
+			navigation.navigate('SignIn');
+		}
 	}
 
 	return (
@@ -71,7 +74,7 @@ export function Settings() {
 										color="#0079ff"
 									/>
 									<OptionText>
-                                        Perguntas Frequentes
+										Perguntas Frequentes
 									</OptionText>
 									<MaterialIcons
 										name="keyboard-arrow-right"

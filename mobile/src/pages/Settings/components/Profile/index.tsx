@@ -1,4 +1,4 @@
-import { TouchableOpacity, Modal, Button } from 'react-native';
+import { TouchableOpacity, Modal } from 'react-native';
 
 import { useState, useEffect } from 'react';
 
@@ -22,10 +22,11 @@ import {
 	ModalContent,
 	ModalCloseButton,
 	Title,
-	TextModal,
 	UpdateImageButton,
 	UpdateImageText,
 	ModalHeader,
+	UserIcon,
+	BackgroundIcon,
 } from './styles';
 
 import {
@@ -35,19 +36,25 @@ import {
 } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { api } from '../../../../api';
+import axios from 'axios';
 
 interface UserData {
     nome: string;
     sobrenome: string;
+    CPF: string;
+    email: string;
+    senha: string;
+    telefone: string;
     dataNascimento?: string;
-    altura?: string;
-    peso?: string;
+    altura?: number;
+    peso?: number;
 }
 
 export function Profile() {
 	const { userData, updateProfileImage } = useUserContext();
 
 	const userId = userData?.id;
+	const url = API_URL + '/paciente/' + userId;
 
 	const [isModalVisible, setModalVisible] = useState(false);
 
@@ -71,7 +78,7 @@ export function Profile() {
 	useEffect(() => {
 		(async () => {
 			const { status } =
-                await ImagePicker.requestMediaLibraryPermissionsAsync();
+				await ImagePicker.requestMediaLibraryPermissionsAsync();
 			if (status !== 'granted') {
 				alert('Permissão para acessar a galeria é necessária');
 			}
@@ -86,6 +93,7 @@ export function Profile() {
 		setModalVisible(false);
 	};
 
+
 	const pickImage = async () => {
 		const { assets, canceled } = await ImagePicker.launchImageLibraryAsync({
 			allowsEditing: true,
@@ -95,7 +103,6 @@ export function Profile() {
 			quality: 1,
 		});
 
-		console.log(assets);
 
 		if (!canceled) {
 			const filename = assets[0].uri.substring(
@@ -103,20 +110,16 @@ export function Profile() {
 				assets[0].uri.length
 			);
 
-			//console.log(filename);
-			console.log(userData);
 			const extend = filename.split('.')[1];
 
 			const formData = new FormData();
 			formData.append(
 				'patientImage',
-				JSON.parse(
-					JSON.stringify({
-						name: filename,
-						uri: assets[0].uri,
-						type: 'image/' + extend,
-					})
-				)
+				{
+					name: filename,
+					uri: assets[0].uri,
+					type: 'image/' + extend,
+				}
 			);
 			formData.append('nome', userData?.nome);
 			formData.append('sobrenome', userData?.sobrenome);
@@ -126,20 +129,21 @@ export function Profile() {
 			formData.append('telefone', userData?.telefone);
 
 			try {
-				const response = await api
-					.put(`/paciente/${userId}`, formData, {
+				await axios
+					.put(url, formData, {
 						headers: {
 							'Content-Type': 'multipart/form-data',
 						},
 					})
 					.then((response) => {
+						console.log('🚀 ~ .then ~ response:', response);
 						const responseData = response.data;
 
 						setModalVisible(false);
 						updateProfileImage(responseData.patientImage);
 					})
 					.catch((erro) => {
-						console.error(erro.response.data);
+						console.error(erro.response);
 					});
 			} catch (error: any) {
 				console.error(error);
@@ -157,11 +161,18 @@ export function Profile() {
 
 				<UserContent>
 					<TouchableOpacity onPress={handleSelectPhoto}>
-						<Photo
-							source={{
-								uri: `${API_URL}/uploads/${userData?.patientImage}`,
-							}}
-						/>
+						{userData?.patientImage ? (
+							<Photo
+								source={{
+									uri: `${API_URL}/uploads/${userData?.patientImage}`,
+								}}
+							/>
+						) : (
+							<BackgroundIcon>
+								<UserIcon name="user" size={60} />
+							</BackgroundIcon>
+						)}
+
 					</TouchableOpacity>
 					<UserName>
 						{userData?.nome} {userData?.sobrenome}
@@ -179,7 +190,7 @@ export function Profile() {
 							{userData?.dataNascimento ? (
 								<Text color="#fff" weight="500" size={18}>
 									{ageCalculation(userData?.dataNascimento)}{' '}
-                                    anos
+									anos
 								</Text>
 							) : (
 								<Text color="white">--</Text>
@@ -240,7 +251,7 @@ export function Profile() {
 
 							<UpdateImageButton onPress={pickImage}>
 								<UpdateImageText>
-                                    Escolher imagem
+									Escolher imagem
 								</UpdateImageText>
 							</UpdateImageButton>
 						</ModalContent>
