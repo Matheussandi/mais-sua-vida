@@ -28,7 +28,7 @@ export async function doctorLoginValidate(request: Request, response: Response) 
     const token = jwt.sign({ id: validDoctor.id }, secret, { expiresIn: "1h" });
 
     return response.status(200).json({ 
-      Doctor: {
+      user: {
         id: validDoctor.id,
         name: validDoctor.nome,
         email: validDoctor.email,

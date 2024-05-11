@@ -1,35 +1,47 @@
 "use client";
 
-import { useState } from "react";
-import { api } from "@/lib/api";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useForm, Controller, FormProvider } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+
+import { signIn } from "next-auth/react"
+import { Form } from "@/components/Form";
+
+type FormValues = {
+  email: string;
+  password: string;
+};
+
+const schema = z.object({
+  email: z.string().email("Email inválido"),
+  password: z.string()
+});
 
 export default function LoginDoctor() {
-  const [CRM, setCRM] = useState("");
-  const [senha, setSenha] = useState("");
-  const [error, setError] = useState("");
-
   const router = useRouter();
 
-  const handleLogin = async () => {
-    try {
-      const response = await api.post("/medico/login", { CRM, senha });
 
-      if (response.status === 200) {
-        const doctor = response.data.Doctor;
-        console.log("Autenticação bem-sucedida");
-        router.push(`/doctor/${doctor.id}`);
-      } else {
-        throw new Error("Erro durante a autenticação");
-      }
-    } catch (error) {
-      console.error("Erro durante a autenticação:", error);
-      setError(
-        "CRM ou senha incorretos. Por favor, verifique suas credenciais."
-      );
+  const loginDoctorForm = useForm<FormValues>({ resolver: zodResolver(schema) });
+
+  const { control, handleSubmit, formState: { errors } } = loginDoctorForm;
+
+  async function onSubmit({ email, password }: FormValues) {
+    const result = await signIn('credentials', {
+      email,
+      password,
+      route: 'medico',
+      redirect: false
+    })
+
+    if (result?.error) {
+      alert('E-mail ou senha inválidos')
+      return
     }
-  };
+
+    router.replace('/doctor')
+  }
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center">
@@ -37,46 +49,57 @@ export default function LoginDoctor() {
       <p className="my-10 text-sm text-gray-600">
         Acesse a plataforma inserindo suas credenciais
       </p>
-      <form className="w-full max-w-sm">
-        <div className={`mb-4 ${error ? "border-red-500" : ""}`}>
-          <input
-            className={`focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none ${
-              error ? "border-red-500" : ""
-            }`}
-            id="CRM"
-            type="text"
-            placeholder="CRM"
-            value={CRM}
-            onChange={(e) => setCRM(e.target.value)}
+      <FormProvider {...loginDoctorForm}>
+        <form className="w-full max-w-sm" onSubmit={handleSubmit(onSubmit)}>
+          <Controller
+            name="email"
+            control={control}
+            defaultValue=""
+            render={({ field }) =>
+              <>
+                <Form.Field>
+                  <div className="flex flex-1 flex-col">
+                    <Form.Label>E-mail:</Form.Label>
+                    <Form.Input {...field} />
+                    <Form.ErrorMessage field="email" />
+                  </div>
+                </Form.Field>
+              </>
+            }
           />
-          <input
-            className={`focus:shadow-outline mt-2 w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none ${
-              error ? "border-red-500" : ""
-            }`}
-            id="senha"
-            type="password"
-            placeholder="Senha"
-            value={senha}
-            onChange={(e) => setSenha(e.target.value)}
+          <Controller
+            name="password"
+            control={control}
+            defaultValue=""
+            render={({ field }) =>
+              <>
+                <Form.Field>
+                  <div className="flex flex-1 flex-col">
+                    <Form.Label>Senha:</Form.Label>
+                    <Form.InputPassword {...field} />
+                    <Form.ErrorMessage field="password" />
+                  </div>
+                </Form.Field>
+              </>
+            }
           />
-          {error && <p className="mt-1 text-xs text-red-500">{error}</p>}
-        </div>
-        <div className="flex flex-col items-center">
-          <button
-            className="focus:shadow-outline mb-4 w-full rounded bg-primary px-4 py-2 text-white transition duration-300 hover:bg-blue-500"
-            type="button"
-            onClick={handleLogin}
-          >
-            Entrar
-          </button>
-          <Link
-            className="inline-block align-baseline text-sm font-bold text-primary hover:text-blue-500"
-            href="/"
-          >
-            Sair
-          </Link>
-        </div>
-      </form>
+          <div className="flex flex-col items-center mt-4">
+            <button
+              className="focus:shadow-outline mb-4 w-full rounded bg-primary px-4 py-2 text-white transition duration-300 hover:bg-blue-500"
+              type="submit"
+            >
+              Entrar
+            </button>
+
+            <Link
+              className="inline-block align-baseline text-sm font-bold text-primary hover:text-blue-500"
+              href="/"
+            >
+              Sair
+            </Link>
+          </div>
+        </form>
+      </FormProvider>
     </div>
   );
 }

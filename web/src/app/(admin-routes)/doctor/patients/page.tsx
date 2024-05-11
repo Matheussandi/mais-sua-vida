@@ -15,6 +15,7 @@ import { getPatients } from "../../../../services/get-patients";
 
 import ptBr from "dayjs/locale/pt-br";
 import dayjs from "dayjs";
+import { useSession } from "next-auth/react";
 
 dayjs.locale(ptBr);
 
@@ -35,13 +36,13 @@ interface AppointmentsProps {
 }
 
 export default function Patients() {
+  const { data } = useSession();
+  
   const [filter, setFilter] = useState("today");
   const [patients, setPatients] = useState<PatientsProps[]>([]);
   const [appointments, setAppointments] = useState<AppointmentsProps[]>([]);
 
-  const pathname = usePathname();
-  const pathParts = pathname.split("/");
-  const doctorId = pathParts[2];
+  const doctorId = data?.user.id;
 
   useEffect(() => {
     async function fetchData() {

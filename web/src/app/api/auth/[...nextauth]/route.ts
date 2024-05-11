@@ -7,11 +7,13 @@ const nextAuthOptions: NextAuthOptions = {
 			name: 'credentials',
 			credentials: {
 				email: { label: 'email', type: 'text' },
-				password: { label: 'password', type: 'password' }
+				password: { label: 'password', type: 'password' },
+				route: { label: 'route', type: 'text'}
 			},
 
 			async authorize(credentials, req) {
-				const response = await fetch('http://localhost:3333/clinica/login', {
+				const url = 'http://localhost:3333/' + credentials?.route + '/login'
+				const response = await fetch(url, {
 					method: 'POST',
 					headers: {
 						'Content-type': 'application/json'

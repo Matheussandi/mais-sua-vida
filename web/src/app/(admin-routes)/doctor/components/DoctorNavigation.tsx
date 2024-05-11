@@ -19,12 +19,11 @@ export function DoctorNavigation({ params }: DoctorLayoutProps) {
       <ul className="mt-5 list-none">
         <li>
           <Link
-            href={`/doctor/${params.doctorId}`}
-            className={`flex items-center py-2 hover:text-primary ${
-              pathname === `/doctor/${params.doctorId}`
+            href={`/doctor`}
+            className={`flex items-center py-2 hover:text-primary ${pathname === `/doctor`
                 ? "text-primary"
                 : "text-black"
-            }`}
+              }`}
           >
             <FaUser className="mr-2" size={20} />
             <span>Sobre</span>
@@ -32,10 +31,9 @@ export function DoctorNavigation({ params }: DoctorLayoutProps) {
         </li>
         <li>
           <Link
-            href={`/doctor/${params.doctorId}/patients`}
-            className={`flex items-center py-2 hover:text-primary ${
-              pathname.includes("/patients") ? "text-primary" : "text-black"
-            }`}
+            href={`/doctor/patients`}
+            className={`flex items-center py-2 hover:text-primary ${pathname.includes("/patients") ? "text-primary" : "text-black"
+              }`}
           >
             <FaUsers className="mr-2" size={20} />
             <span>Pacientes</span>
@@ -43,15 +41,11 @@ export function DoctorNavigation({ params }: DoctorLayoutProps) {
         </li>
         <li>
           <Link
-            href={{
-              pathname: `/doctor/${params.doctorId}/edit`,
-              query: { doctor: params.doctorId },
-            }}
-            className={`flex items-center py-2 hover:text-primary ${
-              pathname === `/doctor/${params.doctorId}/edit`
+            href={{ pathname: `/doctor/edit` }}
+            className={`flex items-center py-2 hover:text-primary ${pathname === `/doctor/edit`
                 ? "text-primary"
                 : "text-black"
-            }`}
+              }`}
           >
             <AiFillTool className="mr-2" size={20} />
             <span>Editar</span>

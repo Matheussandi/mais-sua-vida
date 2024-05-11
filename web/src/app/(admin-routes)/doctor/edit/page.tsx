@@ -1,4 +1,4 @@
-import { EditDoctorForm } from "../../components/EditDoctorForm";
+import { EditDoctorForm } from "../components/EditDoctorForm";
 
 export default function EditDoctor() {
   return (

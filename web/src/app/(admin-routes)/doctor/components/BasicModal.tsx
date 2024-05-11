@@ -66,15 +66,13 @@ export function BasicModal({ isOpen, onClose, setHistory }: BasicModalProps) {
         newHistoryEntry,
       ]);
 
-      console.log(requestData);
-
       await api.post("/historico", requestData, {
         headers: {
           "Content-Type": "application/json",
         },
       });
 
-      console.log("Dados enviados com sucesso");
+      ("Dados enviados com sucesso");
     } catch (error) {
       console.error("Erro ao enviar os dados", error);
     }
