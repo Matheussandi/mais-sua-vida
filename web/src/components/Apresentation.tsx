@@ -1,17 +1,19 @@
 import Image from "next/image";
 
-import doc1 from "../assets/doc-1.png";
-import doc2 from "../assets/doc-2.png";
-import doc3 from "../assets/doc-3.png";
+import doc1 from "../assets/doc-1.webp";
+import doc2 from "../assets/doc-2.webp";
+import doc3 from "../assets/doc-3.webp";
 
-import DoisMedicos from "../assets/twodoctors.png";
+import DoisMedicos from "../assets/twodoctors.webp";
+
+import Link from "next/link";
 
 export function Apresentation() {
   return (
     <>
-       <div className="relative z-10 grid grid-cols-1 gap-4 md:grid-cols-2 space-x-4">
+      <div className="relative z-10 grid grid-cols-1 gap-4 md:grid-cols-2 space-x-4">
         {/* Conteúdo da primeira coluna */}
-        <div className="mt-52">
+        <div className="mt-6 md:mt-52">
           <h1 className="text-2xl font-bold md:text-5xl">
             Simplifique, organize e gerencie as{" "}
             <span className="text-primary">consultas</span>
@@ -23,9 +25,11 @@ export function Apresentation() {
             pacientes e clínicas. Com nossa plataforma, agendar consultas nunca
             foi tão simples e conveniente.
           </p>
-          <button className="my-7 cursor-default rounded-xl bg-primary px-9 py-4 font-bold text-white">
-            Contato
-          </button>
+          <Link href="#footer">
+            <button className="my-7 rounded-xl bg-primary px-9 py-4 font-bold text-white">
+              Contato
+            </button>
+          </Link>
 
           <div className="flex space-x-4">
             <div className="h-48 w-32 flex-col items-center justify-center rounded-lg p-4 shadow-md transition-shadow hover:shadow-lg md:w-36">
@@ -35,7 +39,7 @@ export function Apresentation() {
                 height={500}
                 alt="Imagem de uma médica"
                 objectFit="cover"
-                className="mx-auto rounded-full h-20 w-20"
+                className="mx-auto rounded-lg"
               />
               <div className="text-center mt-4">
                 <h3 className="font-bold">Dr. Luiza</h3>
@@ -49,7 +53,7 @@ export function Apresentation() {
                 width={500}
                 height={500}
                 alt="Imagem de um médico"
-                className="mx-auto rounded-full h-20 w-20"
+                className="mx-auto rounded-lg"
                 quality={100}
               />
               <div className="text-center mt-4">
@@ -64,7 +68,7 @@ export function Apresentation() {
                 width={500}
                 height={500}
                 alt="Imagem de uma médica"
-                className="mx-auto rounded-full h-20 w-20"
+                className="mx-auto rounded-lg"
               />
               <div className="text-center mt-4">
                 <h3 className="font-bold">Dr. Maria</h3>
@@ -75,18 +79,17 @@ export function Apresentation() {
         </div>
 
         {/*  Conteúdo da segunda coluna */}
-        <div className="relative z-10 flex-grow">
+        <div className="relative z-10 flex-grow flex content-center">
           <div className="relative h-full w-full">
             <Image
               src={DoisMedicos}
               alt="Dois médicos juntos"
-              layout="fill"
+              fill
               objectFit="cover"
-              className="hidden md:block"
+              className="hidden lg:block"
             />
           </div>
         </div>
-
       </div>
     </>
   );

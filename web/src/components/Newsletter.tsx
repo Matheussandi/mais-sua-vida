@@ -5,10 +5,10 @@ export function Newsletter() {
     <div className="flex justify-center items-center h-screen">
       <div className="bg-primary rounded-3xl py-12 px-8 md:py-24 md:px-64 flex flex-col items-center">
         <h2 className="text-white font-bold text-center text-2xl md:text-4xl">
-          Inscreva-se na nossa Newsletter
+          Inscreva-se para acesso beta
         </h2>
         <p className="text-white mb-5 text-center">
-          Receba as últimas notícias e atualizações diretamente em seu e-mail.
+          Vamos enviar um e-mail com o link de acesso à versão beta da plataforma.
         </p>
         <form className="flex flex-col">
           <div className="relative">

@@ -8,14 +8,11 @@ import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 
-import { useRouter } from "next/navigation";
-
 import { MediaPicker } from "@/components/MediaPicker";
 
 import { api } from "@/lib/api";
 import { MdModeEdit } from "react-icons/md";
 
-import PhotoClinic from "../../../../assets/photoClinic.png";
 import { Form } from "@/components/Form";
 import { FaRegUserCircle } from "react-icons/fa";
 

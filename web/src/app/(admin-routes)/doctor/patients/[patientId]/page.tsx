@@ -1,3 +1,5 @@
+"use client"
+
 import { getPatientById } from "../../../../../services/get-patient-by-id";
 
 import Image from "next/image";
@@ -10,6 +12,8 @@ import { WeightConverter } from "@/utils/WeightConverter";
 import { calculateAge } from "@/utils/calculateAge";
 
 import dayjs from "dayjs";
+import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 
 interface PatientId {
   params: {
@@ -29,10 +33,23 @@ interface PatientProps {
   peso: string;
 }
 
-export default async function PatientDetails({ params }: PatientId) {
-  const patient: PatientProps = await getPatientById(params.patientId);
+export default function PatientDetails({ params }: PatientId) {
+const pathname = usePathname();
+const parts = pathname.split('/');
+const patientId = parts[parts.length - 1];
 
-  const formattedDate = dayjs(patient.dataNascimento).format("DD/MM/YYYY");
+const [patient, setPatient] = useState<PatientProps>();
+
+const formattedDate = dayjs(patient?.dataNascimento).format("DD/MM/YYYY");
+
+useEffect(() => {
+  async function fetchData() {
+    const patientData: PatientProps = await getPatientById(patientId);
+    setPatient(patientData);
+  }
+
+  fetchData();
+}, [])
 
   return (
     <div className="flex-grow p-10">
@@ -47,14 +64,14 @@ export default async function PatientDetails({ params }: PatientId) {
           />
           <div className="absolute left-1/2 top-1/2 -translate-x-1/2 transform">
             <Image
-              src={`http://localhost:3333/uploads/${patient.patientImage}`}
+              src={`${process.env.NEXT_PUBLIC_API_IMAGE}/${patient?.patientImage}`}
               alt=""
               width={120}
               height={120}
               className="h-32 w-32 rounded-full"
               style={{ border: "6px solid white" }}
             />
-            <h1 className="my-2 text-2xl font-extrabold">{`${patient.nome} ${patient.sobrenome}`}</h1>
+            <h1 className="my-2 text-2xl font-extrabold">{`${patient?.nome} ${patient?.sobrenome}`}</h1>
           </div>
         </div>
 
@@ -65,25 +82,25 @@ export default async function PatientDetails({ params }: PatientId) {
                 <h2 className="font-bold uppercase">Sobre</h2>
                 <p>
                   Idade:{" "}
-                  {patient.dataNascimento
+                  {patient?.dataNascimento
                     ? calculateAge(patient.dataNascimento)
                     : ""}
                 </p>
                 <p>
                   Data de Nascimento:{" "}
-                  {patient.dataNascimento ? formattedDate : ""}
+                  {patient?.dataNascimento ? formattedDate : ""}
                 </p>
                 <p>
                   Altura:{" "}
-                  {patient.altura ? HeightConverter(patient.altura) : ""}
+                  {patient?.altura ? HeightConverter(patient.altura) : ""}
                 </p>
-                <p>Peso: {patient.peso ? WeightConverter(patient.peso) : ""}</p>
+                <p>Peso: {patient?.peso ? WeightConverter(patient.peso) : ""}</p>
               </div>
 
               <div>
                 <h2 className="font-bold uppercase">Contato</h2>
-                <p>E-mail: {patient.email}</p>
-                <p>Celular: {patient.telefone}</p>
+                <p>E-mail: {patient?.email}</p>
+                <p>Celular: {patient?.telefone}</p>
               </div>
             </div>
 

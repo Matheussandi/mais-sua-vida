@@ -5,7 +5,7 @@ import Image from "next/image";
 
 import { AiOutlineClose } from "react-icons/ai";
 
-import Secretary from "../assets/secretary.png";
+import Secretary from "../assets/secretary.webp";
 import Patitents from "../assets/patients.png";
 import Doctors from "../assets/doctors.png";
 import Scheduling from "../assets/scheduling.png";

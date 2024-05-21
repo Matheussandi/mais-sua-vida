@@ -9,8 +9,9 @@ import { getHistoryByPatientId } from "@/services/get-history-by-patient-id";
 
 import ptBr from "dayjs/locale/pt-br";
 import dayjs from "dayjs";
-import { BasicModal } from "@/app/doctor/components/BasicModal";
+
 import { useEffect, useState } from "react";
+import { BasicModal } from "../../../components/BasicModal";
 
 dayjs.locale(ptBr);
 
@@ -85,7 +86,7 @@ export default function Historic({ params }: PatientId) {
           />
           <div className="absolute left-1/2 top-1/2 -translate-x-1/2 transform">
             <Image
-              src={`http://localhost:3333/uploads/${patient.patientImage}`}
+              src={`${process.env.NEXT_PUBLIC_API_IMAGE}/${patient?.patientImage}`}
               alt=""
               width={120}
               height={120}
@@ -98,22 +99,29 @@ export default function Historic({ params }: PatientId) {
 
         <div className="">
           <div className="mt-12 flex flex-col">
-            <div className="relative mt-10 max-h-80 max-w-screen-xl overflow-y-scroll p-5">
-              <ul className="divide-y divide-gray-300">
-                {histories.map((item) => (
-                  <li key={item.id} className="py-2">
-                    <div className="flex items-center">
-                      <div className="h-4 w-4 rounded-full bg-blue-500"></div>
-                      <p className="ml-3 font-medium text-gray-500">
-                        {dayjs(item.data).format("D[ de ]MMMM[ de ]YYYY")}
-                      </p>
-                    </div>
-                    <p className="ml-7 text-gray-800">{item.descricao}</p>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
+            {histories && histories.length > 0 ? (
+              <>
+                <div className="relative mt-10 max-h-80 max-w-screen-xl overflow-y-scroll p-5">
+                  <ul className="divide-y divide-gray-300">
+                    {histories.map((item) => (
+                      <li key={item.id} className="py-2">
+                        <div className="flex items-center">
+                          <div className="h-4 w-4 rounded-full bg-blue-500"></div>
+                          <p className="ml-3 font-medium text-gray-500">
+                            {dayjs(item.data).format("D[ de ]MMMM[ de ]YYYY")}
+                          </p>
+                        </div>
+                        <p className="ml-7 text-gray-800">{item.descricao}</p>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </>
+            ) : (
+              <h2 className="text-xl mt-10 text-center font-bold text-gray-800">
+                Nenhum histórico encontrado
+              </h2>
+            )}
             <div className="my-6 flex items-center justify-center">
               <button
                 className="rounded-lg bg-primary px-10 py-3 font-bold text-white"
