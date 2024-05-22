@@ -1,7 +1,8 @@
 import Image from "next/image";
 
-import img2 from "../assets/casa.png";
 import { BsCheckCircleFill } from "react-icons/bs";
+
+import AboutUs from "../assets/about-us.svg";
 
 export function About() {
   return (
@@ -102,31 +103,12 @@ export function About() {
           {/* Segunda coluna */}
           <div className="w-full md:w-1/2">
             <Image
-              src={img2}
+              src={AboutUs}
               alt="Descrição da imagem"
-              className="h-full w-full object-cover p-6"
+              className="h-full w-full object-contain p-6"
             />
           </div>
         </div>
-
-        {/*         <div className="flex flex-col items-center p-6 sm:flex-row sm:justify-center">
-          <div className="mx-7 flex flex-col items-center">
-            <span className="text-5xl font-bold text-primary">15k</span>
-            <span className="mt-2 font-bold">Clínicas Satisfeitas</span>
-          </div>
-          <div className="mx-7 flex flex-col items-center">
-            <span className="text-5xl font-bold text-primary">150</span>
-            <span className="mt-2 font-bold">Pacientes Mensais</span>
-          </div>
-          <div className="mx-7 flex flex-col items-center">
-            <span className="text-5xl font-bold text-primary">15</span>
-            <span className="mt-2 font-bold">Cidades Presentes</span>
-          </div>
-          <div className="mx-7 flex flex-col items-center">
-            <span className="text-5xl font-bold text-primary">10+</span>
-            <span className="mt-2 font-bold">Convênios</span>
-          </div>
-        </div> */}
       </div>
     </section>
   );

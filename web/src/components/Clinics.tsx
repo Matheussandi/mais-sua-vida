@@ -5,11 +5,11 @@ import Image from "next/image";
 
 import { AiOutlineClose } from "react-icons/ai";
 
-import Secretary from "../assets/secretary.webp";
 import Patitents from "../assets/patients.png";
 import Doctors from "../assets/doctors.png";
 import Scheduling from "../assets/scheduling.png";
 import Confirmation from "../assets/confirmation.png";
+import DataAnalysis from "../assets/data-analysis-pana.svg"
 
 export function Clinics() {
   const [modalOpen, setModalOpen] = useState(false);
@@ -24,20 +24,20 @@ export function Clinics() {
 
   return (
     <section id="clinics">
-      <div className="mt-16 flex flex-col lg:flex-row">
+      <div className="mt-16 flex flex-col md:flex-row">
         {/* Primeira coluna */}
-        <div className="w-full lg:w-1/2">
+        <div className="order-2 md:order-1 w-full md:w-1/2">
           <Image
-            src={Secretary}
+            src={DataAnalysis}
             alt="Imagem"
-            className="h-full w-full object-cover md:p-10"
+            className="h-full w-full object-contain md:p-10"
           />
         </div>
 
         {/* Segunda coluna */}
-        <div className="flex w-full flex-col lg:w-1/2">
+        <div className="order-1 md:order-2 flex w-full flex-col md:w-1/2">
           <div className="my-5 font-bold text-primary">Para clínicas</div>
-          <div className="h-2/3 lg:h-full">
+          <div className="h-2/3 md:h-full">
             <h1 className="text-3xl font-bold">Gerencie suas consultas </h1>
             <p className="my-5 text-justify text-gray-500">
               Com recursos como armazenamento de informações do paciente,
@@ -47,7 +47,7 @@ export function Clinics() {
               somente um lugar.
             </p>
           </div>
-          <div className="flex h-1/3 flex-wrap lg:h-full">
+          <div className="flex h-1/3 flex-wrap md:h-full">
             <div className="w-1/2 bg-white p-4">
               <div className="flex-col items-center justify-center rounded-lg p-4 shadow-md transition-shadow hover:shadow-lg">
                 <div className="align-center">
