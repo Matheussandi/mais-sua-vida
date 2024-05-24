@@ -91,11 +91,11 @@ export default function SignIn() {
 		navigation.navigate('ForgotPassword');
 	}
 
-	useEffect(() => {
+	/* 	useEffect(() => {
 		if (authState?.authenticated === true) {
 			navigation.navigate('Main');
 		}
-	}, [authState]);
+	}, [authState]); */
 
 	return (
 		<KeyboardAvoidingView behavior={'padding'}>

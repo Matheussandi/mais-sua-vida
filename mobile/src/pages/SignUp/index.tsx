@@ -106,6 +106,7 @@ export default function SignUp() {
 					Alert.alert('Erro', result.error);
 				} else {
 					navigation.navigate('SignIn');
+					Alert.alert('Sucesso', 'Sua conta foi criada com sucesso. Por favor, faça login para continuar.');
 				}
 			} else {
 				console.error('onRegister is undefined');
