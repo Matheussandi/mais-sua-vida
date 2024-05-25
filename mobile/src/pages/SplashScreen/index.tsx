@@ -1,23 +1,22 @@
 import React from 'react';
-import { ActivityIndicator } from 'react-native';
+import { ActivityIndicator, Image } from 'react-native';
 
 // eslint-disable-next-line
-const imagePath = require('../../assets/LogoPng.png');
+const imagePath = require('../../assets/logo.png');
 
-import { 
-	Container,
-	Logo,
-} from './styles';
-
+import { Container } from './styles';
 
 export default function SplashScreen() {
 
 	return (
 		<Container>
-			<Logo 
+			<Image
 				source={imagePath}
+				width={150}
+				height={150}
+				style={{ marginVertical: 50 }}
 			/>
-			<ActivityIndicator size={60} color="#0079ff"/>
+			<ActivityIndicator size={60} color="#0079ff" />
 		</Container>
 	);
 }
