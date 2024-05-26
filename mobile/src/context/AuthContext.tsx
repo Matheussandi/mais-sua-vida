@@ -86,18 +86,19 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 	}, []);
 
 	const onRegister = async (data: RegisterData): Promise<RegisterResponse> => {
+		await onLogout();
+
 		const response = await api.post(`${API_URL}/paciente`, data);
 		const { token, user } = response.data;
 		const { id } = user;
-	
+
 		await SecureStore.setItemAsync(TOKEN_KEY, token);
 		await SecureStore.setItemAsync(USER_ID_KEY, id.toString());
-	
+
 		setAuthState({ token, authenticated: true, userId: id });
-	
+
 		return response.data;
 	};
-	
 	const onLogin = async (email: string, senha: string): Promise<LoginResponse> => {
 		const response = await api.post('/paciente/login', { email, senha });
 		const { token, user } = response.data;

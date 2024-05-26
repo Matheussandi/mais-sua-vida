@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 
 import { useForm } from 'react-hook-form';
@@ -12,19 +12,17 @@ import {
 	Alert,
 	TouchableOpacity,
 	ActivityIndicator,
+	Image,
 } from 'react-native';
 
-import { api } from '../../api';
-
 // eslint-disable-next-line
-const imagePath = require("../../assets/LogoPng.png");
+const imagePath = require("../../assets/logo.png");
 import {
 	Container,
 	Title,
 	ForgotPasswordLink,
 	LoginButton,
 	LoginButtonText,
-	Logo,
 	TopContent,
 	ForgotPasswordContainer,
 	CenteredView,
@@ -49,7 +47,7 @@ const schema = yup
 	.required();
 
 export default function SignIn() {
-	const { onLogin, authState } = useAuth();
+	const { onLogin } = useAuth();
 
 	const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
@@ -72,7 +70,7 @@ export default function SignIn() {
 				if (result && result.error) {
 					Alert.alert('Erro', result.error);
 				}
-				navigation.navigate('Main');
+				navigation.navigate('Main' as never);
 			} else {
 				throw new Error('onLogin function is not defined');
 			}
@@ -84,18 +82,18 @@ export default function SignIn() {
 	};
 
 	async function handleSignUp() {
-		navigation.navigate('SignUp');
+		navigation.navigate('SignUp' as never);
 	}
 
 	async function handleForgotPassword() {
-		navigation.navigate('ForgotPassword');
+		navigation.navigate('ForgotPassword' as never);
 	}
 
-	useEffect(() => {
+	/* 	useEffect(() => {
 		if (authState?.authenticated === true) {
 			navigation.navigate('Main');
 		}
-	}, [authState]);
+	}, [authState]); */
 
 	return (
 		<KeyboardAvoidingView behavior={'padding'}>
@@ -105,7 +103,12 @@ export default function SignIn() {
 						<Title>Entrar</Title>
 					</TopContent>
 					<CenteredView>
-						<Logo source={imagePath} />
+						<Image
+							source={imagePath}
+							width={150}
+							height={150}
+							style={{ marginVertical: 50 }}
+						/>
 						<ControlledInput
 							name="email"
 							maxLength={25}

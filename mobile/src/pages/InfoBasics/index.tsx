@@ -27,6 +27,8 @@ import { useUserContext } from '../../context/UserContext';
 
 import { ControlledInput } from '../../components/ControlledInput';
 import { Header } from '../../components/Header';
+import { maskDate, maskPhone } from '../../utils/mask';
+import { unMask } from '../../utils/unMask';
 
 interface FormData {
 	nome: string;
@@ -56,8 +58,8 @@ const schema = yup
 			.matches(/^\d{11}$/, 'CPF inválido.'),
 		telefone: yup
 			.string()
-			.required('Número de telefone é obrigatório.')
-			.matches(/^\d{13}$/, 'Telefone inválido.'),
+			.required('Número de telefone é obrigatório.'),
+		// .matches(/^\d{13}$/, 'Telefone inválido.'),
 		email: yup.string().email('Email inválido').required('Email inválido'),
 		senha: yup.string().required('Senha inválida'),
 		dataNascimento: yup.string(),
@@ -74,6 +76,13 @@ export function InfoBasics() {
 
 	const navigation = useNavigation();
 
+	const [dataNascimento, setDataNascimento] = React.useState<string | null>(null);
+
+	const handlePhoneChange = (value: string) => {
+		const maskedValue = maskPhone(value);
+		setValue('telefone', maskedValue);
+	};
+
 	const {
 		control,
 		handleSubmit,
@@ -85,6 +94,8 @@ export function InfoBasics() {
 
 	async function handleUpdateUser(data: FormData) {
 		try {
+			data.telefone = unMask(data.telefone);
+
 			await axios
 				.put(url, data)
 				.then((response) => {
@@ -163,12 +174,14 @@ export function InfoBasics() {
 
 							<ControlledInput
 								name="telefone"
-								maxLength={13}
+								maxLength={15}
 								control={control}
 								icon="phone"
 								placeholder="Telefone"
+								keyboardType='numeric'
 								error={errors.telefone}
 								autoCapitalize="none"
+								onChangeText={handlePhoneChange}
 							/>
 							<ControlledInput
 								name="email"
@@ -194,8 +207,14 @@ export function InfoBasics() {
 								name="dataNascimento"
 								maxLength={10}
 								control={control}
+								keyboardType='numeric'
 								icon="calendar"
 								placeholder="Data de Nascimento"
+								onChangeText={(value) => {
+									const maskedValue = maskDate(value);
+									setDataNascimento(maskedValue);
+									setValue('dataNascimento', maskedValue);
+								}}
 								error={errors.dataNascimento}
 								autoCapitalize="none"
 							/>
@@ -205,6 +224,7 @@ export function InfoBasics() {
 								maxLength={3}
 								control={control}
 								icon="user"
+								keyboardType='numeric'
 								placeholder="Altura"
 								error={errors.altura}
 								autoCapitalize="none"
@@ -213,6 +233,7 @@ export function InfoBasics() {
 							<ControlledInput
 								name="peso"
 								maxLength={3}
+								keyboardType='numeric'
 								control={control}
 								icon="user"
 								placeholder="Peso"

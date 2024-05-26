@@ -3,10 +3,11 @@ import Image from "next/image";
 import { BsCheckCircleFill } from "react-icons/bs";
 
 import Search from "../assets/search.png";
-import Phone from "../assets/phone.png";
 import Profile from "../assets/profile.png";
 import Calender from "../assets/calendar.png";
 import Star from "../assets/star.png";
+
+import Verified from "../assets/Verified-pana.svg";
 
 export function Patients() {
   return (
@@ -48,6 +49,7 @@ export function Patients() {
               </p>
             </div>
           </div>
+
           <div className="w-full p-4 sm:w-1/2 lg:w-1/4">
             <div className="card h-full rounded-b-lg border-t-4 border-primary p-8 shadow-lg hover:shadow-xl sm:p-14">
               <Image
@@ -81,15 +83,15 @@ export function Patients() {
               </p>
             </div>
           </div>
-          <div className="mt-12 flex flex-wrap">
-            <div className="w-full p-4 sm:w-1/2">
+          <div className="mt-12 flex flex-wrap flex-col-reverse sm:flex-row">
+            <div className="order-1 w-full p-4 sm:w-1/2 content-center">
               <Image
-                src={Phone}
+                src={Verified}
                 alt="Imagem"
                 className="h-auto w-full object-cover"
               />
             </div>
-            <div className="w-full p-4 sm:w-1/2 lg:pr-16 lg:text-justify">
+            <div className="order-2 w-full p-4 sm:w-1/2 lg:pr-16 lg:text-justify">
               <p className="mb-2 text-lg font-bold text-primary">Agendamento</p>
               <h1 className="mb-6 text-5xl font-bold">
                 Faça um agendamento com antecedência com o médico
@@ -116,6 +118,14 @@ export function Patients() {
                     className="mr-3"
                   />
                   Cancele sua consulta a qualquer momento
+                </span>
+                <span className="my-4 flex">
+                  <BsCheckCircleFill
+                    size={26}
+                    color="#0079FF"
+                    className="mr-3"
+                  />
+                  Receba lembretes de consulta (Em breve)
                 </span>
               </div>
 

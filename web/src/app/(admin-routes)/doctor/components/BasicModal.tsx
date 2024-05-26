@@ -8,6 +8,7 @@ import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { v4 as uuidv4 } from "uuid";
+import { useSession } from "next-auth/react";
 
 const createHistoricFormSchema = z.object({
   descricao: z.string(),
@@ -33,12 +34,12 @@ type CreateHistoricFormData = z.infer<typeof createHistoricFormSchema>;
 
 export function BasicModal({ isOpen, onClose, setHistory }: BasicModalProps) {
   const pathname = usePathname();
+  const { data } = useSession();
 
-  // Divide o pathname em partes, separando-as pelos caracteres '/'
   const pathParts = pathname.split("/");
 
-  const doctor = pathParts[2];
-  const patient = pathParts[4];
+  const doctorId = data?.user.id;
+  const patientId = pathParts[3];
 
   const createHistoricForm = useForm<CreateHistoricFormData>({
     resolver: zodResolver(createHistoricFormSchema),
@@ -51,8 +52,8 @@ export function BasicModal({ isOpen, onClose, setHistory }: BasicModalProps) {
       const requestData = {
         data: new Date(),
         descricao: data.descricao,
-        idPaciente: patient,
-        idMedico: doctor,
+        idPaciente: patientId,
+        idMedico: doctorId,
       };
 
       const newHistoryEntry: HistoryProps = {
@@ -65,10 +66,10 @@ export function BasicModal({ isOpen, onClose, setHistory }: BasicModalProps) {
         ...prevHistory,
         newHistoryEntry,
       ]);
-
       await api.post("/historico", requestData, {
         headers: {
           "Content-Type": "application/json",
+          
         },
       });
 
