@@ -1,12 +1,12 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
-
-import { getDoctorById } from "@/services/get-doctor-by-id";
-import Link from "next/link";
-import { MdModeEdit } from "react-icons/md";
 import { useEffect, useState } from "react";
-import { FaTrash } from "react-icons/fa";
+
+import { useSearchParams } from "next/navigation";
+import { getSession } from "next-auth/react";
+import Link from "next/link";
+
+import { api } from "@/lib/api";
 
 interface DoctorProps {
   id: string;
@@ -40,9 +40,22 @@ export default function DoctorSelected() {
     image: "",
   });
 
+  async function getDoctorByClinic(doctorId: string) {
+    const session = await getSession();
+
+    const response = await api.get(`/medico/${doctorId}`, {
+        headers: {
+            Authorization: `Bearer ${session?.token}`
+        }
+    });
+    const doctor = await response.data;
+    
+    return doctor;
+  }
+
   async function getDoctor() {
     try {
-      const doctor: DoctorProps = await getDoctorById(search as string);
+      const doctor: DoctorProps = await getDoctorByClinic(search as string);
       setDoctor(doctor);
     } catch (error) {
       console.error(error);
