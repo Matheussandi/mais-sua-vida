@@ -7,12 +7,12 @@ O objetivo principal do +Sua Vida é proporcionar uma solução abrangente que a
 ## Funcionalidades Principais
 
 ### Para Clínicas:
-- [x] Detalhes sobre os médicos, incluindo especialidades e informações de contato.
+- [x] Detalhes sobre os médicos, incluindo especialidades, sobre, experiência e CRM.
 - [x] Visualizar e gerenciar consultas de médicos específicos.
 
 ### Para Médicos:
 - [x] Visualizar detalhes das consultas passadas, presentes e futuras.
-- [x] Visualizar detalhes do paciente, incluindo histórico de consultas.
+- [x] Visualizar detalhes do paciente, incluindo dados pessoais e histórico de consultas.
 
 ### Para Pacientes:
 - [x] Agendar consultas de forma rápida e conveniente.
