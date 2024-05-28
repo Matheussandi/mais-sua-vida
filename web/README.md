@@ -1,3 +1,28 @@
+# Frontend Web
+Este é o frontend web do projeto, uma plataforma dedicada a facilitar a gestão de clínicas e médicos.
+
+<img src="./public/apresentation-desktop.jpg" alt="Apresentação desktop">
+
+## Demonstração
+
+### Landing Page
+https://github.com/Matheussandi/mais-sua-vida/assets/29473781/703c263e-8810-4855-8862-f4c187dc96a0
+
+### Para clínicas
+https://github.com/Matheussandi/mais-sua-vida/assets/29473781/76764cbc-bfde-42a4-8cb5-74d1c2832e33
+
+### Para médicos
+https://github.com/Matheussandi/mais-sua-vida/assets/29473781/7b079c6b-7731-4d58-b8e3-e6082c9e91f9
+## Tecnologias Utilizadas
+
+- [Next.js](https://nextjs.org/)
+- [Next-auth](https://next-auth.js.org/)
+- [React](https://react.dev/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [Axios](https://axios-http.com/ptbr/docs/intro)
+- [Zod](https://zod.dev/)
+- [React Hook Form](https://react-hook-form.com/)
+
 
 ## Iniciando o Projeto
 
@@ -34,11 +59,7 @@ Este comando irá iniciar o servidor de desenvolvimento. Por padrão, o projeto 
 ### 4. Chamada à API
 A chamada à API está no arquivo `api.ts` da pasta `lib`, onde são feitas as requisições e interações com o servidor.
 
-
-
-### Imagens 
+## Imagens 
 Imagens utilizadas através dos sites:
 - [Unsplash](https://unsplash.com/)
 - [Freepik](https://www.freepik.com/)
-
-
