@@ -1,4 +1,4 @@
-# +Sua Vida
+# +Sua Vida 
 O +Sua Vida é uma plataforma projetada para agilizar a gestão de clínicas médicas e facilitar o agendamento de consultas para pacientes. Com uma interface web dedicada às clínicas e um aplicativo mobile exclusivo para pacientes, o +Sua Vida visa simplificar o processo de marcação de consultas e melhorar a experiência tanto para profissionais de saúde quanto para pacientes.
 
 ## Objetivo
@@ -20,17 +20,17 @@ O objetivo principal do +Sua Vida é proporcionar uma solução abrangente que a
 - [x] Gerenciar suas consultas, incluindo a capacidade de agendar e desmarcar.
 - [x] Acesso aos próprios dados pessoais e histórico de consultas.
 
-## Tecnologias Utilizadas
-- Frontend Web: Next.js
+## Principais Tecnologias Utilizadas
+- Frontend Web: [Next.js](https://nextjs.org/)
 
-- Backend: Node.js, Express.js
+- Backend: [Node.js](https://nodejs.org/), [Express](https://expressjs.com/)
 
-- Mobile: React Native
+- Mobile: [React Native](https://reactnative.dev/), [Expo](https://expo.dev/)
 
-- Banco de Dados: PostgreSQL
+- Banco de Dados: [PostgreSQL](https://www.postgresql.org/)
 
-## Status do Projeto
-O projeto +Sua Vida está em constante evolução, com novas funcionalidades e melhorias sendo implementadas regularmente. Estamos comprometidos em oferecer uma solução robusta e confiável para facilitar a gestão de clínicas e o agendamento de consultas para pacientes.
+## Design
+O design do +Sua Vida foi criado usando Figma. Você pode visualizar o design [aqui](https://www.figma.com/design/kBwbhlohDjHVdQOThjLPhF/Page?m=dev&node-id=0-1&t=JTDKlStheVLUWcnl-1).
 
 ## Mais Detalhes
 Para mais detalhes sobre as tecnologias utilizadas e outras informações específicas, consulte as pastas do repositório:
@@ -40,3 +40,12 @@ Para mais detalhes sobre as tecnologias utilizadas e outras informações espec�
 - `/mobile`: Aplicativo Móvel
 
 - `/api`: Backend
+
+## Créditos
+
+Este projeto foi desenvolvido por:
+
+- [Matheus Sandi](https://github.com/Matheussandi)
+- [Mateus Lucas](https://www.linkedin.com/in/mateuslucasfranco/)
+- [Lucas da Silva](https://github.com/lucs-SSC)
+- [Gabriel Almeida](https://github.com/Gabriel-Almeida11)

@@ -1,8 +1,18 @@
 # Frontend Web
 Este é o frontend web do projeto, uma plataforma dedicada a facilitar a gestão de clínicas e médicos.
 
-<img src="./public//apresentation-desktop.jpg" alt="Apresentação desktop">
+<img src="./public/apresentation-desktop.jpg" alt="Apresentação desktop">
 
+## Demonstração
+
+### Landing Page
+https://github.com/Matheussandi/mais-sua-vida/assets/29473781/703c263e-8810-4855-8862-f4c187dc96a0
+
+### Para clínicas
+https://github.com/Matheussandi/mais-sua-vida/assets/29473781/76764cbc-bfde-42a4-8cb5-74d1c2832e33
+
+### Para médicos
+https://github.com/Matheussandi/mais-sua-vida/assets/29473781/7b079c6b-7731-4d58-b8e3-e6082c9e91f9
 ## Tecnologias Utilizadas
 
 - [Next.js](https://nextjs.org/)
@@ -13,13 +23,6 @@ Este é o frontend web do projeto, uma plataforma dedicada a facilitar a gestão
 - [Zod](https://zod.dev/)
 - [React Hook Form](https://react-hook-form.com/)
 
-## Demonstração
-
-### Para clínicas
-https://github.com/Matheussandi/mais-sua-vida/assets/29473781/76764cbc-bfde-42a4-8cb5-74d1c2832e33
-
-### Para médicos
-https://github.com/Matheussandi/mais-sua-vida/assets/29473781/7b079c6b-7731-4d58-b8e3-e6082c9e91f9
 
 ## Iniciando o Projeto
 

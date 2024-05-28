@@ -11,8 +11,8 @@ https://github.com/Matheussandi/mais-sua-vida/assets/29473781/f2fce7b3-564d-42e3
 
 ## Tecnologias Utilizadas
 
-- [Expo](https://expo.dev/)
 - [React Native](https://reactnative.dev/)
+- [Expo](https://expo.dev/)
 - [React Navigation](https://reactnavigation.org/)
 - [Styled Components](https://styled-components.com/)
 - [Axios](https://axios-http.com/ptbr/docs/intro)
