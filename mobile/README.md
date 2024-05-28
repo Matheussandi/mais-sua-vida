@@ -7,12 +7,7 @@ Este é o aplicativo móvel do projeto, desenvolvido para facilitar o agendament
 </p>
 
 ## Demonstração
-<p align="center">
-  <video controls>
-    <source src="./src/assets/video/apresentation-mobile.mp4" type="video/mp4">
-    Your browser does not support the video tag.
-  </video>
-</p>
+https://github.com/Matheussandi/mais-sua-vida/assets/29473781/f2fce7b3-564d-42e3-8e2e-bc99378f0773
 
 ## Tecnologias Utilizadas
 
