@@ -9,7 +9,7 @@ Este é o frontend web do projeto, uma plataforma dedicada a facilitar a gestão
 https://github.com/Matheussandi/mais-sua-vida/assets/29473781/703c263e-8810-4855-8862-f4c187dc96a0
 
 ### Para clínicas
-https://github.com/Matheussandi/mais-sua-vida/assets/29473781/76764cbc-bfde-42a4-8cb5-74d1c2832e33
+https://github.com/Matheussandi/mais-sua-vida/assets/29473781/6bb4f6e0-be96-4a8e-a135-b4a6d5d042e7
 
 ### Para médicos
 https://github.com/Matheussandi/mais-sua-vida/assets/29473781/7b079c6b-7731-4d58-b8e3-e6082c9e91f9
